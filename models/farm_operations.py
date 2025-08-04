@@ -597,9 +597,9 @@ class FarmPlowingWorker(models.Model):
 
     plowing_id = fields.Many2one('farm.plowing', string='Şumlama', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -621,9 +621,9 @@ class FarmPlantingWorker(models.Model):
 
     planting_id = fields.Many2one('farm.planting', string='Əkin', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -645,9 +645,9 @@ class FarmIrrigationWorker(models.Model):
 
     irrigation_id = fields.Many2one('farm.irrigation', string='Sulama', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -669,9 +669,9 @@ class FarmFertilizingWorker(models.Model):
 
     fertilizing_id = fields.Many2one('farm.fertilizing', string='Gübrələmə', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -693,9 +693,9 @@ class FarmTreatmentWorker(models.Model):
 
     treatment_id = fields.Many2one('farm.treatment', string='Dərmanlama', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -717,9 +717,9 @@ class FarmPruningWorker(models.Model):
 
     pruning_id = fields.Many2one('farm.pruning', string='Budama', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -741,9 +741,9 @@ class FarmHarvestWorker(models.Model):
 
     harvest_id = fields.Many2one('farm.harvest', string='Yığım', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
@@ -765,9 +765,9 @@ class FarmColdStorageWorker(models.Model):
 
     cold_storage_id = fields.Many2one('farm.cold.storage', string='Soyuducu Anbarı', ondelete='cascade', required=True)
     worker_id = fields.Many2one('farm.worker', string='İşçi', ondelete='cascade')
-    worker_name = fields.Char('İşçi Adı', required=True)
+    worker_name = fields.Char('İşçi Adı', required=False)
     hours_worked = fields.Float('İş Saatı', required=True, default=1.0)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
     amount = fields.Float('Məbləğ', compute='_compute_amount', store=True)
 
     @api.depends('hours_worked', 'hourly_rate')
