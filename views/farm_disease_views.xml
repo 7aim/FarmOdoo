@@ -81,8 +81,8 @@
                             <field name="row_id"/>
                         </group>
                         <group string="Xəstəlik Məlumatları">
-                            <field name="disease_type_id"/>
                             <field name="detection_date"/>
+                            <field name="disease_type_id"/>
                             <field name="damage_level"/>
                         </group>
                     </group>

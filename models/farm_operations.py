@@ -17,7 +17,7 @@ class FarmPlowing(models.Model):
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
     
     # Texniki məlumatlar
-    equipment = fields.Char('Texnika/İcrakar', required=False, tracking=True)
+    equipment = fields.Many2one('res.partner', string='İcrakar', tracking=True)
     plowing_depth = fields.Float('Şumlama Dərinliyi (cm)', default=5.0, required=True, tracking=True)
     area_hectare = fields.Float('Genişlik (ha)', default=10.0, required=True, tracking=True)
 
@@ -26,7 +26,6 @@ class FarmPlowing(models.Model):
     worker_line_ids = fields.One2many('farm.plowing.worker', 'plowing_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     notes = fields.Text('Qeydlər')
-    cost = fields.Float('Xərc')
 
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
@@ -58,7 +57,7 @@ class FarmPlanting(models.Model):
     
     # Ağac məlumatları
     variety_id = fields.Many2one('farm.variety', string='Sort (Ağac)', required=True, ondelete='cascade', tracking=True)
-    tree_count = fields.Integer('Say (ağac sayı)', required=True, tracking=True)
+    tree_count = fields.Integer('Say (ağac sayı)', required=True, default=1, tracking=True)
 
     # Fidan məlumatları
     seedling_type = fields.Selection([
@@ -67,7 +66,7 @@ class FarmPlanting(models.Model):
     ], string='Fidan Növü', required=True, tracking=True)
 
     # Təchizatçı və qiymət
-    supplier = fields.Char('Təchizatçı', tracking=True)
+    supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Techizatcı')]", tracking=True)
     unit_price = fields.Float('Vahid Qiymət', tracking=True)
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
     
@@ -173,7 +172,7 @@ class FarmFertilizing(models.Model):
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
     # Əlavə məlumatlar
-    supplier = fields.Char('Təchizatçı', tracking=True)
+    supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Techizatcı')]", tracking=True)
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
 
@@ -337,14 +336,9 @@ class FarmPruning(models.Model):
     ], string='Budama Növü', required=True, tracking=True)
     
     # Alətlər və işçilər
-    tools_used = fields.Text('İstifadə Olunan Alətlər', tracking=True)
     worker_line_ids = fields.One2many('farm.pruning.worker', 'pruning_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    worker_count = fields.Integer('İşçi Sayı')
-    work_hours = fields.Float('İş Saatı')
-    
-    # Xərclər
-    cost = fields.Float('Xərc')
+
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
 
@@ -353,13 +347,11 @@ class FarmPruning(models.Model):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
 
-    @api.constrains('pruned_tree_count', 'worker_count')
+    @api.constrains('pruned_tree_count')
     def _check_positive_values(self):
         for record in self:
             if record.pruned_tree_count <= 0:
                 raise ValidationError('Budanan ağac sayı müsbət olmalıdır!')
-            if record.worker_count and record.worker_count <= 0:
-                raise ValidationError('İşçi sayı müsbət olmalıdır!')
 
 
 class FarmHarvest(models.Model):
@@ -389,8 +381,6 @@ class FarmHarvest(models.Model):
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.harvest.worker', 'harvest_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    worker_count = fields.Integer('İşçi Sayı', required=True)
-    work_hours = fields.Float('İş Vaxtı (saat)', required=True)
     
     # Xərclər
     cost_per_kg = fields.Float('Kq-a Görə Qiymət')
@@ -410,18 +400,13 @@ class FarmHarvest(models.Model):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
 
-    @api.constrains('tree_count', 'quantity_kg', 'worker_count', 'work_hours')
+    @api.constrains('tree_count', 'quantity_kg')
     def _check_positive_values(self):
         for record in self:
             if record.tree_count <= 0:
                 raise ValidationError('Ağac sayı müsbət olmalıdır!')
             if record.quantity_kg <= 0:
                 raise ValidationError('Məhsul miqdarı müsbət olmalıdır!')
-            if record.worker_count <= 0:
-                raise ValidationError('İşçi sayı müsbət olmalıdır!')
-            if record.work_hours <= 0:
-                raise ValidationError('İş vaxtı müsbət olmalıdır!')
-
 
 class FarmForecast(models.Model):
     """Proqnozlaşdırma"""
@@ -549,7 +534,7 @@ class FarmColdStorage(models.Model):
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.cold.storage.worker', 'cold_storage_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
+    operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]", tracking=True)
     entry_time = fields.Datetime('Giriş Vaxtı', default=fields.Datetime.now)
     exit_time = fields.Datetime('Çıxış Vaxtı')
     

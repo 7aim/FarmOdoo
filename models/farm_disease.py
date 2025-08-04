@@ -93,7 +93,7 @@ class FarmDiseaseRecord(models.Model):
     
     # Xəstəlik məlumatları
     disease_type_id = fields.Many2one('farm.disease.type', string='Xəstəlik/Zərərverici', required=True, tracking=True)
-    detection_date = fields.Date('Təyin Tarixi', required=True, default=fields.Date.today, tracking=True)
+    detection_date = fields.Datetime('Təyin Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
     # Zərər səviyyəsi
     damage_level = fields.Selection([

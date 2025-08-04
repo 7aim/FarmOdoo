@@ -11,8 +11,8 @@
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
-                <field name="variety_id"/>
                 <field name="season_count"/>
+                <field name="variety_id"/>
                 <field name="planting_date"/>
                 <field name="status"/>
             </list>

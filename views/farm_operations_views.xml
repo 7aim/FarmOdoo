@@ -48,7 +48,7 @@
                 <field name="plowing_depth"/>
                 <field name="area_hectare"/>
                 <field name="operator_id"/>
-                <field name="cost"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -67,11 +67,10 @@
                             <field name="parcel_id"/>
                         </group>
                         <group string="Texniki Məlumatlar">
-                            <field name="equipment"/>
                             <field name="plowing_depth"/>
                             <field name="area_hectare"/>
+                            <field name="equipment"/>
                             <field name="operator_id"/>
-                            <field name="cost"/>
                         </group>
                     </group>
                     <notebook>
@@ -128,16 +127,12 @@
                             <field name="planting_date"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
+                            <field name="supplier"/>
                         </group>
                         <group string="Ağac Məlumatları">
                             <field name="variety_id"/>
-                            <field name="tree_count"/>
                             <field name="seedling_type"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Təchizatçı Məlumatları">
-                            <field name="supplier"/>
+                            <field name="tree_count"/>
                             <field name="unit_price"/>
                             <field name="total_cost"/>
                         </group>
@@ -195,13 +190,13 @@
                             <field name="irrigation_date"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
+                            <field name="operator_id"/>
                         </group>
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>
-                            <field name="water_liters"/>
                             <field name="water_source"/>
+                            <field name="water_liters"/>
                             <field name="water_cost"/>
-                            <field name="operator_id"/>
                         </group>
                     </group>
                     <notebook>
@@ -252,13 +247,11 @@
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
-                            <field name="fertilizing_date"/>
                             <field name="field_id"/>
                             <field name="parcel_id"/>
                         </group>
-                    </group>
-                    <group>
                         <group string="Əlavə Məlumatlar">
+                            <field name="fertilizing_date"/>
                             <field name="fertilizer_type"/>
                             <field name="supplier"/>
                         </group>
@@ -417,9 +410,7 @@
                 <field name="row_id"/>
                 <field name="pruning_type"/>
                 <field name="pruned_tree_count"/>
-                <field name="worker_count"/>
-                <field name="work_hours"/>
-                <field name="cost"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -433,20 +424,14 @@
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
-                            <field name="pruning_date"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
                         </group>
                         <group string="Budama Məlumatları">
+                            <field name="pruning_date"/>
                             <field name="pruning_type"/>
                             <field name="pruned_tree_count"/>
-                            <field name="worker_count"/>
-                            <field name="work_hours"/>
-                            <field name="cost"/>
                         </group>
-                    </group>
-                    <group string="İstifadə Olunan Alətlər">
-                        <field name="tools_used" nolabel="1"/>
                     </group>
                     <notebook>
                         <page string="İşçi Xərcləri" name="worker_costs">
@@ -485,7 +470,6 @@
                 <field name="tree_count"/>
                 <field name="quantity_kg"/>
                 <field name="loaded_to_pallets"/>
-                <field name="worker_count"/>
                 <field name="total_cost"/>
             </list>
         </field>
@@ -503,18 +487,12 @@
                             <field name="harvest_date"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
+                            <field name="loaded_to_pallets"/>
                         </group>
                         <group string="Yığım Məlumatları">
                             <field name="harvest_type"/>
                             <field name="tree_count"/>
                             <field name="quantity_kg"/>
-                            <field name="loaded_to_pallets"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="İşçi Məlumatları">
-                            <field name="worker_count"/>
-                            <field name="work_hours"/>
                             <field name="cost_per_kg"/>
                             <field name="total_cost"/>
                         </group>
