@@ -23,7 +23,7 @@ class FarmWorker(models.Model):
     # Hesablanmış sahələr
     total_operations = fields.Integer('Ümumi Əməliyyat Sayı', compute='_compute_statistics', store=True)
     total_hours = fields.Float('Ümumi İş Saatı', compute='_compute_statistics', store=True)
-    total_earned = fields.Float('Ümumi Qazanc', compute='_compute_statistics', store=True)
+    total_earned = fields.Float('Əməliyyat Qazancı', compute='_compute_statistics', store=True)
     total_paid = fields.Float('Ümumi Ödəniş', compute='_compute_total_paid', store=True)
     balance = fields.Float('Balans', compute='_compute_balance', store=True)
     
@@ -81,7 +81,7 @@ class FarmWorker(models.Model):
     @api.depends('total_earned', 'total_paid')
     def _compute_balance(self):
         for worker in self:
-            worker.balance = worker.total_earned - worker.total_paid
+            worker.balance = worker.total_earned + worker.total_paid
 
     @api.constrains('hourly_rate')
     def _check_hourly_rate(self):
