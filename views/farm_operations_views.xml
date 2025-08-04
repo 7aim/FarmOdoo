@@ -106,15 +106,17 @@
         <field name="model">farm.planting</field>
         <field name="arch" type="xml">
             <list string="Əkin Əməliyyatları">
-                <field name="planting_date"/>
+                <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
                 <field name="variety_id"/>
-                <field name="tree_count"/>
                 <field name="seedling_type"/>
                 <field name="supplier"/>
+                <field name="tree_count"/>
+                <field name="planting_date"/>
                 <field name="total_cost"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -172,14 +174,16 @@
         <field name="model">farm.irrigation</field>
         <field name="arch" type="xml">
             <list string="Sulama Əməliyyatları">
-                <field name="irrigation_date"/>
+                <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
                 <field name="irrigation_type"/>
-                <field name="water_liters"/>
                 <field name="operator_id"/>
+                <field name="water_liters"/>
                 <field name="water_cost"/>
+                <field name="irrigation_date"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -236,12 +240,15 @@
         <field name="model">farm.fertilizing</field>
         <field name="arch" type="xml">
             <list string="Gübrələmə Əməliyyatları">
-                <field name="fertilizing_date"/>
+                <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
                 <field name="fertilizer_type"/>
+                <field name="supplier"/>
+                <field name="fertilizing_date"/>
                 <field name="total_cost"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -310,13 +317,14 @@
         <field name="model">farm.treatment</field>
         <field name="arch" type="xml">
             <list string="Dərmanlama Əməliyyatları">
-                <field name="treatment_date"/>
                 <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
                 <field name="application_method"/>
+                <field name="treatment_date"/>
                 <field name="total_cost"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -417,13 +425,13 @@
         <field name="model">farm.pruning</field>
         <field name="arch" type="xml">
             <list string="Budama Əməliyyatları">
-                <field name="pruning_date"/>
                 <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
                 <field name="pruning_type"/>
                 <field name="pruned_tree_count"/>
+                <field name="pruning_date"/>
                 <field name="total_worker_cost"/>
             </list>
         </field>
@@ -478,7 +486,6 @@
         <field name="model">farm.harvest</field>
         <field name="arch" type="xml">
             <list string="Yığım Əməliyyatları">
-                <field name="harvest_date"/>
                 <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
@@ -487,7 +494,8 @@
                 <field name="tree_count"/>
                 <field name="quantity_kg"/>
                 <field name="loaded_to_pallets"/>
-                <field name="total_cost"/>
+                <field name="harvest_date"/>
+                <field name="total_worker_cost"/>
             </list>
         </field>
     </record>
@@ -596,16 +604,16 @@
         <field name="model">farm.damaged.trees</field>
         <field name="arch" type="xml">
             <list string="Zərərçəkmiş Ağaclar">
-                <field name="damage_date"/>
                 <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
                 <field name="row_id"/>
-                <field name="damaged_tree_count"/>
                 <field name="damage_reason"/>
+                <field name="damaged_tree_count"/>
+                <field name="damage_date"/>
                 <field name="treatment_applied"/>
-                <field name="recovery_status"/>
                 <field name="treatment_cost"/>
+                <field name="recovery_status"/>
             </list>
         </field>
     </record>
@@ -655,14 +663,15 @@
         <field name="model">farm.cold.storage</field>
         <field name="arch" type="xml">
             <list string="Soyuducu Anbarı">
-                <field name="storage_date"/>
+                <field name="name"/>
                 <field name="pallet_id"/>
-                <field name="quantity_kg"/>
                 <field name="cooler_id"/>
                 <field name="storage_section"/>
                 <field name="storage_position"/>
-                <field name="temperature"/>
                 <field name="operator_id"/>
+                <field name="quantity_kg"/>
+                <field name="temperature"/>
+                <field name="storage_date"/>
                 <field name="status"/>
             </list>
         </field>
