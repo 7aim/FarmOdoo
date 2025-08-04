@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Palet list View -->
+    <record id="farm_pallet_list_view" model="ir.ui.view">
+        <field name="name">farm.pallet.list</field>
+        <field name="model">farm.pallet</field>
+        <field name="arch" type="xml">
+            <list string="Paletlər">
+                <field name="pallet_code"/>
+                <field name="name"/>
+                <field name="pallet_type"/>
+                <field name="capacity_kg"/>
+                <field name="cooler_id"/>
+                <field name="availability_status"/>
+                <field name="condition"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Palet Form View -->
+    <record id="farm_pallet_form_view" model="ir.ui.view">
+        <field name="name">farm.pallet.form</field>
+        <field name="model">farm.pallet</field>
+        <field name="arch" type="xml">
+            <form string="Palet">
+                <header>
+                    <field name="availability_status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name" placeholder="Palet Adı"/>
+                            <field name="pallet_code" readonly="1"/>
+                            <field name="pallet_type"/>
+                            <field name="capacity_kg"/>
+                            <field name="capacity_liter"/>
+                            <field name="condition"/>
+                            <field name="storage_area"/>
+                            <field name="cooler_id" invisible="storage_area != 'cooler'"/>
+                        </group>
+                        <group string="Tarixi Məlumatlar">
+                            <field name="purchase_date"/>
+                            <field name="last_maintenance_date"/>
+                        </group>
+                    </group>
+                    <group string="Açıqlama">
+                        <field name="description" placeholder="Palet haqqında qeydlər..." nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="farm_pallet_action" model="ir.actions.act_window">
+        <field name="name">Paletlər</field>
+        <field name="res_model">farm.pallet</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="farm_parcel_list_view" model="ir.ui.view">
+        <field name="name">farm.parcel.list</field>
+        <field name="model">farm.parcel</field>
+        <field name="arch" type="xml">
+            <list string="Parsellər">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="field_id"/>
+                <field name="parcel_type_id"/>
+                <field name="irrigation_available"/>
+                <field name="area_hectare"/>
+                <field name="total_rows"/>
+                <field name="total_trees"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_parcel_form_view" model="ir.ui.view">
+        <field name="name">farm.parcel.form</field>
+        <field name="model">farm.parcel</field>
+        <field name="arch" type="xml">
+            <form string="Parsel">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name" placeholder="Nar parseli"/>
+                            <field name="code" readonly="1"/>
+                            <field name="parcel_type_id"/>
+                            <field name="field_id"/>
+                        </group>
+                        <group string="Texniki Məlumatlar">
+                            <field name="area_hectare"/>
+                            <field name="soil_depth"/>
+                            <field name="irrigation_available"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cərgələr">
+                            <field name="row_ids" context="{'default_parcel_id': id}">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="tree_count"/>
+                                    <field name="length_meter"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group string="Açıqlama">
+                        <field name="description" placeholder="Parsel haqqında qeydlər..." nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="farm_parcel_type_list_view" model="ir.ui.view">
+        <field name="name">farm.parcel.type.list</field>
+        <field name="model">farm.parcel.type</field>
+        <field name="arch" type="xml">
+            <list string="Parsel Tipləri">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="fruit_category"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_parcel_type_form_view" model="ir.ui.view">
+        <field name="name">farm.parcel.type.form</field>
+        <field name="model">farm.parcel.type</field>
+        <field name="arch" type="xml">
+            <form string="Parsel Tipi">
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Parsel tipi"/>
+                        <field name="code"/>
+                        <field name="fruit_category"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="farm_parcel_action" model="ir.actions.act_window">
+        <field name="name">Parsellər</field>
+        <field name="res_model">farm.parcel</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="farm_parcel_type_action" model="ir.actions.act_window">
+        <field name="name">Parsel Tipləri</field>
+        <field name="res_model">farm.parcel.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

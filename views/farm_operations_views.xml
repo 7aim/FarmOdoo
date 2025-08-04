@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Şumlama Action -->
+    <record id="farm_plowing_action" model="ir.actions.act_window">
+        <field name="name">Şumlama</field>
+        <field name="res_model">farm.plowing</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Əkin Action -->
+    <record id="farm_planting_action" model="ir.actions.act_window">
+        <field name="name">Əkin</field>
+        <field name="res_model">farm.planting</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Sulama Action -->
+    <record id="farm_irrigation_action" model="ir.actions.act_window">
+        <field name="name">Sulama</field>
+        <field name="res_model">farm.irrigation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Gübrələmə Action -->
+    <record id="farm_fertilizing_action" model="ir.actions.act_window">
+        <field name="name">Gübrələmə</field>
+        <field name="res_model">farm.fertilizing</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Dərmanlama Action -->
+    <record id="farm_treatment_action" model="ir.actions.act_window">
+        <field name="name">Dərmanlama</field>
+        <field name="res_model">farm.treatment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Şumlama Views -->
+    <record id="farm_plowing_list_view" model="ir.ui.view">
+        <field name="name">farm.plowing.list</field>
+        <field name="model">farm.plowing</field>
+        <field name="arch" type="xml">
+            <list string="Şumlama Əməliyyatları">
+                <field name="operation_date"/>
+                <field name="field_id"/>
+                <field name="parcel_id"/>
+                <field name="equipment"/>
+                <field name="plowing_depth"/>
+                <field name="area_hectare"/>
+                <field name="operator_id"/>
+                <field name="cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_plowing_form_view" model="ir.ui.view">
+        <field name="name">farm.plowing.form</field>
+        <field name="model">farm.plowing</field>
+        <field name="arch" type="xml">
+            <form string="Şumlama">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="operation_date"/>
+                            <field name="field_id"/>
+                            <field name="parcel_id"/>
+                        </group>
+                        <group string="Texniki Məlumatlar">
+                            <field name="equipment"/>
+                            <field name="plowing_depth"/>
+                            <field name="area_hectare"/>
+                            <field name="operator_id"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Şumlama haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Əkin Views -->
+    <record id="farm_planting_list_view" model="ir.ui.view">
+        <field name="name">farm.planting.list</field>
+        <field name="model">farm.planting</field>
+        <field name="arch" type="xml">
+            <list string="Əkin Əməliyyatları">
+                <field name="planting_date"/>
+                <field name="parcel_id"/>
+                <field name="row_id"/>
+                <field name="variety_id"/>
+                <field name="tree_count"/>
+                <field name="seedling_type"/>
+                <field name="supplier"/>
+                <field name="total_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_planting_form_view" model="ir.ui.view">
+        <field name="name">farm.planting.form</field>
+        <field name="model">farm.planting</field>
+        <field name="arch" type="xml">
+            <form string="Əkin">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="planting_date"/>
+                            <field name="parcel_id"/>
+                            <field name="row_id"/>
+                        </group>
+                        <group string="Ağac Məlumatları">
+                            <field name="variety_id"/>
+                            <field name="tree_count"/>
+                            <field name="seedling_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Təchizatçı Məlumatları">
+                            <field name="supplier"/>
+                            <field name="unit_price"/>
+                            <field name="total_cost"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Əkin haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Sulama Views -->
+    <record id="farm_irrigation_list_view" model="ir.ui.view">
+        <field name="name">farm.irrigation.list</field>
+        <field name="model">farm.irrigation</field>
+        <field name="arch" type="xml">
+            <list string="Sulama Əməliyyatları">
+                <field name="irrigation_date"/>
+                <field name="parcel_id"/>
+                <field name="row_id"/>
+                <field name="irrigation_type"/>
+                <field name="water_liters"/>
+                <field name="operator_id"/>
+                <field name="water_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_irrigation_form_view" model="ir.ui.view">
+        <field name="name">farm.irrigation.form</field>
+        <field name="model">farm.irrigation</field>
+        <field name="arch" type="xml">
+            <form string="Sulama">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="irrigation_date"/>
+                            <field name="parcel_id"/>
+                            <field name="row_id"/>
+                        </group>
+                        <group string="Sulama Məlumatları">
+                            <field name="irrigation_type"/>
+                            <field name="water_liters"/>
+                            <field name="water_source"/>
+                            <field name="water_cost"/>
+                            <field name="operator_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Sulama haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Gübrələmə Views -->
+    <record id="farm_fertilizing_list_view" model="ir.ui.view">
+        <field name="name">farm.fertilizing.list</field>
+        <field name="model">farm.fertilizing</field>
+        <field name="arch" type="xml">
+            <list string="Gübrələmə Əməliyyatları">
+                <field name="fertilizing_date"/>
+                <field name="field_id"/>
+                <field name="parcel_id"/>
+                <field name="fertilizer_type"/>
+                <field name="total_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_fertilizing_form_view" model="ir.ui.view">
+        <field name="name">farm.fertilizing.form</field>
+        <field name="model">farm.fertilizing</field>
+        <field name="arch" type="xml">
+            <form string="Gübrələmə">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="fertilizing_date"/>
+                            <field name="field_id"/>
+                            <field name="parcel_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Əlavə Məlumatlar">
+                            <field name="fertilizer_type"/>
+                            <field name="supplier"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Məhsul Xərcləri" name="product_costs">
+                            <field name="product_line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id" options="{'no_create_edit': True}"/>
+                                    <field name="available_qty" readonly="1" string="Anbardan Mövcud"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" readonly="1"/>
+                                    <field name="unit_cost" readonly="1"/>
+                                    <field name="cost" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_cost"/>
+                            </group>
+                        </page>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Gübrələmə haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dərmanlama Views -->
+    <record id="farm_treatment_list_view" model="ir.ui.view">
+        <field name="name">farm.treatment.list</field>
+        <field name="model">farm.treatment</field>
+        <field name="arch" type="xml">
+            <list string="Dərmanlama Əməliyyatları">
+                <field name="treatment_date"/>
+                <field name="parcel_id"/>
+                <field name="row_id"/>
+                <field name="application_method"/>
+                <field name="total_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_treatment_form_view" model="ir.ui.view">
+        <field name="name">farm.treatment.form</field>
+        <field name="model">farm.treatment</field>
+        <field name="arch" type="xml">
+            <form string="Dərmanlama">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="treatment_date"/>
+                            <field name="parcel_id"/>
+                            <field name="row_id"/>
+                            <field name="application_method"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Dərman Xərcləri" name="medicine_costs">
+                            <field name="product_line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id" options="{'no_create_edit': True}"/>
+                                    <field name="available_qty" readonly="1" string="Anbardan Mövcud"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" readonly="1"/>
+                                    <field name="unit_cost" readonly="1"/>
+                                    <field name="cost" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_cost"/>
+                            </group>
+                        </page>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Dərmanlama haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Budama Action -->
+    <record id="farm_pruning_action" model="ir.actions.act_window">
+        <field name="name">Budama və Təmizləmə</field>
+        <field name="res_model">farm.pruning</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Yığım Action -->
+    <record id="farm_harvest_action" model="ir.actions.act_window">
+        <field name="name">Yığım</field>
+        <field name="res_model">farm.harvest</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Proqnoz Action -->
+    <record id="farm_forecast_action" model="ir.actions.act_window">
+        <field name="name">Proqnozlaşdırma</field>
+        <field name="res_model">farm.forecast</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Zərərçəkmiş Ağaclar Action -->
+    <record id="farm_damaged_trees_action" model="ir.actions.act_window">
+        <field name="name">Zərərçəkmiş Ağaclar</field>
+        <field name="res_model">farm.damaged.trees</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Soyuducu Anbarı Action -->
+    <record id="farm_cold_storage_action" model="ir.actions.act_window">
+        <field name="name">Soyuducu Anbarı</field>
+        <field name="res_model">farm.cold.storage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Budama Views -->
+    <record id="farm_pruning_list_view" model="ir.ui.view">
+        <field name="name">farm.pruning.list</field>
+        <field name="model">farm.pruning</field>
+        <field name="arch" type="xml">
+            <list string="Budama Əməliyyatları">
+                <field name="pruning_date"/>
+                <field name="parcel_id"/>
+                <field name="row_id"/>
+                <field name="pruning_type"/>
+                <field name="pruned_tree_count"/>
+                <field name="worker_count"/>
+                <field name="work_hours"/>
+                <field name="cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_pruning_form_view" model="ir.ui.view">
+        <field name="name">farm.pruning.form</field>
+        <field name="model">farm.pruning</field>
+        <field name="arch" type="xml">
+            <form string="Budama">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="pruning_date"/>
+                            <field name="parcel_id"/>
+                            <field name="row_id"/>
+                        </group>
+                        <group string="Budama Məlumatları">
+                            <field name="pruning_type"/>
+                            <field name="pruned_tree_count"/>
+                            <field name="worker_count"/>
+                            <field name="work_hours"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+                    <group string="İstifadə Olunan Alətlər">
+                        <field name="tools_used" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Budama haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Yığım Views -->
+    <record id="farm_harvest_list_view" model="ir.ui.view">
+        <field name="name">farm.harvest.list</field>
+        <field name="model">farm.harvest</field>
+        <field name="arch" type="xml">
+            <list string="Yığım Əməliyyatları">
+                <field name="harvest_date"/>
+                <field name="parcel_id"/>
+                <field name="row_id"/>
+                <field name="harvest_type"/>
+                <field name="tree_count"/>
+                <field name="quantity_kg"/>
+                <field name="loaded_to_pallets"/>
+                <field name="worker_count"/>
+                <field name="total_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_harvest_form_view" model="ir.ui.view">
+        <field name="name">farm.harvest.form</field>
+        <field name="model">farm.harvest</field>
+        <field name="arch" type="xml">
+            <form string="Yığım">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="harvest_date"/>
+                            <field name="parcel_id"/>
+                            <field name="row_id"/>
+                        </group>
+                        <group string="Yığım Məlumatları">
+                            <field name="harvest_type"/>
+                            <field name="tree_count"/>
+                            <field name="quantity_kg"/>
+                            <field name="loaded_to_pallets"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="İşçi Məlumatları">
+                            <field name="worker_count"/>
+                            <field name="work_hours"/>
+                            <field name="cost_per_kg"/>
+                            <field name="total_cost"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Yığım haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Proqnoz Views -->
+    <record id="farm_forecast_list_view" model="ir.ui.view">
+        <field name="name">farm.forecast.list</field>
+        <field name="model">farm.forecast</field>
+        <field name="arch" type="xml">
+            <list string="Proqnozlar">
+                <field name="name"/>
+                <field name="forecast_year"/>
+                <field name="forecast_month"/>
+                <field name="field_id"/>
+                <field name="parcel_id"/>
+                <field name="expected_quantity_kg"/>
+                <field name="climate_risk_factor"/>
+                <field name="confidence_level"/>
+                <field name="historical_data_based"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_forecast_form_view" model="ir.ui.view">
+        <field name="name">farm.forecast.form</field>
+        <field name="model">farm.forecast</field>
+        <field name="arch" type="xml">
+            <form string="Proqnozlaşdırma">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="forecast_year"/>
+                            <field name="forecast_month"/>
+                            <field name="field_id"/>
+                            <field name="parcel_id"/>
+                        </group>
+                        <group string="Proqnoz Məlumatları">
+                            <field name="expected_quantity_kg"/>
+                            <field name="climate_risk_factor"/>
+                            <field name="confidence_level"/>
+                            <field name="historical_data_based"/>
+                        </group>
+                    </group>
+                    <group string="Analiz və Qeydlər">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Zərərçəkmiş Ağaclar Views -->
+    <record id="farm_damaged_trees_list_view" model="ir.ui.view">
+        <field name="name">farm.damaged.trees.list</field>
+        <field name="model">farm.damaged.trees</field>
+        <field name="arch" type="xml">
+            <list string="Zərərçəkmiş Ağaclar">
+                <field name="damage_date"/>
+                <field name="parcel_id"/>
+                <field name="row_id"/>
+                <field name="damaged_tree_count"/>
+                <field name="damage_reason"/>
+                <field name="treatment_applied"/>
+                <field name="recovery_status"/>
+                <field name="treatment_cost"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_damaged_trees_form_view" model="ir.ui.view">
+        <field name="name">farm.damaged.trees.form</field>
+        <field name="model">farm.damaged.trees</field>
+        <field name="arch" type="xml">
+            <form string="Zərərçəkmiş Ağaclar">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="damage_date"/>
+                            <field name="parcel_id"/>
+                            <field name="row_id"/>
+                        </group>
+                        <group string="Zərər Məlumatları">
+                            <field name="damaged_tree_count"/>
+                            <field name="damage_reason"/>
+                            <field name="recovery_status"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Müalicə Məlumatları">
+                            <field name="treatment_applied"/>
+                            <field name="treatment_date"/>
+                            <field name="treatment_cost"/>
+                        </group>
+                    </group>
+                    <group string="Müalicə Təsviri">
+                        <field name="treatment_description" nolabel="1"/>
+                    </group>
+                    <group string="Əlavə Qeydlər">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Soyuducu Anbarı Views -->
+    <record id="farm_cold_storage_list_view" model="ir.ui.view">
+        <field name="name">farm.cold.storage.list</field>
+        <field name="model">farm.cold.storage</field>
+        <field name="arch" type="xml">
+            <list string="Soyuducu Anbarı">
+                <field name="storage_date"/>
+                <field name="pallet_id"/>
+                <field name="quantity_kg"/>
+                <field name="cooler_id"/>
+                <field name="storage_section"/>
+                <field name="storage_position"/>
+                <field name="temperature"/>
+                <field name="operator_id"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_cold_storage_form_view" model="ir.ui.view">
+        <field name="name">farm.cold.storage.form</field>
+        <field name="model">farm.cold.storage</field>
+        <field name="arch" type="xml">
+            <form string="Soyuducu Anbarı">
+                <header>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="storage_date"/>
+                            <field name="pallet_id"/>
+                            <field name="quantity_kg"/>
+                        </group>
+                        <group string="Soyuducu Məlumatları">
+                            <field name="cooler_id"/>
+                            <field name="storage_section"/>
+                            <field name="storage_position"/>
+                            <field name="operator_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Şərait">
+                            <field name="temperature"/>
+                            <field name="humidity"/>
+                        </group>
+                        <group string="Vaxt Məlumatları">
+                            <field name="entry_time"/>
+                            <field name="exit_time"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="İşçi Xərcləri" name="worker_costs">
+                            <field name="worker_line_ids">
+                                <list editable="bottom">
+                                    <field name="worker_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Soyuducu anbarı haqqında əlavə məlumatlar..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

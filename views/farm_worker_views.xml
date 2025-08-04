@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- İşçi Action -->
+    <record id="farm_worker_action" model="ir.actions.act_window">
+        <field name="name">İşçilər</field>
+        <field name="res_model">farm.worker</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- İşçi Ödənişləri Action -->
+    <record id="farm_worker_payment_action" model="ir.actions.act_window">
+        <field name="name">İşçi Ödənişləri</field>
+        <field name="res_model">farm.worker.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- İşçi List View -->
+    <record id="farm_worker_list_view" model="ir.ui.view">
+        <field name="name">farm.worker.list</field>
+        <field name="model">farm.worker</field>
+        <field name="arch" type="xml">
+            <list string="İşçilər">
+                <field name="employee_code"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="hourly_rate"/>
+                <field name="total_operations"/>
+                <field name="total_hours"/>
+                <field name="total_earned"/>
+                <field name="total_paid"/>
+                <field name="balance"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- İşçi Form View -->
+    <record id="farm_worker_form_view" model="ir.ui.view">
+        <field name="name">farm.worker.form</field>
+        <field name="model">farm.worker</field>
+        <field name="arch" type="xml">
+            <form string="İşçi">
+                <header>
+                    <button name="action_view_payments" type="object" 
+                            string="Ödənişlər" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_payments" icon="fa-money">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="total_paid"/></span>
+                                <span class="o_stat_text">Ümumi Ödəniş</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_operations" icon="fa-tasks">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="total_operations"/></span>
+                                <span class="o_stat_text">Əməliyyatlar</span>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="employee_code"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="İş Məlumatları">
+                            <field name="hire_date"/>
+                            <field name="hourly_rate"/>
+                            <field name="total_hours" readonly="1"/>
+                            <field name="balance" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Ünvan">
+                        <field name="address" nolabel="1"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Ödənişlər" name="payments">
+                            <field name="payment_line_ids">
+                                <list editable="bottom">
+                                    <field name="payment_date"/>
+                                    <field name="payment_type"/>
+                                    <field name="amount" sum="Cəmi"/>
+                                    <field name="description"/>
+                                    <field name="reference"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_paid"/>
+                                <field name="total_earned"/>
+                                <field name="balance"/>
+                            </group>
+                        </page>
+                        
+                        <page string="Əməliyyat Statistikası" name="statistics">
+                            <group>
+                                <group string="Ümumi Statistika">
+                                    <field name="total_operations"/>
+                                    <field name="total_hours"/>
+                                    <field name="total_earned"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Şumlama" name="plowing">
+                            <field name="plowing_line_ids" readonly="1">
+                                <list>
+                                    <field name="plowing_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Əkin" name="planting">
+                            <field name="planting_line_ids" readonly="1">
+                                <list>
+                                    <field name="planting_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Sulama" name="irrigation">
+                            <field name="irrigation_line_ids" readonly="1">
+                                <list>
+                                    <field name="irrigation_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Gübrələmə" name="fertilizing">
+                            <field name="fertilizing_line_ids" readonly="1">
+                                <list>
+                                    <field name="fertilizing_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Dərmanlama" name="treatment">
+                            <field name="treatment_line_ids" readonly="1">
+                                <list>
+                                    <field name="treatment_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Budama" name="pruning">
+                            <field name="pruning_line_ids" readonly="1">
+                                <list>
+                                    <field name="pruning_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Yığım" name="harvest">
+                            <field name="harvest_line_ids" readonly="1">
+                                <list>
+                                    <field name="harvest_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Soyuducu" name="cold_storage">
+                            <field name="cold_storage_line_ids" readonly="1">
+                                <list>
+                                    <field name="cold_storage_id"/>
+                                    <field name="hours_worked"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- İşçi Ödənişləri List View -->
+    <record id="farm_worker_payment_list_view" model="ir.ui.view">
+        <field name="name">farm.worker.payment.list</field>
+        <field name="model">farm.worker.payment</field>
+        <field name="arch" type="xml">
+            <list string="İşçi Ödənişləri">
+                <field name="payment_date"/>
+                <field name="worker_id"/>
+                <field name="payment_type"/>
+                <field name="amount" sum="Cəmi"/>
+                <field name="description"/>
+                <field name="reference"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- İşçi Ödənişləri Form View -->
+    <record id="farm_worker_payment_form_view" model="ir.ui.view">
+        <field name="name">farm.worker.payment.form</field>
+        <field name="model">farm.worker.payment</field>
+        <field name="arch" type="xml">
+            <form string="İşçi Ödənişi">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="worker_id"/>
+                            <field name="payment_date"/>
+                            <field name="amount"/>
+                            <field name="payment_type"/>
+                        </group>
+                        <group string="Əlavə Məlumatlar">
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <group string="Açıqlama">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

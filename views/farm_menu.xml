@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Əsas Farm Menyu -->
+    <menuitem id="farm_main_menu" name="Kənd Təsərrüfatı" sequence="1"/>
+    
+    <!-- I. Saheler Menyusu -->
+    <menuitem id="farm_master_menu" name="Saheler" parent="farm_main_menu" sequence="10"/>
+    
+    <!-- Saheler Alt Menyuları -->
+    <menuitem id="farm_field_menu" name="Sahələr" parent="farm_master_menu" 
+              action="farm_field_action" sequence="10"/>
+    <menuitem id="farm_parcel_menu" name="Parsellər" parent="farm_master_menu" 
+              action="farm_parcel_action" sequence="20"/>
+    <menuitem id="farm_row_menu" name="Cərgələr" parent="farm_master_menu" 
+              action="farm_row_action" sequence="30"/>
+    <menuitem id="farm_tree_menu" name="Ağaclar" parent="farm_master_menu" 
+              action="farm_tree_action" sequence="40"/>
+
+    <!-- II. Operativ Formlar Menyusu -->
+    <menuitem id="farm_operations_menu" name="Əməliyyatlar" parent="farm_main_menu" sequence="20"/>
+
+    <!-- Bağçılık Əməliyyatları -->
+    <menuitem id="farm_operations_gardening_menu" name="Bağçılık Əməliyyatları" 
+              parent="farm_operations_menu" sequence="10"/>
+    
+    <menuitem id="farm_plowing_menu" name="Şumlama" parent="farm_operations_gardening_menu" 
+              action="farm_plowing_action" sequence="10"/>
+    <menuitem id="farm_planting_menu" name="Əkin" parent="farm_operations_gardening_menu" 
+              action="farm_planting_action" sequence="20"/>
+    <menuitem id="farm_irrigation_menu" name="Sulama" parent="farm_operations_gardening_menu" 
+              action="farm_irrigation_action" sequence="30"/>
+    <menuitem id="farm_fertilizing_menu" name="Gübrələmə" parent="farm_operations_gardening_menu" 
+              action="farm_fertilizing_action" sequence="40"/>
+    <menuitem id="farm_treatment_menu" name="Dərmanlama" parent="farm_operations_gardening_menu" 
+              action="farm_treatment_action" sequence="50"/>
+    <menuitem id="farm_pruning_menu" name="Budama və Təmizləmə" parent="farm_operations_gardening_menu" 
+              action="farm_pruning_action" sequence="60"/>
+    <menuitem id="farm_disease_main_menu" name="Xəstəlik Qeydləri" parent="farm_operations_gardening_menu" 
+              action="farm_disease_record_action" sequence="70"/>
+
+    <!-- Məhsul Əməliyyatları -->
+    <menuitem id="farm_operations_harvest_menu" name="Məhsul Əməliyyatları" 
+              parent="farm_operations_menu" sequence="20"/>
+    
+    <menuitem id="farm_harvest_menu" name="Yığım" parent="farm_operations_harvest_menu" 
+              action="farm_harvest_action" sequence="10"/>
+    <menuitem id="farm_cold_storage_menu" name="Soyuducu Anbarı" parent="farm_operations_harvest_menu" 
+              action="farm_cold_storage_action" sequence="20"/>
+    
+    <!-- Planlaşdırma və Təhlil -->
+    <menuitem id="farm_operations_planning_menu" name="Planlaşdırma və Təhlil" 
+              parent="farm_operations_menu" sequence="30"/>
+    
+    <menuitem id="farm_forecast_menu" name="Proqnozlaşdırma" parent="farm_operations_planning_menu" 
+              action="farm_forecast_action" sequence="10"/>
+    <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_planning_menu" 
+              action="farm_damaged_trees_action" sequence="20"/>
+
+    <!-- III. İşçilər -->
+    <menuitem id="farm_workers_menu" name="İşçilər" parent="farm_main_menu" sequence="30"/>
+    
+    <menuitem id="farm_worker_list_menu" name="İşçilər" parent="farm_workers_menu" 
+              action="farm_worker_action" sequence="10"/>
+    <menuitem id="farm_worker_payments_menu" name="Ödənişlər" parent="farm_workers_menu" 
+              action="farm_worker_payment_action" sequence="20"/>
+
+    <!-- V. Satınalma -->
+    <menuitem id="farm_purchase_menu" name="Satınalma" parent="farm_main_menu" sequence="50"/>
+    
+    <menuitem id="farm_purchase_orders_menu" name="Satınalma Sifarişləri" parent="farm_purchase_menu" 
+              action="purchase.purchase_form_action" sequence="10"/>
+    <menuitem id="farm_vendors_menu" name="Təchizatçılar" parent="farm_purchase_menu" 
+              action="base.action_partner_supplier_form" sequence="20"/>
+
+    <!-- VI. Məhsullar -->
+    <menuitem id="farm_products_menu" name="Məhsullar" parent="farm_main_menu" sequence="60"/>
+    
+    <menuitem id="farm_product_list_menu" name="Məhsul Siyahısı" parent="farm_products_menu" 
+              action="product.product_template_action" sequence="10"/>
+    <menuitem id="farm_product_variants_menu" name="Məhsul Variantları" parent="farm_products_menu" 
+              action="product.product_normal_action" sequence="20"/>
+    <menuitem id="farm_product_categories_menu" name="Məhsul Kateqoriyaları" parent="farm_products_menu" 
+              action="product.product_category_action_form" sequence="30"/>
+    
+    <!-- VII. Konfiqurasiya -->
+    <menuitem id="farm_config_menu" name="Konfiqurasiya" parent="farm_main_menu" sequence="90"/>
+    
+    <menuitem id="farm_parcel_type_menu" name="Parsel Tipləri" parent="farm_config_menu" 
+              action="farm_parcel_type_action" sequence="10"/>
+    <menuitem id="farm_disease_type_menu" name="Xəstəliklər" parent="farm_config_menu" 
+              action="farm_disease_type_action" sequence="30"/>
+    <menuitem id="farm_pallet_menu" name="Paletlər" parent="farm_config_menu" 
+              action="farm_pallet_action" sequence="40"/>
+    <menuitem id="farm_cooler_menu" name="Soyuducular" parent="farm_config_menu" 
+              action="farm_cooler_action" sequence="20"/>
+    <menuitem id="farm_variety_menu" name="Sortlar" parent="farm_config_menu" 
+              action="farm_variety_action" sequence="50"/>
+</odoo>

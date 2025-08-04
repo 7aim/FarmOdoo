@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="farm_field_list_view" model="ir.ui.view">
+        <field name="name">farm.field.list</field>
+        <field name="model">farm.field</field>
+        <field name="arch" type="xml">
+            <list string="Sahələr">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="district"/>
+                <field name="village"/>
+                <field name="soil_type"/>
+                <field name="area_hectare"/>
+                <field name="total_parcel"/>
+                <field name="total_rows"/>
+                <field name="total_trees"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_field_form_view" model="ir.ui.view">
+        <field name="name">farm.field.form</field>
+        <field name="model">farm.field</field>
+        <field name="arch" type="xml">
+            <form string="Sahə">
+                <header>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name" placeholder='Nar bağı'/>
+                            <field name="code" readonly="1"/>
+                            <field name="area_hectare"/>
+                            <field name="soil_type"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Yer Məlumatları">
+                            <field name="district" placeholder='Naxçıvan'/>
+                            <field name="village" placeholder='Qaraçuq'/>
+                            <field name="gps_latitude"/>
+                            <field name="gps_longitude"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Statistikalar">
+                            <field name="total_parcel" readonly="1"/>
+                            <field name="total_rows" readonly="1"/>
+                            <field name="total_trees" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Parsellər">
+                            <field name="parcel_ids" context="{'default_field_id': id}">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="parcel_type_id"/>
+                                    <field name="area_hectare"/>
+                                    <field name="total_rows"/>
+                                    <field name="total_trees"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group string="Açıqlama">
+                        <field name="description" placeholder="Sahə haqqında qeydlər..." nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="farm_field_action" model="ir.actions.act_window">
+        <field name="name">Sahələr</field>
+        <field name="res_model">farm.field</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                İlk sahənizi yaradın!
+            </p>
+            <p>
+                Sahələr təsərrüfatınızın əsas bölmələridir.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Soyuducu List View -->
+    <record id="farm_cooler_list_view" model="ir.ui.view">
+        <field name="name">farm.cooler.list</field>
+        <field name="model">farm.cooler</field>
+        <field name="arch" type="xml">
+            <list string="Soyuducular">
+                <field name="name"/>
+                <field name="cooler_code"/>
+                <field name="capacity_kg"/>
+                <field name="target_temperature"/>
+                <field name="current_temperature"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Soyuducu Form View -->
+    <record id="farm_cooler_form_view" model="ir.ui.view">
+        <field name="name">farm.cooler.form</field>
+        <field name="model">farm.cooler</field>
+        <field name="arch" type="xml">
+            <form string="Soyuducu">
+                <header>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>             
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name" placeholder="Soyuducu Adı"/>
+                            <field name="cooler_code"/>
+                            <field name="capacity_kg"/>
+                        </group>
+                        <group string="Temperatura Nəzarəti">
+                            <field name="target_temperature"/>
+                            <field name="current_temperature"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Soyuducu Search View -->
+    <record id="farm_cooler_search_view" model="ir.ui.view">
+        <field name="name">farm.cooler.search</field>
+        <field name="model">farm.cooler</field>
+        <field name="arch" type="xml">
+            <search string="Soyuducu Axtarışı">
+                <field name="cooler_code"/>
+                <separator/>
+                <filter name="active_coolers" string="Aktiv Soyuducular" domain="[('status', '=', 'active')]"/>
+                <filter name="passive_coolers" string="Passiv Soyuducular" domain="[('status', '=', 'passive')]"/>
+                <group expand="0" string="Qruplama">
+                    <filter name="group_by_status" string="Statusla" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Soyuducu Action -->
+    <record id="farm_cooler_action" model="ir.actions.act_window">
+        <field name="name">Soyuducular</field>
+        <field name="res_model">farm.cooler</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Yeni soyuducu əlavə edin
+            </p>
+            <p>
+                Soyuducularınızı qeydiyyata alın və idarə edin.
+            </p>
+        </field>
+    </record>
+</odoo>
