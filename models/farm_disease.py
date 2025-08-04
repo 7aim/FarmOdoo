@@ -80,9 +80,10 @@ class FarmDiseaseType(models.Model):
 class FarmDiseaseRecord(models.Model):
     _name = 'farm.disease.record'
     _description = 'Xəstəlik Qeydi'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'detection_date desc'
 
-    name = fields.Char('Qeyd Adı', compute='_compute_name', store=True)
+    name = fields.Char('Qeyd Adı', compute='_compute_name', store=True, readonly=True)
     
     # Ağac əlaqəsi
     tree_id = fields.Many2one('farm.tree', string='Ağac', required=True, ondelete='cascade')
@@ -91,16 +92,16 @@ class FarmDiseaseRecord(models.Model):
     field_id = fields.Many2one(related='tree_id.field_id', string='Sahə', store=True, readonly=True)
     
     # Xəstəlik məlumatları
-    disease_type_id = fields.Many2one('farm.disease.type', string='Xəstəlik/Zərərverici', required=True)
-    detection_date = fields.Date('Təyin Tarixi', required=True, default=fields.Date.today)
-    
+    disease_type_id = fields.Many2one('farm.disease.type', string='Xəstəlik/Zərərverici', required=True, tracking=True)
+    detection_date = fields.Date('Təyin Tarixi', required=True, default=fields.Date.today, tracking=True)
+
     # Zərər səviyyəsi
     damage_level = fields.Selection([
         ('low', 'Aşağı'),
         ('medium', 'Orta'),
         ('high', 'Yüksək'),
         ('critical', 'Kritik')
-    ], string='Zərər Səviyyəsi', default='low')
+    ], string='Zərər Səviyyəsi', default='low', tracking=True)
 
     # Status
     status = fields.Selection([
@@ -109,8 +110,8 @@ class FarmDiseaseRecord(models.Model):
         ('under_treatment', 'Müalicə davam edir'),
         ('recovered', 'Sağaldı'),
         ('chronic', 'Xroniki')
-    ], string='Status', default='detected', required=True)
-    
+    ], string='Status', default='detected', required=True, tracking=True)
+
     description = fields.Text('Qeydlər')
 
     @api.depends('tree_id', 'disease_type_id', 'detection_date')

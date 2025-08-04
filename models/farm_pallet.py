@@ -5,9 +5,10 @@ from odoo.exceptions import ValidationError
 class FarmPallet(models.Model):
     _name = 'farm.pallet'
     _description = 'Paletlər'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'pallet_code'
 
-    name = fields.Char('Palet Adı')
+    name = fields.Char('Palet Adı', tracking=True)
     pallet_code = fields.Char('Palet Kodu', copy=False, readonly=True)
     
     # Palet tipi
@@ -17,11 +18,11 @@ class FarmPallet(models.Model):
         ('metal', 'Metal'),
         ('cardboard', 'Karton'),
         ('other', 'Digər')
-    ], string='Palet Tipi', default='wood')
+    ], string='Palet Tipi', default='wood', tracking=True)
 
     # Həcm məlumatları
-    capacity_kg = fields.Float('Həcm (kq)', default=5.0)
-    capacity_liter = fields.Float('Həcm (litr)', default=0.0)
+    capacity_kg = fields.Float('Həcm (kq)', default=5.0, tracking=True)
+    capacity_liter = fields.Float('Həcm (litr)', default=0.0, tracking=True)
 
     # Status məlumatları
     availability_status = fields.Selection([
@@ -30,8 +31,8 @@ class FarmPallet(models.Model):
         ('reserved', 'Rezerv'),
         ('maintenance', 'Təmir'),
         ('damaged', 'Zədəli')
-    ], string='Mövcudluq', default='empty')
-    
+    ], string='Mövcudluq', default='empty', tracking=True)
+
     # Saxlanma yeri
     storage_area = fields.Selection([
         ('field', 'Sahədə'),
@@ -39,15 +40,15 @@ class FarmPallet(models.Model):
         ('cooler', 'Soyuducuda'),
         ('transport', 'Nəqldə'),
         ('other', 'Digər')
-    ], string='Saxlanma Sahəsi', default='warehouse')
-    
+    ], string='Saxlanma Sahəsi', default='warehouse', tracking=True)
+
     # Soyuducu əlaqəsi
     cooler_id = fields.Many2one('farm.cooler', string='Soyuducu')
     
     # Tarixi məlumatlar
-    purchase_date = fields.Date('Alınma Tarixi')
-    last_maintenance_date = fields.Date('Son Təmir Tarixi')
-    
+    purchase_date = fields.Date('Alınma Tarixi', default=fields.Date.today, tracking=True)
+    last_maintenance_date = fields.Date('Son Təmir Tarixi', tracking=True)
+
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
     condition = fields.Selection([
@@ -56,7 +57,7 @@ class FarmPallet(models.Model):
         ('fair', 'Orta'),
         ('poor', 'Pis'),
         ('damaged', 'Zədəli')
-    ], string='Vəziyyət', default='good')
+    ], string='Vəziyyət', default='good', tracking=True)
 
     def name_get(self):
         """Override name_get for custom display name"""

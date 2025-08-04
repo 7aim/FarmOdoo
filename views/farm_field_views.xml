@@ -68,6 +68,7 @@
                         <field name="description" placeholder="Sahə haqqında qeydlər..." nolabel="1"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

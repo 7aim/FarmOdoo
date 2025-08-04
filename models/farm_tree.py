@@ -5,9 +5,10 @@ from odoo.exceptions import ValidationError
 class FarmTree(models.Model):
     _name = 'farm.tree'
     _description = 'Ağac'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'tree_id'
 
-    name = fields.Char('Ağac Adı')
+    name = fields.Char('Ağac Adı', tracking=True)
     tree_id = fields.Char('Ağac kodu', copy=False, readonly=True)
 
     # Cərgə əlaqəsi
@@ -16,11 +17,11 @@ class FarmTree(models.Model):
     field_id = fields.Many2one(related='row_id.field_id', string='Sahə', store=True, readonly=True)
     
     # Ağac məlumatları
-    variety_id = fields.Many2one('farm.variety', string='Sort', required=True)
+    variety_id = fields.Many2one('farm.variety', string='Sort', required=True, tracking=True)
     
     # Tarixi məlumatlar
-    planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today)
-    season_count = fields.Integer('Mövsüm Sayı (il)', compute='_compute_season_count', store=True)
+    planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today, tracking=True)
+    season_count = fields.Integer('Mövsüm Sayı (il)', compute='_compute_season_count', store=True, tracking=True)
     
     # Status
     status = fields.Selection([

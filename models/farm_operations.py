@@ -7,21 +7,22 @@ class FarmPlowing(models.Model):
     _name = 'farm.plowing'
     _description = 'Şumlama'
     _order = 'operation_date desc'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Şumlama')
-    operation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
+    name = fields.Char('Əməliyyat Adı', required=True, default='Şumlama', tracking=True)
+    operation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     # Sahə və Parsel
-    field_id = fields.Many2one('farm.field', string='Sahə', required=False, ondelete='cascade')
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade')
+    field_id = fields.Many2one('farm.field', string='Sahə', required=False, ondelete='cascade', tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
     
     # Texniki məlumatlar
-    equipment = fields.Char('Texnika/İcrakar', required=False)
-    plowing_depth = fields.Float('Şumlama Dərinliyi (cm)', default=5.0, required=True)
-    area_hectare = fields.Float('Genişlik (ha)', default=10.0, required=True)
+    equipment = fields.Char('Texnika/İcrakar', required=False, tracking=True)
+    plowing_depth = fields.Float('Şumlama Dərinliyi (cm)', default=5.0, required=True, tracking=True)
+    area_hectare = fields.Float('Genişlik (ha)', default=10.0, required=True, tracking=True)
 
     # İşçi məlumatları
-    operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
+    operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]", tracking=True)
     worker_line_ids = fields.One2many('farm.plowing.worker', 'plowing_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     notes = fields.Text('Qeydlər')
@@ -45,28 +46,29 @@ class FarmPlanting(models.Model):
     """Əkin Əməliyyatı"""
     _name = 'farm.planting'
     _description = 'Əkin'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'planting_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Əkin')
-    planting_date = fields.Datetime('Əkin Tarixi', required=True, default=fields.Datetime.now)
+    name = fields.Char('Əməliyyat Adı', required=True, default='Əkin', tracking=True)
+    planting_date = fields.Datetime('Əkin Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
     # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Ağac məlumatları
-    variety_id = fields.Many2one('farm.variety', string='Sort (Ağac)', required=True, ondelete='cascade')
-    tree_count = fields.Integer('Say (ağac sayı)', required=True)
-    
+    variety_id = fields.Many2one('farm.variety', string='Sort (Ağac)', required=True, ondelete='cascade', tracking=True)
+    tree_count = fields.Integer('Say (ağac sayı)', required=True, tracking=True)
+
     # Fidan məlumatları
     seedling_type = fields.Selection([
         ('open_root', 'Açıq Kök'),
         ('closed_root', 'Qapalı Kök')
-    ], string='Fidan Növü', required=True)
-    
+    ], string='Fidan Növü', required=True, tracking=True)
+
     # Təchizatçı və qiymət
-    supplier = fields.Char('Təchizatçı')
-    unit_price = fields.Float('Vahid Qiymət')
+    supplier = fields.Char('Təchizatçı', tracking=True)
+    unit_price = fields.Float('Vahid Qiymət', tracking=True)
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
     
     # İşçi məlumatları
@@ -97,33 +99,34 @@ class FarmIrrigation(models.Model):
     """Sulama Əməliyyatı"""
     _name = 'farm.irrigation'
     _description = 'Sulama'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'irrigation_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Sulama')
-    irrigation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
-    
+    name = fields.Char('Əməliyyat Adı', required=True, default='Sulama', tracking=True)
+    irrigation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
+
     # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
-    
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+
     # Sulama tipi
     irrigation_type = fields.Selection([
         ('drip', 'Damla'),
         ('motor', 'Motor'),
         ('rain', 'Süni Yağış')
-    ], string='Sulama Tipi', required=True)
+    ], string='Sulama Tipi', required=True, tracking=True)
     
     # Su məlumatları
-    water_liters = fields.Float('Günlük/Litrlər', required=True)
-    water_source = fields.Char('Su Mənbəyi')
-    water_cost = fields.Float('Su Məsrəfi')
+    water_liters = fields.Float('Günlük/Litrlər', required=True, tracking=True)
+    water_source = fields.Char('Su Mənbəyi', tracking=True)
+    water_cost = fields.Float('Su Məsrəfi', tracking=True)
     
     # İşçi məlumatları
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
     worker_line_ids = fields.One2many('farm.irrigation.worker', 'irrigation_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     notes = fields.Text('Qeydlər')
-    active = fields.Boolean('Aktiv', default=True)
+    #active = fields.Boolean('Aktiv', default=True)
 
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
@@ -141,15 +144,16 @@ class FarmFertilizing(models.Model):
     """Gübrələmə Əməliyyatı"""
     _name = 'farm.fertilizing'
     _description = 'Gübrələmə'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fertilizing_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Gübrələmə')
-    fertilizing_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
+    name = fields.Char('Əməliyyat Adı', required=True, default='Gübrələmə', tracking=True)
+    fertilizing_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     # Sahə və Parsel
-    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade')
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade')
-    
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+
     # Gübrə tipi
     fertilizer_type = fields.Selection([
         ('nitrogen', 'Azot'),
@@ -158,7 +162,7 @@ class FarmFertilizing(models.Model):
         ('organic', 'Üzvi'),
         ('complex', 'Kompleks'),
         ('other', 'Digər')
-    ], string='Gübrə Tipi', required=True)
+    ], string='Gübrə Tipi', required=True, tracking=True)
     
     # Gübrə məlumatları
     product_line_ids = fields.One2many('farm.fertilizing.line', 'fertilizing_id', string='Məhsul Xərcləri')
@@ -169,7 +173,7 @@ class FarmFertilizing(models.Model):
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
     # Əlavə məlumatlar
-    supplier = fields.Char('Təchizatçı')
+    supplier = fields.Char('Təchizatçı', tracking=True)
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
 
@@ -188,6 +192,7 @@ class FarmTreatment(models.Model):
     """Dərmanlama Əməliyyatı"""
     _name = 'farm.treatment'
     _description = 'Dərmanlama'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'treatment_date desc'
 
     name = fields.Char('Əməliyyat Adı', required=True, default='Dərmanlama')
@@ -312,26 +317,27 @@ class FarmPruning(models.Model):
     """Budama və Təmizləmə Əməliyyatı"""
     _name = 'farm.pruning'
     _description = 'Budama və Təmizləmə'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'pruning_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Budama')
-    pruning_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
+    name = fields.Char('Əməliyyat Adı', required=True, default='Budama', tracking=True)
+    pruning_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     # Parsel və Cərgə
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
     row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
     
     # Budama məlumatları
-    pruned_tree_count = fields.Integer('Budanan Ağac Sayı', required=True)
+    pruned_tree_count = fields.Integer('Budanan Ağac Sayı', required=True, tracking=True)
     pruning_type = fields.Selection([
         ('dry', 'Quru Budama'),
         ('formal', 'Formal Budama'),
         ('cleaning', 'Təmizləmə'),
         ('shaping', 'Formalaşdırma')
-    ], string='Budama Növü', required=True)
+    ], string='Budama Növü', required=True, tracking=True)
     
     # Alətlər və işçilər
-    tools_used = fields.Text('İstifadə Olunan Alətlər')
+    tools_used = fields.Text('İstifadə Olunan Alətlər', tracking=True)
     worker_line_ids = fields.One2many('farm.pruning.worker', 'pruning_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     worker_count = fields.Integer('İşçi Sayı')
@@ -360,10 +366,11 @@ class FarmHarvest(models.Model):
     """Yığım Əməliyyatı"""
     _name = 'farm.harvest'
     _description = 'Yığım'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'harvest_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Yığım')
-    harvest_date = fields.Datetime('Yığım Tarixi', required=True, default=fields.Datetime.now)
+    name = fields.Char('Əməliyyat Adı', required=True, default='Yığım', tracking=True)
+    harvest_date = fields.Datetime('Yığım Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
     # Parsel və Cərgə
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
@@ -373,12 +380,12 @@ class FarmHarvest(models.Model):
     harvest_type = fields.Selection([
         ('manual', 'Əllə'),
         ('mechanical', 'Mexaniki')
-    ], string='Yığım Növü', required=True)
-    
-    tree_count = fields.Integer('Ağac Sayı', required=True)
-    quantity_kg = fields.Float('Miqdar (kq)', required=True)
-    loaded_to_pallets = fields.Boolean('Paletlərə Yükləndimi?', default=False)
-    
+    ], string='Yığım Növü', required=True, tracking=True)
+
+    tree_count = fields.Integer('Ağac Sayı', required=True, tracking=True)
+    quantity_kg = fields.Float('Miqdar (kq)', required=True, tracking=True)
+    loaded_to_pallets = fields.Boolean('Paletlərə Yükləndimi?', default=False, tracking=True)
+
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.harvest.worker', 'harvest_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
@@ -420,24 +427,25 @@ class FarmForecast(models.Model):
     """Proqnozlaşdırma"""
     _name = 'farm.forecast'
     _description = 'Proqnozlaşdırma'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'forecast_year desc, forecast_month'
 
-    name = fields.Char('Proqnoz Adı', required=True)
-    forecast_year = fields.Integer('İl', required=True, default=lambda self: fields.Date.today().year)
+    name = fields.Char('Proqnoz Adı', required=True, default='Proqnozlaşdırma', tracking=True)
+    forecast_year = fields.Integer('İl', required=True, default=lambda self: fields.Date.today().year, tracking=True)
     forecast_month = fields.Selection([
         ('1', 'Yanvar'), ('2', 'Fevral'), ('3', 'Mart'),
         ('4', 'Aprel'), ('5', 'May'), ('6', 'İyun'),
         ('7', 'İyul'), ('8', 'Avqust'), ('9', 'Sentyabr'),
         ('10', 'Oktyabr'), ('11', 'Noyabr'), ('12', 'Dekabr')
-    ], string='Ay')
+    ], string='Ay', required=True, default=lambda self: fields.Date.today().month, tracking=True)
     
     # Sahə və Parsel
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade')
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade')
     
     # Proqnoz məlumatları
-    expected_quantity_kg = fields.Float('Gözlənən Miqdar (kq)', required=True)
-    historical_data_based = fields.Boolean('Tarixi Məlumatlara Əsaslanan', default=True)
+    expected_quantity_kg = fields.Float('Gözlənən Miqdar (kq)', required=True, tracking=True)
+    historical_data_based = fields.Boolean('Tarixi Məlumatlara Əsaslanan', default=True, tracking=True)
     
     # Risk faktoru
     climate_risk_factor = fields.Selection([
@@ -445,12 +453,12 @@ class FarmForecast(models.Model):
         ('medium', 'Orta'),
         ('high', 'Yüksək'),
         ('very_high', 'Çox Yüksək')
-    ], string='İqlim Risk Faktoru', required=True, default='medium')
+    ], string='İqlim Risk Faktoru', required=True, default='medium', tracking=True)
     
     # Əlavə məlumatlar
-    confidence_level = fields.Float('Etibarlılıq Səviyyəsi (%)', default=80.0)
-    notes = fields.Text('Analiz və Qeydlər')
-    active = fields.Boolean('Aktiv', default=True)
+    confidence_level = fields.Float('Etibarlılıq Səviyyəsi (%)', default=80.0, tracking=True)
+    notes = fields.Text('Analiz və Qeydlər', tracking=True)
+    active = fields.Boolean('Aktiv', default=True, tracking=True)
 
     @api.constrains('expected_quantity_kg', 'confidence_level')
     def _check_values(self):
@@ -465,17 +473,18 @@ class FarmDamagedTrees(models.Model):
     """Zərərçəkmiş Ağaclar"""
     _name = 'farm.damaged.trees'
     _description = 'Zərərçəkmiş Ağaclar'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'damage_date desc'
 
-    name = fields.Char('Qeyd Adı', required=True, default='Zərərçəkmiş Ağaclar')
-    damage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
+    name = fields.Char('Qeyd Adı', required=True, default='Zərərçəkmiş Ağaclar', tracking=True)
+    damage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     # Parsel məlumatları
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
     row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
     
     # Zərər məlumatları
-    damaged_tree_count = fields.Integer('Zərərçəkmiş Ağac Sayı', required=True)
+    damaged_tree_count = fields.Integer('Zərərçəkmiş Ağac Sayı', required=True, tracking=True)
     damage_reason = fields.Selection([
         ('disease', 'Xəstəlik'),
         ('frost', 'Don'),
@@ -485,21 +494,21 @@ class FarmDamagedTrees(models.Model):
         ('drought', 'Quraqlıq'),
         ('wind', 'Külək'),
         ('other', 'Digər')
-    ], string='Zərər Səbəbi', required=True)
-    
+    ], string='Zərər Səbəbi', required=True, tracking=True)
+
     # Müalicə tədbiri
-    treatment_applied = fields.Boolean('Müalicə Tədbiri Görülübmü?', default=False)
-    treatment_description = fields.Text('Müalicə Təsviri')
-    treatment_date = fields.Date('Müalicə Tarixi')
-    treatment_cost = fields.Float('Müalicə Xərci')
-    
+    treatment_applied = fields.Boolean('Müalicə Tədbiri Görülübmü?', default=False, tracking=True)
+    treatment_description = fields.Text('Müalicə Təsviri', tracking=True)
+    treatment_date = fields.Date('Müalicə Tarixi', tracking=True)
+    treatment_cost = fields.Float('Müalicə Xərci', tracking=True)
+
     # Nəticə
     recovery_status = fields.Selection([
         ('recovered', 'Sağalıb'),
         ('partial', 'Qismən Sağalıb'),
         ('lost', 'İtirilmiş'),
         ('pending', 'Gözləyir')
-    ], string='Bərpa Statusu')
+    ], string='Bərpa Statusu', default='pending', required=True, tracking=True)
     
     # Qeydlər
     notes = fields.Text('Əlavə Qeydlər')
@@ -516,26 +525,27 @@ class FarmColdStorage(models.Model):
     """Malların Soyuducuya Yerləşdirilməsi"""
     _name = 'farm.cold.storage'
     _description = 'Soyuducu Anbarı'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'storage_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Soyuducuya Yerləşdirmə')
-    storage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
+    name = fields.Char('Əməliyyat Adı', required=True, default='Soyuducuya Yerləşdirmə', tracking=True)
+    storage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     # Palet məlumatları
     pallet_id = fields.Many2one('farm.pallet', string='Palet', required=True, ondelete='cascade')
     pallet_code = fields.Char('Palet Kodu', related='pallet_id.pallet_code', store=True)
-    quantity_kg = fields.Float('Miqdar (kq)', required=True)
+    quantity_kg = fields.Float('Miqdar (kq)', required=True, tracking=True)
     
     # Soyuducu məlumatları
     cooler_id = fields.Many2one('farm.cooler', string='Soyuducu', required=True, ondelete='cascade')
     cold_storage_code = fields.Char('Soyuducu Kodu', related='cooler_id.cooler_code', store=True)
-    storage_section = fields.Char('Bölmə')
-    storage_position = fields.Char('Paletin Yerləşdiyi Nömrə')
-    
+    storage_section = fields.Char('Bölmə', tracking=True)
+    storage_position = fields.Char('Paletin Yerləşdiyi Nömrə', tracking=True)
+
     # Temperatura və şərait
-    temperature = fields.Float('Temperatura (°C)')
-    humidity = fields.Float('Rütubət (%)')
-    
+    temperature = fields.Float('Temperatura (°C)', tracking=True)
+    humidity = fields.Float('Rütubət (%)', tracking=True)
+
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.cold.storage.worker', 'cold_storage_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
@@ -549,7 +559,7 @@ class FarmColdStorage(models.Model):
         ('processing', 'İşləmədə'),
         ('shipped', 'Göndərildi'),
         ('damaged', 'Zədələnib')
-    ], string='Status', default='stored', required=True)
+    ], string='Status', default='stored', required=True, tracking=True)
     
     # Qeydlər
     notes = fields.Text('Qeydlər')

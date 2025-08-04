@@ -4,9 +4,10 @@ from odoo.exceptions import ValidationError
 class FarmField(models.Model):
     _name = 'farm.field'
     _description = 'Sahə (Field)'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'code'
 
-    name = fields.Char('Sahə Adı', required=True)
+    name = fields.Char('Sahə Adı', required=True, tracking=True)
     code = fields.Char('Sahə Kodu', copy=False, readonly=True)
     
     # Yer məlumatları
@@ -85,20 +86,20 @@ class FarmField(models.Model):
         ('gazakh', 'Qazax'),
         ('salyan', 'Salyan'),
         ('other', 'Digər')
-    ], string='Rayonlar', required=True, default='baku')
+    ], string='Rayonlar', required=True, default='baku', tracking=True)
     village = fields.Char('Kənd')
-    gps_latitude = fields.Float('GPS Enlemi', digits=(10, 6), default=40.712776)
-    gps_longitude = fields.Float('GPS Uzunluğu', digits=(10, 6), default=-74.005974)
+    gps_latitude = fields.Float('GPS Enlemi', digits=(10, 6), default=40.712776, tracking=True)
+    gps_longitude = fields.Float('GPS Uzunluğu', digits=(10, 6), default=-74.005974, tracking=True)
 
     # Sahənin ölçüsü və məlumatları
-    area_hectare = fields.Float('Sahənin Ölçüsü (Hektar)', default=40.0)
+    area_hectare = fields.Float('Sahənin Ölçüsü (Hektar)', default=40.0, tracking=True)
     soil_type = fields.Selection([
         ('clay', 'Gil'),
         ('sandy', 'Qumlu'),
         ('loamy', 'Gillicə'),
         ('mixed', 'Qarışıq'),
         ('other', 'Digər')
-    ], string='Torpaq Tipi', default='mixed')
+    ], string='Torpaq Tipi', default='mixed', tracking=True)
 
     # Status
     status = fields.Selection([

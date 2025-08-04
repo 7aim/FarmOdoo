@@ -59,6 +59,7 @@
                         <field name="description" placeholder="Ağac haqqında qeydlər..." nolabel="1"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

@@ -5,9 +5,10 @@ from odoo.exceptions import ValidationError
 class FarmRow(models.Model):
     _name = 'farm.row'
     _description = 'Cərgə'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'code'
 
-    name = fields.Char('Cərgə Adı')
+    name = fields.Char('Cərgə Adı', tracking=True)
     code = fields.Char('Cərgə Kodu', copy=False, readonly=True)
     
     # Parsel əlaqəsi
@@ -18,8 +19,8 @@ class FarmRow(models.Model):
     tree_count = fields.Integer('Ağac Sayı', compute='_compute_tree_count')
     
     # Fiziki məlumatlar
-    length_meter = fields.Float('Uzunluq (m)', default=100.0)
-    tree_spacing = fields.Float('Məsafə (m)', default=3.0)
+    length_meter = fields.Float('Uzunluq (m)', default=100.0, tracking=True)
+    tree_spacing = fields.Float('Məsafə (m)', default=3.0, tracking=True)
 
     # Əlaqəli sahələr
     tree_ids = fields.One2many('farm.tree', 'row_id', string='Ağaclar')

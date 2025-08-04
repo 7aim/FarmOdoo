@@ -35,6 +35,7 @@
                         <field name="description" placeholder="Xəstəlik/Zərərverici haqqında qeydler..." nolabel="1"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -89,6 +90,7 @@
                         <field name="description" placeholder="Müalicə haqqında qeydler..." nolabel="1"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

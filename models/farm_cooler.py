@@ -5,18 +5,19 @@ from odoo.exceptions import ValidationError
 class FarmCooler(models.Model):
     _name = 'farm.cooler'
     _description = 'Soyuducu'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'cooler_code'
 
-    name = fields.Char('Soyuducu Adı')
+    name = fields.Char('Soyuducu Adı', tracking=True)
     cooler_code = fields.Char('Soyuducu Kodu', copy=False, readonly=True)
     
     # Tutum məlumatları
-    capacity_kg = fields.Float('Tutum (kq)', default=5.0)
+    capacity_kg = fields.Float('Tutum (kq)', default=5.0, tracking=True)
 
     # Temperatura nəzarət
-    target_temperature = fields.Float('Hədəf Temperatura (°C)', default=4.0)
-    current_temperature = fields.Float('Hazırkı Temperatura (°C)')
-    
+    target_temperature = fields.Float('Hədəf Temperatura (°C)', default=4.0, tracking=True)
+    current_temperature = fields.Float('Hazırkı Temperatura (°C)', tracking=True)
+
     # Status
     status = fields.Selection([
         ('active', 'Aktiv'),

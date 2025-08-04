@@ -6,19 +6,20 @@ class FarmWorker(models.Model):
     """İşçilər"""
     _name = 'farm.worker'
     _description = 'İşçilər'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
 
-    name = fields.Char('İşçi Adı', required=True)
-    employee_code = fields.Char('İşçi Kodu', required=True)
-    phone = fields.Char('Telefon')
-    email = fields.Char('Email')
-    address = fields.Text('Ünvan')
-    
+    name = fields.Char('İşçi Adı', required=True, tracking=True)
+    employee_code = fields.Char('İşçi Kodu', required=True, tracking=True)
+    phone = fields.Char('Telefon', tracking=True)
+    email = fields.Char('Email', tracking=True)
+    address = fields.Text('Ünvan', tracking=True)
+
     # Status və məlumatlar
     active = fields.Boolean('Aktiv', default=True)
-    hire_date = fields.Date('İşə Başlama Tarixi', default=fields.Date.today)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0)
-    
+    hire_date = fields.Date('İşə Başlama Tarixi', default=fields.Date.today, tracking=True)
+    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0, tracking=True)
+
     # Hesablanmış sahələr
     total_operations = fields.Integer('Ümumi Əməliyyat Sayı', compute='_compute_statistics', store=True)
     total_hours = fields.Float('Ümumi İş Saatı', compute='_compute_statistics', store=True)
@@ -121,17 +122,18 @@ class FarmWorkerPayment(models.Model):
     """İşçi Ödənişləri"""
     _name = 'farm.worker.payment'
     _description = 'İşçi Ödənişləri'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'payment_date desc'
 
-    worker_id = fields.Many2one('farm.worker', string='İşçi', required=True, ondelete='cascade')
-    payment_date = fields.Date('Ödəniş Tarixi', required=True, default=fields.Date.today)
-    amount = fields.Float('Məbləğ', required=True)
+    worker_id = fields.Many2one('farm.worker', string='İşçi', required=True, ondelete='cascade', tracking=True)
+    payment_date = fields.Date('Ödəniş Tarixi', required=True, default=fields.Date.today, tracking=True)
+    amount = fields.Float('Məbləğ', required=True, tracking=True)
     payment_type = fields.Selection([
         ('salary', 'Maaş'),
         ('bonus', 'Bonus'),
         ('advance', 'Avans'),
         ('other', 'Digər')
-    ], string='Ödəniş Növü', required=True, default='salary')
+    ], string='Ödəniş Növü', required=True, default='salary', tracking=True)
     description = fields.Text('Açıqlama')
     reference = fields.Char('İstinad')
 

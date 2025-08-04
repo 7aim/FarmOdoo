@@ -3,9 +3,10 @@ from odoo import models, fields, api
 class FarmVariety(models.Model):
     _name = 'farm.variety'
     _description = 'Ağac Sortları'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fruit_type, name'
 
-    name = fields.Char('Sort Adı')
+    name = fields.Char('Sort Adı', tracking=True)
     code = fields.Char('Sort Kodu', copy=False, readonly=True)
     
     # Meyvə tipi
@@ -16,25 +17,25 @@ class FarmVariety(models.Model):
         ('citrus', 'Sitrus'),
         ('stone_fruit', 'Daşlı Meyvələr'),
         ('other', 'Digər')
-    ], string='Meyvə Tipi', required=True)
-    
+    ], string='Meyvə Tipi', required=True, tracking=True)
+
     # Sort növləri
-    variety_name = fields.Char('Sort Növü')
-    
+    variety_name = fields.Char('Sort Növü', tracking=True)
+
     # Xüsusiyyətlər
     maturity_period = fields.Selection([
         ('early', 'Erkən'),
         ('medium', 'Orta'),
         ('late', 'Gec')
-    ], string='Yetişmə Dövrü', default='medium')
-    
+    ], string='Yetişmə Dövrü', default='medium', tracking=True)
+
     harvest_season = fields.Selection([
         ('spring', 'Yaz'),
         ('summer', 'Yay'),
         ('autumn', 'Payız'),
         ('winter', 'Qış')
-    ], string='Məhsul Mövsümü', default='autumn')
-    
+    ], string='Məhsul Mövsümü', default='autumn', tracking=True)
+
     # Ağac məlumatları ilə əlaqə
     tree_ids = fields.One2many('farm.tree', 'variety_id', string='Ağaclar')
     tree_count = fields.Integer('Ağac Sayı', compute='_compute_tree_count')

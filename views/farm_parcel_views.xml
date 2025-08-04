@@ -52,6 +52,7 @@
                         <field name="description" placeholder="Parsel haqqında qeydlər..." nolabel="1"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -80,6 +81,7 @@
                         <field name="fruit_category"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
