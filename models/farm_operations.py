@@ -9,13 +9,13 @@ class FarmPlowing(models.Model):
     _order = 'operation_date desc'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Şumlama', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Şumlama', tracking=True)
     operation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Sahə və Parsel
-    field_id = fields.Many2one('farm.field', string='Sahə', required=False, ondelete='cascade', tracking=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+
     # Texniki məlumatlar
     equipment = fields.Many2one('res.partner', string='İcrakar', tracking=True)
     plowing_depth = fields.Float('Şumlama Dərinliyi (cm)', default=5.0, required=True, tracking=True)
@@ -40,7 +40,17 @@ class FarmPlowing(models.Model):
             if record.area_hectare <= 0:
                 raise ValidationError('Genişlik müsbət olmalıdır!')
 
+    @api.depends('field_id', 'parcel_id', 'operation_date')
+    def _compute_name(self):
+        for record in self:
+            if record.field_id and record.parcel_id and record.operation_date:
+                record.name = f" Şumlama - {record.field_id.name} - {record.parcel_id.name} - ({record.operation_date})"
+            elif record.field_id and record.operation_date:
+                record.name = f" Şumlama - {record.field_id.name} - ({record.operation_date})"
+            else:
+                record.name = 'Yeni Şumlama Qeydi'
 
+    
 class FarmPlanting(models.Model):
     """Əkin Əməliyyatı"""
     _name = 'farm.planting'
@@ -48,11 +58,11 @@ class FarmPlanting(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'planting_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Əkin', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Əkin', tracking=True)
     planting_date = fields.Datetime('Əkin Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade', tracking=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
     row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Ağac məlumatları
@@ -93,6 +103,16 @@ class FarmPlanting(models.Model):
             if record.tree_count <= 0:
                 raise ValidationError('Ağac sayı müsbət olmalıdır!')
 
+    @api.depends('field_id', 'parcel_id', 'planting_date')
+    def _compute_name(self):
+        for record in self:
+            if record.field_id and record.parcel_id and record.planting_date:
+                record.name = f" Əkin - {record.field_id.name} - {record.parcel_id.name} - ({record.planting_date})"
+            elif record.field_id and record.planting_date:
+                record.name = f" Əkin - {record.field_id.name} - ({record.planting_date})"
+            else:
+                record.name = 'Yeni Əkin Qeydi'
+
 
 class FarmIrrigation(models.Model):
     """Sulama Əməliyyatı"""
@@ -101,11 +121,11 @@ class FarmIrrigation(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'irrigation_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Sulama', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Sulama', tracking=True)
     irrigation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade', tracking=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
     row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
 
     # Sulama tipi
@@ -138,6 +158,16 @@ class FarmIrrigation(models.Model):
             if record.water_liters <= 0:
                 raise ValidationError('Su miqdarı müsbət olmalıdır!')
 
+    @api.depends('field_id', 'parcel_id', 'irrigation_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.parcel_id and record.field_id and record.irrigation_date:
+                record.name = f" Sulama - {record.field_id.name} - {record.parcel_id.name} - ({record.irrigation_date})"
+            elif record.field_id and record.irrigation_date:
+                record.name = f" Sulama - {record.field_id.name} - ({record.irrigation_date})"
+            else:
+                record.name = 'Yeni Sulama Qeydi'
+
 
 class FarmFertilizing(models.Model):
     """Gübrələmə Əməliyyatı"""
@@ -146,12 +176,13 @@ class FarmFertilizing(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fertilizing_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Gübrələmə', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Gübrələmə', tracking=True)
     fertilizing_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Sahə və Parsel
-    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', tracking=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+
 
     # Gübrə tipi
     fertilizer_type = fields.Selection([
@@ -186,6 +217,16 @@ class FarmFertilizing(models.Model):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
 
+    @api.depends('field_id', 'parcel_id', 'fertilizing_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.parcel_id and record.field_id and record.fertilizing_date:
+                record.name = f" Gübrələmə - {record.field_id.name} - {record.parcel_id.name} - ({record.fertilizing_date})"
+            elif record.field_id and record.fertilizing_date:
+                record.name = f" Gübrələmə - {record.field_id.name} - ({record.fertilizing_date})"
+            else:
+                record.name = 'Yeni Gübrələmə Qeydi'
+
 
 class FarmTreatment(models.Model):
     """Dərmanlama Əməliyyatı"""
@@ -194,12 +235,12 @@ class FarmTreatment(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'treatment_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Dərmanlama')
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Dərmanlama')
     treatment_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
 
-    # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=False, ondelete='cascade')
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Xəstəlik və dərman
     product_line_ids = fields.One2many('farm.treatment.line', 'treatment_id', string='Dərman Xərcləri')
@@ -229,6 +270,16 @@ class FarmTreatment(models.Model):
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('field_id', 'parcel_id', 'treatment_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.parcel_id and record.field_id and record.treatment_date:
+                record.name = f" Dərmanlama - {record.field_id.name} - {record.parcel_id.name} - ({record.treatment_date})"
+            elif record.field_id and record.treatment_date:
+                record.name = f" Dərmanlama - {record.field_id.name} - ({record.treatment_date})"
+            else:
+                record.name = 'Yeni Dərmanlama Qeydi'
 
 
 class FarmFertilizingLine(models.Model):
@@ -319,12 +370,12 @@ class FarmPruning(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'pruning_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Budama', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Budama', tracking=True)
     pruning_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Budama məlumatları
     pruned_tree_count = fields.Integer('Budanan Ağac Sayı', required=True, tracking=True)
@@ -353,6 +404,16 @@ class FarmPruning(models.Model):
             if record.pruned_tree_count <= 0:
                 raise ValidationError('Budanan ağac sayı müsbət olmalıdır!')
 
+    @api.depends('field_id', 'parcel_id', 'pruning_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.parcel_id and record.field_id and record.pruning_date:
+                record.name = f" Budama - {record.field_id.name} - {record.parcel_id.name} - ({record.pruning_date})"
+            elif record.field_id and record.pruning_date:
+                record.name = f" Budama - {record.field_id.name} - ({record.pruning_date})"
+            else:
+                record.name = 'Yeni Budama Qeydi'
+
 
 class FarmHarvest(models.Model):
     """Yığım Əməliyyatı"""
@@ -361,12 +422,12 @@ class FarmHarvest(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'harvest_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Yığım', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Yığım', tracking=True)
     harvest_date = fields.Datetime('Yığım Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Parsel və Cərgə
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Yığım məlumatları
     harvest_type = fields.Selection([
@@ -407,6 +468,16 @@ class FarmHarvest(models.Model):
                 raise ValidationError('Ağac sayı müsbət olmalıdır!')
             if record.quantity_kg <= 0:
                 raise ValidationError('Məhsul miqdarı müsbət olmalıdır!')
+            
+    @api.depends('field_id', 'parcel_id', 'harvest_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.parcel_id and record.field_id and record.harvest_date:
+                record.name = f" Yığım - {record.field_id.name} - {record.parcel_id.name} - ({record.harvest_date})"
+            elif record.field_id and record.harvest_date:
+                record.name = f" Yığım - {record.field_id.name} - ({record.harvest_date})"
+            else:
+                record.name = 'Yeni Yığım Qeydi'
 
 class FarmForecast(models.Model):
     """Proqnozlaşdırma"""
@@ -424,9 +495,9 @@ class FarmForecast(models.Model):
         ('10', 'Oktyabr'), ('11', 'Noyabr'), ('12', 'Dekabr')
     ], string='Ay', required=True, default=lambda self: fields.Date.today().month, tracking=True)
     
-    # Sahə və Parsel
-    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade')
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade')
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Proqnoz məlumatları
     expected_quantity_kg = fields.Float('Gözlənən Miqdar (kq)', required=True, tracking=True)
@@ -461,12 +532,12 @@ class FarmDamagedTrees(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'damage_date desc'
 
-    name = fields.Char('Qeyd Adı', required=True, default='Zərərçəkmiş Ağaclar', tracking=True)
+    name = fields.Char('Qeyd Adı', required=True, compute='_compute_name', default='Zərərçəkmiş Ağaclar', tracking=True)
     damage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
-    # Parsel məlumatları
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade')
+    field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
+    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
     # Zərər məlumatları
     damaged_tree_count = fields.Integer('Zərərçəkmiş Ağac Sayı', required=True, tracking=True)
@@ -505,6 +576,15 @@ class FarmDamagedTrees(models.Model):
             if record.damaged_tree_count <= 0:
                 raise ValidationError('Zərərçəkmiş ağac sayı müsbət olmalıdır!')
 
+    @api.depends('field_id', 'parcel_id', 'treatment_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.parcel_id and record.field_id and record.treatment_date:
+                record.name = f" Zərərçəkmiş Ağaclar - {record.field_id.name} - {record.parcel_id.name} - ({record.treatment_date})"
+            elif record.field_id and record.treatment_date:
+                record.name = f" Zərərçəkmiş Ağaclar - {record.field_id.name} - ({record.treatment_date})"
+            else:
+                record.name = 'Yeni Zərərçəkmiş Ağaclar Qeydi'
 
 class FarmColdStorage(models.Model):
     """Malların Soyuducuya Yerləşdirilməsi"""
@@ -513,7 +593,7 @@ class FarmColdStorage(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'storage_date desc'
 
-    name = fields.Char('Əməliyyat Adı', required=True, default='Soyuducuya Yerləşdirmə', tracking=True)
+    name = fields.Char('Əməliyyat Adı', required=True, compute='_compute_name', default='Soyuducuya Yerləşdirmə', tracking=True)
     storage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     # Palet məlumatları
@@ -572,6 +652,14 @@ class FarmColdStorage(models.Model):
                 ('id', '!=', record.id)
             ]) > 0:
                 raise ValidationError('Bu palet kodu artıq soyuducuda mövcuddur!')
+
+    @api.depends('storage_date')
+    def _compute_name(self):
+        for record in self:
+            if  record.storage_date:
+                record.name = f" Soyuducu Anbarı - ({record.storage_date})"
+            else:
+                record.name = 'Yeni Soyuducu Anbarı Qeydi'
 
 
 # Worker Line Models
