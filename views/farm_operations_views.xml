@@ -51,6 +51,8 @@
                 <field name="area_hectare"/>
                 <field name="operation_date"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -90,6 +92,20 @@
                                 <field name="total_worker_cost"/>
                             </group>
                         </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
+                            </group>
+                        </page>
                         <page string="Qeydlər">
                             <field name="notes" placeholder="Şumlama haqqında əlavə məlumatlar..."/>
                         </page>
@@ -115,8 +131,9 @@
                 <field name="supplier"/>
                 <field name="tree_count"/>
                 <field name="planting_date"/>
-                <field name="total_cost"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -158,6 +175,20 @@
                                 <field name="total_worker_cost"/>
                             </group>
                         </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
+                            </group>
+                        </page>
                         <page string="Qeydlər">
                             <field name="notes" placeholder="Əkin haqqında əlavə məlumatlar..."/>
                         </page>
@@ -184,6 +215,8 @@
                 <field name="water_cost"/>
                 <field name="irrigation_date"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -224,6 +257,20 @@
                                 <field name="total_worker_cost"/>
                             </group>
                         </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
+                            </group>
+                        </page>
                         <page string="Qeydlər">
                             <field name="notes" placeholder="Sulama haqqında əlavə məlumatlar..."/>
                         </page>
@@ -247,8 +294,10 @@
                 <field name="fertilizer_type"/>
                 <field name="supplier"/>
                 <field name="fertilizing_date"/>
-                <field name="total_cost"/>
+                <field name="total_product_cost"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -285,7 +334,7 @@
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
-                                <field name="total_cost"/>
+                                <field name="total_product_cost"/>
                             </group>
                         </page>
                         <page string="İşçi Xərcləri" name="worker_costs">
@@ -299,6 +348,20 @@
                             </field>
                             <group class="oe_subtotal_footer oe_right">
                                 <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
                             </group>
                         </page>
                         <page string="Qeydlər">
@@ -323,8 +386,10 @@
                 <field name="row_id"/>
                 <field name="application_method"/>
                 <field name="treatment_date"/>
-                <field name="total_cost"/>
+                <field name="total_product_cost"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -358,7 +423,7 @@
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
-                                <field name="total_cost"/>
+                                <field name="total_product_cost"/>
                             </group>
                         </page>
                         <page string="İşçi Xərcləri" name="worker_costs">
@@ -372,6 +437,20 @@
                             </field>
                             <group class="oe_subtotal_footer oe_right">
                                 <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
                             </group>
                         </page>
                         <page string="Qeydlər">
@@ -419,6 +498,21 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <!-- Əlavə Xərclər Action -->
+    <record id="farm_additional_expense_action" model="ir.actions.act_window">
+        <field name="name">Əlavə Xərclər</field>
+        <field name="res_model">farm.additional.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Yeni əlavə xərc yaradın.
+            </p>
+            <p>
+                Əlavə xərclər bütün əməliyyatlarla əlaqələndirilə bilər.
+            </p>
+        </field>
+    </record>
+
     <!-- Budama Views -->
     <record id="farm_pruning_list_view" model="ir.ui.view">
         <field name="name">farm.pruning.list</field>
@@ -433,6 +527,8 @@
                 <field name="pruned_tree_count"/>
                 <field name="pruning_date"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -470,6 +566,20 @@
                                 <field name="total_worker_cost"/>
                             </group>
                         </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
+                            </group>
+                        </page>
                         <page string="Qeydlər">
                             <field name="notes" placeholder="Budama haqqında əlavə məlumatlar..."/>
                         </page>
@@ -496,6 +606,8 @@
                 <field name="loaded_to_pallets"/>
                 <field name="harvest_date"/>
                 <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -520,7 +632,6 @@
                             <field name="tree_count"/>
                             <field name="quantity_kg"/>
                             <field name="cost_per_kg"/>
-                            <field name="total_cost"/>
                         </group>
                     </group>
                     <notebook>
@@ -535,6 +646,20 @@
                             </field>
                             <group class="oe_subtotal_footer oe_right">
                                 <field name="total_worker_cost"/>
+                            </group>
+                        </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
                             </group>
                         </page>
                         <page string="Qeydlər">
@@ -673,6 +798,9 @@
                 <field name="temperature"/>
                 <field name="storage_date"/>
                 <field name="status"/>
+                <field name="total_worker_cost"/>
+                <field name="total_additional_cost"/>
+                <field name="total_cost"/>
             </list>
         </field>
     </record>
@@ -724,12 +852,72 @@
                                 <field name="total_worker_cost"/>
                             </group>
                         </page>
+                        <page string="Əlavə Xərclər" name="additional_expenses">
+                            <field name="additional_expense_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="expense_type"/>
+                                    <field name="amount" sum="Cəmi Əlavə Xərc"/>
+                                    <field name="expense_date"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_additional_cost"/>
+                            </group>
+                        </page>
                         <page string="Qeydlər">
                             <field name="notes" placeholder="Soyuducu anbarı haqqında əlavə məlumatlar..."/>
                         </page>
                     </notebook>
                 </sheet>
                 <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Əlavə Xərclər Views -->
+    <record id="farm_additional_expense_list_view" model="ir.ui.view">
+        <field name="name">farm.additional.expense.list</field>
+        <field name="model">farm.additional.expense</field>
+        <field name="arch" type="xml">
+            <list string="Əlavə Xərclər">
+                <field name="name"/>
+                <field name="expense_type"/>
+                <field name="amount" sum="Cəmi Məbləğ"/>
+                <field name="expense_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="farm_additional_expense_form_view" model="ir.ui.view">
+        <field name="name">farm.additional.expense.form</field>
+        <field name="model">farm.additional.expense</field>
+        <field name="arch" type="xml">
+            <form string="Əlavə Xərc">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name"/>
+                            <field name="expense_type"/>
+                            <field name="amount"/>
+                            <field name="expense_date"/>
+                        </group>
+                        <group string="Əlaqəli Əməliyyat">
+                            <field name="plowing_id"/>
+                            <field name="planting_id"/>
+                            <field name="irrigation_id"/>
+                            <field name="fertilizing_id"/>
+                            <field name="treatment_id"/>
+                            <field name="pruning_id"/>
+                            <field name="harvest_id"/>
+                            <field name="cold_storage_id"/>
+                        </group>
+                    </group>
+                    <group string="Açıqlama">
+                        <field name="description" nolabel="1" placeholder="Xərc haqqında ətraflı məlumat..."/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>

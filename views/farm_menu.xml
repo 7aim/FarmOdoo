@@ -47,15 +47,6 @@
     <menuitem id="farm_cold_storage_menu" name="Soyuducu Anbarı" parent="farm_operations_harvest_menu" 
               action="farm_cold_storage_action" sequence="20"/>
     
-    <!-- Planlaşdırma və Təhlil -->
-    <menuitem id="farm_operations_planning_menu" name="Planlaşdırma və Təhlil" 
-              parent="farm_operations_menu" sequence="30"/>
-    
-    <menuitem id="farm_forecast_menu" name="Proqnozlaşdırma" parent="farm_operations_planning_menu" 
-              action="farm_forecast_action" sequence="10"/>
-    <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_planning_menu" 
-              action="farm_damaged_trees_action" sequence="20"/>
-
     <!-- III. İşçilər -->
     <menuitem id="farm_workers_menu" name="İşçilər" parent="farm_main_menu" sequence="30"/>
     
@@ -63,6 +54,17 @@
               action="farm_worker_action" sequence="10"/>
     <menuitem id="farm_worker_payments_menu" name="Ödənişlər" parent="farm_workers_menu" 
               action="farm_worker_payment_action" sequence="20"/>
+    <menuitem id="farm_additional_expense_menu" name="Əlavə Xərclər" parent="farm_workers_menu" 
+              action="farm_additional_expense_action" sequence="30"/>
+
+    <!-- IV. Planlaşdırma və Təhlil -->
+    <menuitem id="farm_operations_planning_menu" name="Planlaşdırma və Təhlil" 
+              parent="farm_main_menu" sequence="40"/>
+    
+    <menuitem id="farm_forecast_menu" name="Proqnozlaşdırma" parent="farm_operations_planning_menu" 
+              action="farm_forecast_action" sequence="10"/>
+    <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_planning_menu" 
+              action="farm_damaged_trees_action" sequence="20"/>
 
     <!-- V. Satınalma -->
     <menuitem id="farm_purchase_menu" name="Satınalma" parent="farm_main_menu" sequence="50"/>

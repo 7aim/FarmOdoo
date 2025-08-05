@@ -31,5 +31,5 @@ access_farm_harvest_worker,farm.harvest.worker,model_farm_harvest_worker,,1,1,1,
 access_farm_cold_storage_worker,farm.cold.storage.worker,model_farm_cold_storage_worker,,1,1,1,1
 access_farm_worker,farm.worker,model_farm_worker,,1,1,1,1
 access_farm_worker_payment,farm.worker.payment,model_farm_worker_payment,,1,1,1,1
-access_farm_worker,farm.worker,model_farm_worker,,1,1,1,1
-access_farm_worker_payment,farm.worker.payment,model_farm_worker_payment,,1,1,1,1
+access_farm_additional_expense,farm.additional.expense,model_farm_additional_expense,,1,1,1,1
+access_farm_additional_expense,farm.additional.expense,model_farm_additional_expense,,1,1,1,1

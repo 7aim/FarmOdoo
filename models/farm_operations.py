@@ -24,13 +24,31 @@ class FarmPlowing(models.Model):
     # İşçi məlumatları
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]", tracking=True)
     worker_line_ids = fields.One2many('farm.plowing.worker', 'plowing_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'plowing_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Ümumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+
     notes = fields.Text('Qeydlər')
 
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost
 
     @api.constrains('plowing_depth', 'area_hectare')
     def _check_positive_values(self):
@@ -78,12 +96,19 @@ class FarmPlanting(models.Model):
     # Təchizatçı və qiymət
     supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Techizatcı')]", tracking=True)
     unit_price = fields.Float('Vahid Qiymət', tracking=True)
-    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
-    
+    # total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.planting.worker', 'planting_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'planting_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Ümumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+
     # Qeydlər
     notes = fields.Text('Qeydlər')
 
@@ -96,6 +121,16 @@ class FarmPlanting(models.Model):
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost
 
     @api.constrains('tree_count')
     def _check_tree_count(self):
@@ -143,7 +178,15 @@ class FarmIrrigation(models.Model):
     # İşçi məlumatları
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
     worker_line_ids = fields.One2many('farm.irrigation.worker', 'irrigation_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'irrigation_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Ümumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+
     notes = fields.Text('Qeydlər')
     #active = fields.Boolean('Aktiv', default=True)
 
@@ -151,6 +194,16 @@ class FarmIrrigation(models.Model):
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost
 
     @api.constrains('water_liters')
     def _check_positive_values(self):
@@ -196,26 +249,43 @@ class FarmFertilizing(models.Model):
     
     # Gübrə məlumatları
     product_line_ids = fields.One2many('farm.fertilizing.line', 'fertilizing_id', string='Məhsul Xərcləri')
-    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
-    
+    total_product_cost = fields.Float('Məhsul Xərci', compute='_compute_total_product_cost', store=True)
+
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.fertilizing.worker', 'fertilizing_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'fertilizing_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Umumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+
     # Əlavə məlumatlar
     supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Techizatcı')]", tracking=True)
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
 
     @api.depends('product_line_ids.cost')
-    def _compute_total_cost(self):
+    def _compute_total_product_cost(self):
         for record in self:
-            record.total_cost = sum(line.cost for line in record.product_line_ids)
+            record.total_product_cost = sum(line.cost for line in record.product_line_ids)
 
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('product_line_ids.cost', 'total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_product_cost + record.total_worker_cost + record.total_additional_cost
 
     @api.depends('field_id', 'parcel_id', 'fertilizing_date')
     def _compute_name(self):
@@ -242,10 +312,6 @@ class FarmTreatment(models.Model):
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
     row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
     
-    # Xəstəlik və dərman
-    product_line_ids = fields.One2many('farm.treatment.line', 'treatment_id', string='Dərman Xərcləri')
-    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
-    
     # Tətbiq üsulu
     application_method = fields.Selection([
         ('spray', 'Püskürtmə'),
@@ -254,22 +320,44 @@ class FarmTreatment(models.Model):
         ('foliar', 'Yarpağa'),
         ('other', 'Digər')
     ], string='Tətbiq Üsulu', required=True)
-    
+
+    # Xəstəlik və dərman
+    product_line_ids = fields.One2many('farm.treatment.line', 'treatment_id', string='Dərman Xərcləri')
+    total_product_cost = fields.Float('Məhsul Xərci', compute='_compute_total_product_cost', store=True)
+
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.treatment.worker', 'treatment_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'treatment_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Umumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+    
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
 
     @api.depends('product_line_ids.cost')
-    def _compute_total_cost(self):
+    def _compute_total_product_cost(self):
         for record in self:
-            record.total_cost = sum(line.cost for line in record.product_line_ids)
+            record.total_product_cost = sum(line.cost for line in record.product_line_ids)
 
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost + record.total_product_cost
 
     @api.depends('field_id', 'parcel_id', 'treatment_date')
     def _compute_name(self):
@@ -363,6 +451,43 @@ class FarmTreatmentLine(models.Model):
                 }
             }
 
+
+# Əlavə Xərclər Base Model
+class FarmAdditionalExpense(models.Model):
+    """Əlavə Xərclər Base Model"""
+    _name = 'farm.additional.expense'
+    _description = 'Əlavə Xərclər'
+
+    name = fields.Char('Xərc Adı', required=True)
+    description = fields.Text('Açıqlama')
+    amount = fields.Float('Məbləğ', required=True)
+    expense_type = fields.Selection([
+        ('transport', 'Nəqliyyat'),
+        ('fuel', 'Yanacaq'),
+        ('equipment', 'Avadanlıq'),
+        ('material', 'Material'),
+        ('service', 'Xidmət'),
+        ('maintenance', 'Təmir'),
+        ('other', 'Digər')
+    ], string='Xərc Növü', required=True, default='other')
+    expense_date = fields.Date('Xərc Tarixi', default=fields.Date.today)
+
+    # Əməliyyat növləri üçün Many2one sahələr
+    plowing_id = fields.Many2one('farm.plowing', string='Şumlama', ondelete='cascade')
+    planting_id = fields.Many2one('farm.planting', string='Əkin', ondelete='cascade')
+    irrigation_id = fields.Many2one('farm.irrigation', string='Sulama', ondelete='cascade')
+    fertilizing_id = fields.Many2one('farm.fertilizing', string='Gübrələmə', ondelete='cascade')
+    treatment_id = fields.Many2one('farm.treatment', string='Dərmanlama', ondelete='cascade')
+    pruning_id = fields.Many2one('farm.pruning', string='Budama', ondelete='cascade')
+    harvest_id = fields.Many2one('farm.harvest', string='Yığım', ondelete='cascade')
+    cold_storage_id = fields.Many2one('farm.cold.storage', string='Soyuducu Anbarı', ondelete='cascade')
+
+    @api.constrains('amount')
+    def _check_amount(self):
+        for expense in self:
+            if expense.amount < 0:
+                raise ValidationError('Xərc məbləği mənfi ola bilməz!')
+
 class FarmPruning(models.Model):
     """Budama və Təmizləmə Əməliyyatı"""
     _name = 'farm.pruning'
@@ -388,7 +513,14 @@ class FarmPruning(models.Model):
     
     # Alətlər və işçilər
     worker_line_ids = fields.One2many('farm.pruning.worker', 'pruning_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'pruning_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Ümumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
 
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
@@ -397,6 +529,16 @@ class FarmPruning(models.Model):
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost
 
     @api.constrains('pruned_tree_count')
     def _check_positive_values(self):
@@ -441,25 +583,37 @@ class FarmHarvest(models.Model):
 
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.harvest.worker', 'harvest_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'harvest_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Ümumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+
     # Xərclər
     cost_per_kg = fields.Float('Kq-a Görə Qiymət')
-    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+    # total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
     
     # Qeydlər
     notes = fields.Text('Qeydlər')
     active = fields.Boolean('Aktiv', default=True)
 
-    @api.depends('quantity_kg', 'cost_per_kg')
-    def _compute_total_cost(self):
-        for record in self:
-            record.total_cost = record.quantity_kg * record.cost_per_kg
-
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost
 
     @api.constrains('tree_count', 'quantity_kg')
     def _check_positive_values(self):
@@ -613,7 +767,15 @@ class FarmColdStorage(models.Model):
 
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.cold.storage.worker', 'cold_storage_id', string='İşçi Sətirləri')
-    total_worker_cost = fields.Float('Ümumi İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
+    
+    # Əlavə xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'cold_storage_id', string='Əlavə Xərclər')
+    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Ümumi xərc
+    total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
+    
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]", tracking=True)
     entry_time = fields.Datetime('Giriş Vaxtı', default=fields.Datetime.now)
     exit_time = fields.Datetime('Çıxış Vaxtı')
@@ -634,6 +796,16 @@ class FarmColdStorage(models.Model):
     def _compute_total_worker_cost(self):
         for record in self:
             record.total_worker_cost = sum(line.amount for line in record.worker_line_ids)
+
+    @api.depends('additional_expense_ids.amount')
+    def _compute_total_additional_cost(self):
+        for record in self:
+            record.total_additional_cost = sum(expense.amount for expense in record.additional_expense_ids)
+
+    @api.depends('total_worker_cost', 'total_additional_cost')
+    def _compute_total_cost(self):
+        for record in self:
+            record.total_cost = record.total_worker_cost + record.total_additional_cost
 
     @api.constrains('quantity_kg', 'temperature', 'humidity')
     def _check_values(self):
