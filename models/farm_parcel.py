@@ -110,6 +110,7 @@ class FarmParcel(models.Model):
 class FarmParcelType(models.Model):
     _name = 'farm.parcel.type'
     _description = 'Parsel Tipi'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'code'
 
     name = fields.Char('Tip Adı', required=True, tracking=True)

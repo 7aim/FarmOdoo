@@ -234,13 +234,13 @@
                             <field name="field_id"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
-                            <field name="operator_id"/>
                         </group>
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>
-                            <field name="water_source"/>
                             <field name="water_liters"/>
                             <field name="water_cost"/>
+                            <field name="water_source"/>
+                            <field name="operator_id"/>
                         </group>
                     </group>
                     <notebook>
@@ -625,13 +625,13 @@
                             <field name="field_id"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
-                            <field name="loaded_to_pallets"/>
                         </group>
                         <group string="Yığım Məlumatları">
                             <field name="harvest_type"/>
                             <field name="tree_count"/>
                             <field name="quantity_kg"/>
                             <field name="cost_per_kg"/>
+                            <field name="loaded_to_pallets"/>
                         </group>
                     </group>
                     <notebook>
@@ -761,20 +761,13 @@
                             <field name="damaged_tree_count"/>
                             <field name="damage_reason"/>
                             <field name="recovery_status"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Müalicə Məlumatları">
                             <field name="treatment_applied"/>
                             <field name="treatment_date"/>
                             <field name="treatment_cost"/>
                         </group>
                     </group>
-                    <group string="Müalicə Təsviri">
-                        <field name="treatment_description" nolabel="1"/>
-                    </group>
                     <group string="Əlavə Qeydlər">
-                        <field name="notes" nolabel="1"/>
+                        <field name="notes" nolabel="1" placeholder="Müalicə haqqında qeydlər..."/>
                     </group>
                 </sheet>
                 <chatter/>

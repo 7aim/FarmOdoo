@@ -4,6 +4,7 @@ from odoo import models, fields, api
 class FarmDiseaseType(models.Model):
     _name = 'farm.disease.type'
     _description = 'Xəstəlik Səbəbi'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'category, name'
 
     name = fields.Char('Xəstəlik/Zərərverici Adı')

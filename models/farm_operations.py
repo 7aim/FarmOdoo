@@ -171,10 +171,10 @@ class FarmIrrigation(models.Model):
     ], string='Sulama Tipi', required=True, tracking=True)
     
     # Su məlumatları
-    water_liters = fields.Float('Günlük/Litrlər', required=True, tracking=True)
+    water_liters = fields.Float('Su Miqdarı', required=True, default=1000.0, tracking=True)
     water_source = fields.Char('Su Mənbəyi', tracking=True)
     water_cost = fields.Float('Su Məsrəfi', tracking=True)
-    
+
     # İşçi məlumatları
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
     worker_line_ids = fields.One2many('farm.irrigation.worker', 'irrigation_id', string='İşçi Sətirləri')
@@ -708,7 +708,6 @@ class FarmDamagedTrees(models.Model):
 
     # Müalicə tədbiri
     treatment_applied = fields.Boolean('Müalicə Tədbiri Görülübmü?', default=False, tracking=True)
-    treatment_description = fields.Text('Müalicə Təsviri', tracking=True)
     treatment_date = fields.Date('Müalicə Tarixi', tracking=True)
     treatment_cost = fields.Float('Müalicə Xərci', tracking=True)
 

@@ -68,13 +68,9 @@
                     <field name="status" widget="statusbar"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" readonly="1"/>
-                        </h1>
-                    </div>
                     <group>
                         <group string="Ağac Məlumatları">
+                            <field name="name" readonly="1"/>
                             <field name="tree_id"/>
                             <field name="field_id"/>
                             <field name="parcel_id"/>
