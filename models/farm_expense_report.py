@@ -13,9 +13,12 @@ class FarmExpenseReport(models.Model):
     date = fields.Date('Tarix', readonly=True)
     amount = fields.Float('Məbləğ', readonly=True)
     expense_type = fields.Char('Xərc Növü', readonly=True)
+    note = fields.Text('Qeyd', readonly=True)
     year = fields.Char('İl', readonly=True)
     month = fields.Char('Ay', readonly=True)
     quarter = fields.Char('Rüb', readonly=True)
+    original_model = fields.Char('Orijinal Model', readonly=True)
+    original_id = fields.Integer('Orijinal ID', readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
@@ -28,9 +31,12 @@ class FarmExpenseReport(models.Model):
                     expense_date AS date,
                     amount,
                     'Kommunal' AS expense_type,
+                    COALESCE(note, '') AS note,
                     EXTRACT(year FROM expense_date)::text AS year,
                     EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    'farm.communal.expense' AS original_model,
+                    id AS original_id
                 FROM farm_communal_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -43,9 +49,12 @@ class FarmExpenseReport(models.Model):
                     expense_date AS date,
                     amount,
                     'Dizel' AS expense_type,
+                    COALESCE(note, '') AS note,
                     EXTRACT(year FROM expense_date)::text AS year,
                     EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    'farm.diesel.expense' AS original_model,
+                    id AS original_id
                 FROM farm_diesel_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -58,9 +67,12 @@ class FarmExpenseReport(models.Model):
                     expense_date AS date,
                     amount,
                     'Traktor' AS expense_type,
+                    COALESCE(note, '') AS note,
                     EXTRACT(year FROM expense_date)::text AS year,
                     EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    'farm.tractor.expense' AS original_model,
+                    id AS original_id
                 FROM farm_tractor_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -73,9 +85,12 @@ class FarmExpenseReport(models.Model):
                     expense_date AS date,
                     amount,
                     'Mal-material' AS expense_type,
+                    COALESCE(note, '') AS note,
                     EXTRACT(year FROM expense_date)::text AS year,
                     EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    'farm.material.expense' AS original_model,
+                    id AS original_id
                 FROM farm_material_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -88,9 +103,12 @@ class FarmExpenseReport(models.Model):
                     expense_date AS date,
                     amount,
                     'Otel' AS expense_type,
+                    COALESCE(note, '') AS note,
                     EXTRACT(year FROM expense_date)::text AS year,
                     EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    'farm.hotel.expense' AS original_model,
+                    id AS original_id
                 FROM farm_hotel_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -103,9 +121,12 @@ class FarmExpenseReport(models.Model):
                     fwp.payment_date AS date,
                     fwp.amount,
                     'Maaş' AS expense_type,
+                    COALESCE(fwp.description, '') AS note,
                     EXTRACT(year FROM fwp.payment_date)::text AS year,
                     EXTRACT(month FROM fwp.payment_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter,
+                    'farm.worker.payment' AS original_model,
+                    fwp.id AS original_id
                 FROM farm_worker_payment fwp
                 JOIN farm_worker fw ON fwp.worker_id = fw.id
                 WHERE fwp.payment_date IS NOT NULL
@@ -119,9 +140,12 @@ class FarmExpenseReport(models.Model):
                     expense_date AS date,
                     amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(description, '') AS note,
                     EXTRACT(year FROM expense_date)::text AS year,
                     EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    'farm.additional.expense' AS original_model,
+                    id AS original_id
                 FROM farm_additional_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -134,9 +158,12 @@ class FarmExpenseReport(models.Model):
                     fp.operation_date::date AS date,
                     fpw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(fp.notes, '') AS note,
                     EXTRACT(year FROM fp.operation_date)::text AS year,
                     EXTRACT(month FROM fp.operation_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fp.operation_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fp.operation_date)::text AS quarter,
+                    'farm.plowing' AS original_model,
+                    fp.id AS original_id
                 FROM farm_plowing_worker fpw
                 JOIN farm_plowing fp ON fpw.plowing_id = fp.id
                 JOIN farm_worker fw ON fpw.worker_id = fw.id
@@ -150,9 +177,12 @@ class FarmExpenseReport(models.Model):
                     fpl.planting_date::date AS date,
                     fplw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(fpl.notes, '') AS note,
                     EXTRACT(year FROM fpl.planting_date)::text AS year,
                     EXTRACT(month FROM fpl.planting_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fpl.planting_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fpl.planting_date)::text AS quarter,
+                    'farm.planting' AS original_model,
+                    fpl.id AS original_id
                 FROM farm_planting_worker fplw
                 JOIN farm_planting fpl ON fplw.planting_id = fpl.id
                 JOIN farm_worker fw ON fplw.worker_id = fw.id
@@ -166,9 +196,12 @@ class FarmExpenseReport(models.Model):
                     fi.irrigation_date::date AS date,
                     fiw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(fi.notes, '') AS note,
                     EXTRACT(year FROM fi.irrigation_date)::text AS year,
                     EXTRACT(month FROM fi.irrigation_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fi.irrigation_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fi.irrigation_date)::text AS quarter,
+                    'farm.irrigation' AS original_model,
+                    fi.id AS original_id
                 FROM farm_irrigation_worker fiw
                 JOIN farm_irrigation fi ON fiw.irrigation_id = fi.id
                 JOIN farm_worker fw ON fiw.worker_id = fw.id
@@ -182,9 +215,12 @@ class FarmExpenseReport(models.Model):
                     ff.fertilizing_date::date AS date,
                     ffw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(ff.notes, '') AS note,
                     EXTRACT(year FROM ff.fertilizing_date)::text AS year,
                     EXTRACT(month FROM ff.fertilizing_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM ff.fertilizing_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM ff.fertilizing_date)::text AS quarter,
+                    'farm.fertilizing' AS original_model,
+                    ff.id AS original_id
                 FROM farm_fertilizing_worker ffw
                 JOIN farm_fertilizing ff ON ffw.fertilizing_id = ff.id
                 JOIN farm_worker fw ON ffw.worker_id = fw.id
@@ -198,9 +234,12 @@ class FarmExpenseReport(models.Model):
                     ft.treatment_date::date AS date,
                     ftw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(ft.notes, '') AS note,
                     EXTRACT(year FROM ft.treatment_date)::text AS year,
                     EXTRACT(month FROM ft.treatment_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM ft.treatment_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM ft.treatment_date)::text AS quarter,
+                    'farm.treatment' AS original_model,
+                    ft.id AS original_id
                 FROM farm_treatment_worker ftw
                 JOIN farm_treatment ft ON ftw.treatment_id = ft.id
                 JOIN farm_worker fw ON ftw.worker_id = fw.id
@@ -214,9 +253,12 @@ class FarmExpenseReport(models.Model):
                     fpr.pruning_date::date AS date,
                     fprw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(fpr.notes, '') AS note,
                     EXTRACT(year FROM fpr.pruning_date)::text AS year,
                     EXTRACT(month FROM fpr.pruning_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fpr.pruning_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fpr.pruning_date)::text AS quarter,
+                    'farm.pruning' AS original_model,
+                    fpr.id AS original_id
                 FROM farm_pruning_worker fprw
                 JOIN farm_pruning fpr ON fprw.pruning_id = fpr.id
                 JOIN farm_worker fw ON fprw.worker_id = fw.id
@@ -230,9 +272,12 @@ class FarmExpenseReport(models.Model):
                     fh.harvest_date::date AS date,
                     fhw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(fh.notes, '') AS note,
                     EXTRACT(year FROM fh.harvest_date)::text AS year,
                     EXTRACT(month FROM fh.harvest_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fh.harvest_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fh.harvest_date)::text AS quarter,
+                    'farm.harvest' AS original_model,
+                    fh.id AS original_id
                 FROM farm_harvest_worker fhw
                 JOIN farm_harvest fh ON fhw.harvest_id = fh.id
                 JOIN farm_worker fw ON fhw.worker_id = fw.id
@@ -246,9 +291,12 @@ class FarmExpenseReport(models.Model):
                     fcs.storage_date::date AS date,
                     fcsw.amount,
                     'Fəhlə' AS expense_type,
+                    COALESCE(fcs.notes, '') AS note,
                     EXTRACT(year FROM fcs.storage_date)::text AS year,
                     EXTRACT(month FROM fcs.storage_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM fcs.storage_date)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM fcs.storage_date)::text AS quarter,
+                    'farm.cold.storage' AS original_model,
+                    fcs.id AS original_id
                 FROM farm_cold_storage_worker fcsw
                 JOIN farm_cold_storage fcs ON fcsw.cold_storage_id = fcs.id
                 JOIN farm_worker fw ON fcsw.worker_id = fw.id
@@ -263,9 +311,12 @@ class FarmExpenseReport(models.Model):
                     po.date_order::date AS date,
                     po.amount_total,
                     'Satınalmalar' AS expense_type,
+                    'Satınalma sifarişi' AS note,
                     EXTRACT(year FROM po.date_order)::text AS year,
                     EXTRACT(month FROM po.date_order)::text AS month,
-                    'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter
+                    'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
+                    'purchase.order' AS original_model,
+                    po.id AS original_id
                 FROM purchase_order po
                 WHERE po.state IN ('purchase', 'done') 
                 AND po.date_order IS NOT NULL
@@ -298,4 +349,28 @@ class FarmExpenseReport(models.Model):
                 'sticky': False,
                 'type': 'success'
             }
+        }
+
+    def open_original_record(self):
+        """Orijinal əməliyyatı açır"""
+        self.ensure_one()
+        if not self.original_model or not self.original_id:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Xəta!',
+                    'message': 'Orijinal əməliyyat tapılmadı.',
+                    'type': 'danger',
+                    'sticky': False,
+                }
+            }
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self.original_model,
+            'res_id': self.original_id,
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'form_view_initial_mode': 'edit'},
         }

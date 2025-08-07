@@ -11,10 +11,44 @@
                     <field name="expense_type"/>
                     <field name="name"/>
                     <field name="amount" sum="Cəm"/>
+                    <field name="note"/>
                     <field name="year"/>
                     <field name="month"/>
                     <field name="quarter"/>
                 </list>
+            </field>
+        </record>
+
+        <!-- Ümumi Xərc Hesabatı Form View -->
+        <record id="view_farm_expense_report_form" model="ir.ui.view">
+            <field name="name">farm.expense.report.form</field>
+            <field name="model">farm.expense.report</field>
+            <field name="arch" type="xml">
+                <form string="Xərc Təfərrüatı" create="false" edit="false" delete="false">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="open_original_record" type="object" 
+                                    class="oe_stat_button" icon="fa-external-link"
+                                    string="Orijinal Əməliyyat"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_type"/>
+                                <field name="date"/>
+                                <field name="amount"/>
+                            </group>
+                            <group>
+                                <field name="year"/>
+                                <field name="month"/>
+                                <field name="quarter"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Xərc haqqında əlavə məlumat..."/>
+                        </group>
+                    </sheet>
+                </form>
             </field>
         </record>
 
@@ -47,7 +81,7 @@
         <record id="action_farm_expense_report" model="ir.actions.act_window">
             <field name="name">Ümumi Xərc Hesabatı</field>
             <field name="res_model">farm.expense.report</field>
-            <field name="view_mode">pivot,list,graph</field>
+            <field name="view_mode">pivot,list,form,graph</field>
             <field name="context">{}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
