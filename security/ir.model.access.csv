@@ -39,3 +39,4 @@ access_farm_material_expense,farm.material.expense,model_farm_material_expense,,
 access_farm_hotel_expense,farm.hotel.expense,model_farm_hotel_expense,,1,1,1,1
 access_farm_cash_flow,farm.cash.flow,model_farm_cash_flow,,1,1,1,1
 access_farm_cash_balance,farm.cash.balance,model_farm_cash_balance,,1,1,1,1
+access_farm_expense_report,farm.expense.report,model_farm_expense_report,,1,0,0,0

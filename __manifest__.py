@@ -30,6 +30,7 @@
         'views/farm_worker_views.xml',
         'views/farm_expense_views.xml',
         'views/farm_cash_views.xml',
+        'views/farm_expense_report_views.xml',
         'views/farm_menu.xml',
         'views/purchase_order.xml',
     ],
