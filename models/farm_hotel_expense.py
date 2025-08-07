@@ -15,9 +15,6 @@ class FarmHotelExpense(models.Model):
     
     # Otel məlumatları
     hotel_name = fields.Char('Otel Adı')
-    nights = fields.Integer('Gecə Sayı')
-    price_per_night = fields.Float('Gecəlik Qiymət')
-    guest_count = fields.Integer('Qonaq Sayı', default=1)
     
     # Hesabat üçün
     year = fields.Integer('İl', compute='_compute_date_fields', store=True)

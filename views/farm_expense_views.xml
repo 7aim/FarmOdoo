@@ -28,8 +28,6 @@
                                 <field name="name"/>
                                 <field name="expense_date"/>
                                 <field name="communal_type"/>
-                            </group>
-                            <group>
                                 <field name="amount"/>
                             </group>
                         </group>
@@ -216,7 +214,6 @@
         </record>
 
         <!-- Mal-Material Xərcləri Action -->
-        <!-- Mal-Material Xərcləri Action -->
         <record id="action_farm_material_expense" model="ir.actions.act_window">
             <field name="name">Mal-Material Xərcləri</field>
             <field name="res_model">farm.material.expense</field>
@@ -240,8 +237,6 @@
                     <field name="expense_date"/>
                     <field name="name"/>
                     <field name="hotel_name"/>
-                    <field name="nights"/>
-                    <field name="guest_count"/>
                     <field name="amount" sum="Total"/>
                 </list>
             </field>
@@ -259,11 +254,6 @@
                                 <field name="name"/>
                                 <field name="expense_date"/>
                                 <field name="hotel_name"/>
-                            </group>
-                            <group>
-                                <field name="nights"/>
-                                <field name="price_per_night"/>
-                                <field name="guest_count"/>
                                 <field name="amount"/>
                             </group>
                         </group>
