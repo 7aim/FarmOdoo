@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <!-- Demo data buraya əlavə edilə bilər -->
+        <!-- Sequences for new expense types -->
+        <record id="seq_farm_communal_expense" model="ir.sequence">
+            <field name="name">Kommunal Xərc Ardıcıllığı</field>
+            <field name="code">farm.communal.expense</field>
+            <field name="prefix">KOM</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_farm_diesel_expense" model="ir.sequence">
+            <field name="name">Dizel Xərc Ardıcıllığı</field>
+            <field name="code">farm.diesel.expense</field>
+            <field name="prefix">DIZ</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_farm_tractor_expense" model="ir.sequence">
+            <field name="name">Traktor Xərc Ardıcıllığı</field>
+            <field name="code">farm.tractor.expense</field>
+            <field name="prefix">TRA</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_farm_material_expense" model="ir.sequence">
+            <field name="name">Mal-Material Xərc Ardıcıllığı</field>
+            <field name="code">farm.material.expense</field>
+            <field name="prefix">MAT</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Kassa Hərəkatı list View -->
+        <record id="view_farm_cash_flow_list" model="ir.ui.view">
+            <field name="name">farm.cash.flow.list</field>
+            <field name="model">farm.cash.flow</field>
+            <field name="arch" type="xml">
+                <list string="Kassa Hərəkatı" decoration-success="transaction_type=='income'" decoration-danger="transaction_type=='expense'">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="transaction_type"/>
+                    <field name="amount" sum="Cəm"/>
+                    <field name="reference"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Kassa Hərəkatı Form View -->
+        <record id="view_farm_cash_flow_form" model="ir.ui.view">
+            <field name="name">farm.cash.flow.form</field>
+            <field name="model">farm.cash.flow</field>
+            <field name="arch" type="xml">
+                <form string="Kassa Hərəkatı">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="transaction_type"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="reference"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Kassa Hərəkatı Action -->
+        <record id="action_farm_cash_flow" model="ir.actions.act_window">
+            <field name="name">Kassa Hərəkatı</field>
+            <field name="res_model">farm.cash.flow</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Kassa hərəkatı əlavə edin
+                </p>
+                <p>
+                    Mədaxil və məxaric əməliyyatlarını qeyd edin.
+                </p>
+            </field>
+        </record>
+
+        <!-- Kassa Balans Form View -->
+        <record id="view_farm_cash_balance_form" model="ir.ui.view">
+            <field name="name">farm.cash.balance.form</field>
+            <field name="model">farm.cash.balance</field>
+            <field name="arch" type="xml">
+                <form string="Kassa Balansı">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="current_balance" readonly="1"/>
+                                <span> AZN</span>
+                            </h1>
+                            <h3>Cari Balans</h3>
+                        </div>
+                        <group>
+                            <group>
+                                <label for="total_income" string="Ümumi Mədaxil"/>
+                                <div>
+                                    <field name="total_income" class="oe_inline" readonly="1"/>
+                                    <span> AZN</span>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="total_expense" string="Ümumi Məxaric"/>
+                                <div>
+                                    <field name="total_expense" class="oe_inline" readonly="1"/>
+                                    <span> AZN</span>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Kassa Balans Action -->
+        <record id="action_farm_cash_balance" model="ir.actions.act_window">
+            <field name="name">Kassa Balansı</field>
+            <field name="res_model">farm.cash.balance</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

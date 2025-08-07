@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Kommunal Xərcləri list View -->
+        <record id="view_farm_communal_expense_list" model="ir.ui.view">
+            <field name="name">farm.communal.expense.list</field>
+            <field name="model">farm.communal.expense</field>
+            <field name="arch" type="xml">
+                <list string="Kommunal Xərcləri">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="communal_type"/>
+                    <field name="amount" sum="Total"/>
+                    <field name="note"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Kommunal Xərcləri Form View -->
+        <record id="view_farm_communal_expense_form" model="ir.ui.view">
+            <field name="name">farm.communal.expense.form</field>
+            <field name="model">farm.communal.expense</field>
+            <field name="arch" type="xml">
+                <form string="Kommunal Xərci">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="communal_type"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Kommunal Xərcləri Action -->
+        <record id="action_farm_communal_expense" model="ir.actions.act_window">
+            <field name="name">Kommunal Xərcləri</field>
+            <field name="res_model">farm.communal.expense</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Kommunal xərci əlavə edin
+                </p>
+                <p>
+                    Elektrik, su, qaz və digər kommunal xərclərinizi qeyd edin.
+                </p>
+            </field>
+        </record>
+
+        <!-- Dizel Xərcləri list View -->
+        <record id="view_farm_diesel_expense_list" model="ir.ui.view">
+            <field name="name">farm.diesel.expense.list</field>
+            <field name="model">farm.diesel.expense</field>
+            <field name="arch" type="xml">
+                <list string="Dizel Xərcləri">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="liters"/>
+                    <field name="price_per_liter"/>
+                    <field name="amount" sum="Total"/>
+                    <field name="fuel_station"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Dizel Xərcləri Form View -->
+        <record id="view_farm_diesel_expense_form" model="ir.ui.view">
+            <field name="name">farm.diesel.expense.form</field>
+            <field name="model">farm.diesel.expense</field>
+            <field name="arch" type="xml">
+                <form string="Dizel Xərci">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="fuel_station"/>
+                            </group>
+                            <group>
+                                <field name="liters"/>
+                                <field name="price_per_liter"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Dizel Xərcləri Action -->
+        <record id="action_farm_diesel_expense" model="ir.actions.act_window">
+            <field name="name">Dizel Xərcləri</field>
+            <field name="res_model">farm.diesel.expense</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Dizel xərci əlavə edin
+                </p>
+                <p>
+                    Dizel yanacaq xərclərinizi qeyd edin.
+                </p>
+            </field>
+        </record>
+
+        <!-- Traktor Xərcləri list View -->
+        <record id="view_farm_tractor_expense_list" model="ir.ui.view">
+            <field name="name">farm.tractor.expense.list</field>
+            <field name="model">farm.tractor.expense</field>
+            <field name="arch" type="xml">
+                <list string="Traktor Xərcləri">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="tractor_name"/>
+                    <field name="expense_type"/>
+                    <field name="amount" sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Traktor Xərcləri Form View -->
+        <record id="view_farm_tractor_expense_form" model="ir.ui.view">
+            <field name="name">farm.tractor.expense.form</field>
+            <field name="model">farm.tractor.expense</field>
+            <field name="arch" type="xml">
+                <form string="Traktor Xərci">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="tractor_name"/>
+                            </group>
+                            <group>
+                                <field name="expense_type"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Traktor Xərcləri Action -->
+        <record id="action_farm_tractor_expense" model="ir.actions.act_window">
+            <field name="name">Traktor Xərcləri</field>
+            <field name="res_model">farm.tractor.expense</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Traktor xərci əlavə edin
+                </p>
+                <p>
+                    Traktor təmir, yanacaq və digər xərclərinizi qeyd edin.
+                </p>
+            </field>
+        </record>
+
+        <!-- Mal-Material Xərcləri list View -->
+        <record id="view_farm_material_expense_list" model="ir.ui.view">
+            <field name="name">farm.material.expense.list</field>
+            <field name="model">farm.material.expense</field>
+            <field name="arch" type="xml">
+                <list string="Mal-Material Xərcləri">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="material_type"/>
+                    <field name="supplier"/>
+                    <field name="quantity"/>
+                    <field name="unit_price"/>
+                    <field name="amount" sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Mal-Material Xərcləri Form View -->
+        <record id="view_farm_material_expense_form" model="ir.ui.view">
+            <field name="name">farm.material.expense.form</field>
+            <field name="model">farm.material.expense</field>
+            <field name="arch" type="xml">
+                <form string="Mal-Material Xərci">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="material_type"/>
+                                <field name="supplier"/>
+                            </group>
+                            <group>
+                                <field name="quantity"/>
+                                <field name="unit_price"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Mal-Material Xərcləri Action -->
+        <!-- Mal-Material Xərcləri Action -->
+        <record id="action_farm_material_expense" model="ir.actions.act_window">
+            <field name="name">Mal-Material Xərcləri</field>
+            <field name="res_model">farm.material.expense</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Mal-Material xərci əlavə edin
+                </p>
+                <p>
+                    Alət, avadanlıq və digər material xərclərinizi qeyd edin.
+                </p>
+            </field>
+        </record>
+
+        <!-- Otel Xərcləri list View -->
+        <record id="view_farm_hotel_expense_list" model="ir.ui.view">
+            <field name="name">farm.hotel.expense.list</field>
+            <field name="model">farm.hotel.expense</field>
+            <field name="arch" type="xml">
+                <list string="Otel Xərcləri">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="hotel_name"/>
+                    <field name="nights"/>
+                    <field name="guest_count"/>
+                    <field name="amount" sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Otel Xərcləri Form View -->
+        <record id="view_farm_hotel_expense_form" model="ir.ui.view">
+            <field name="name">farm.hotel.expense.form</field>
+            <field name="model">farm.hotel.expense</field>
+            <field name="arch" type="xml">
+                <form string="Otel Xərci">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="hotel_name"/>
+                            </group>
+                            <group>
+                                <field name="nights"/>
+                                <field name="price_per_night"/>
+                                <field name="guest_count"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Otel Xərcləri Action -->
+        <record id="action_farm_hotel_expense" model="ir.actions.act_window">
+            <field name="name">Otel Xərcləri</field>
+            <field name="res_model">farm.hotel.expense</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Otel xərci əlavə edin
+                </p>
+                <p>
+                    Otel, mehmanxana və qalma xərclərinizi qeyd edin.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

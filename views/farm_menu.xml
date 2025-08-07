@@ -57,6 +57,20 @@
     <menuitem id="farm_additional_expense_menu" name="Əlavə Xərclər" parent="farm_workers_menu" 
               action="farm_additional_expense_action" sequence="30"/>
 
+    <!-- Digər Xərclər Alt Menyuları -->
+    <menuitem id="farm_other_expenses_menu" name="Digər Xərclər" parent="farm_main_menu" sequence="35"/>
+    
+    <menuitem id="farm_communal_expense_menu" name="Kommunal" parent="farm_other_expenses_menu" 
+              action="action_farm_communal_expense" sequence="10"/>
+    <menuitem id="farm_diesel_expense_menu" name="Dizel" parent="farm_other_expenses_menu" 
+              action="action_farm_diesel_expense" sequence="20"/>
+    <menuitem id="farm_tractor_expense_menu" name="Traktor" parent="farm_other_expenses_menu" 
+              action="action_farm_tractor_expense" sequence="30"/>
+    <menuitem id="farm_material_expense_menu" name="Mal-material" parent="farm_other_expenses_menu" 
+              action="action_farm_material_expense" sequence="40"/>
+    <menuitem id="farm_hotel_expense_menu" name="Otel" parent="farm_other_expenses_menu" 
+              action="action_farm_hotel_expense" sequence="50"/>
+
     <!-- IV. Planlaşdırma və Təhlil -->
     <menuitem id="farm_operations_planning_menu" name="Planlaşdırma və Təhlil" 
               parent="farm_main_menu" sequence="40"/>
@@ -74,6 +88,14 @@
     <menuitem id="farm_vendors_menu" name="Təchizatçılar" parent="farm_purchase_menu" 
               action="base.action_partner_supplier_form" sequence="20"/>
 
+    <!-- V.5. Kassa -->
+    <menuitem id="farm_cash_menu" name="Kassa" parent="farm_main_menu" sequence="55"/>
+    
+    <menuitem id="farm_cash_flow_menu" name="Kassa Hərəkatı" parent="farm_cash_menu" 
+              action="action_farm_cash_flow" sequence="10"/>
+    <menuitem id="farm_cash_balance_menu" name="Kassa Balansı" parent="farm_cash_menu" 
+              action="action_farm_cash_balance" sequence="20"/>
+
     <!-- VI. Məhsullar -->
     <menuitem id="farm_products_menu" name="Məhsullar" parent="farm_main_menu" sequence="60"/>
     
@@ -83,33 +105,6 @@
               action="product.product_normal_action" sequence="20"/>
     <menuitem id="farm_product_categories_menu" name="Məhsul Kateqoriyaları" parent="farm_products_menu" 
               action="product.product_category_action_form" sequence="30"/>
-
-    <!-- VII. Hesabatlıq -->
-    <menuitem id="farm_reporting_menu" name="Hesabatlıq" parent="farm_main_menu" sequence="70"/>
-    
-    <!-- Dashboard -->
-    <menuitem id="farm_reporting_dashboard_menu" name="Maliyyə Dashboard" parent="farm_reporting_menu" 
-              action="action_farm_summary_dashboard" sequence="10"/>
-    
-    <!-- Ümumi Hesabatlar -->
-    <menuitem id="farm_reporting_general_menu" name="Ümumi Hesabatlar" parent="farm_reporting_menu" sequence="20"/>
-    
-    <menuitem id="farm_reporting_all_menu" name="Ümumi Hesabatlıq" parent="farm_reporting_general_menu" 
-              action="action_farm_reporting" sequence="10"/>
-    <menuitem id="farm_financial_summary_menu" name="Maliyyə Xülasəsi" parent="farm_reporting_general_menu" 
-              action="action_farm_financial_summary" sequence="20"/>
-    
-    <!-- Detallı Hesabatlar -->
-    <menuitem id="farm_reporting_detailed_menu" name="Detallı Hesabatlar" parent="farm_reporting_menu" sequence="30"/>
-    
-    <menuitem id="farm_operation_report_menu" name="Əməliyyat Hesabatı" parent="farm_reporting_detailed_menu" 
-              action="action_farm_operation_report" sequence="10"/>
-    <menuitem id="farm_worker_report_menu" name="İşçi Hesabatı" parent="farm_reporting_detailed_menu" 
-              action="action_farm_worker_report" sequence="20"/>
-    <menuitem id="farm_purchase_report_menu" name="Satınalma Hesabatı" parent="farm_reporting_detailed_menu" 
-              action="action_farm_purchase_report" sequence="30"/>
-    <menuitem id="farm_expense_report_menu" name="Xərc Hesabatı" parent="farm_reporting_detailed_menu" 
-              action="action_farm_expense_report" sequence="40"/>
     
     <!-- VIII. Konfiqurasiya -->
     <menuitem id="farm_config_menu" name="Konfiqurasiya" parent="farm_main_menu" sequence="90"/>
