@@ -13,7 +13,7 @@
         - Xəstəlik və zərərvericilərin izlənilməsi
         - Palet və soyuducu idarəetməsi
     """,
-    'website': 'https://www.example.com',
+    'website': 'https://www.github.com/7aim/FarmOdoo',
     'depends': ['base', 'stock', 'product','purchase'],
     'data': [
         'security/ir.model.access.csv',
