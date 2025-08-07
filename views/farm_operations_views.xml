@@ -4,35 +4,108 @@
     <record id="farm_plowing_action" model="ir.actions.act_window">
         <field name="name">Şumlama</field>
         <field name="res_model">farm.plowing</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Şumlama Pivot View -->
+    <record id="view_farm_plowing_pivot" model="ir.ui.view">
+        <field name="name">farm.plowing.pivot</field>
+        <field name="model">farm.plowing</field>
+        <field name="arch" type="xml">
+            <pivot string="Şumlama Pivot">
+                <field name="operation_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="area_hectare" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Əkin Action -->
     <record id="farm_planting_action" model="ir.actions.act_window">
         <field name="name">Əkin</field>
         <field name="res_model">farm.planting</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Əkin Pivot View -->
+    <record id="view_farm_planting_pivot" model="ir.ui.view">
+        <field name="name">farm.planting.pivot</field>
+        <field name="model">farm.planting</field>
+        <field name="arch" type="xml">
+            <pivot string="Əkin Pivot">
+                <field name="planting_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="variety_id" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="tree_count" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Sulama Action -->
     <record id="farm_irrigation_action" model="ir.actions.act_window">
         <field name="name">Sulama</field>
         <field name="res_model">farm.irrigation</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Sulama Pivot View -->
+    <record id="view_farm_irrigation_pivot" model="ir.ui.view">
+        <field name="name">farm.irrigation.pivot</field>
+        <field name="model">farm.irrigation</field>
+        <field name="arch" type="xml">
+            <pivot string="Sulama Pivot">
+                <field name="irrigation_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="water_liters" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Gübrələmə Action -->
     <record id="farm_fertilizing_action" model="ir.actions.act_window">
         <field name="name">Gübrələmə</field>
         <field name="res_model">farm.fertilizing</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Gübrələmə Pivot View -->
+    <record id="view_farm_fertilizing_pivot" model="ir.ui.view">
+        <field name="name">farm.fertilizing.pivot</field>
+        <field name="model">farm.fertilizing</field>
+        <field name="arch" type="xml">
+            <pivot string="Gübrələmə Pivot">
+                <field name="fertilizing_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="fertilizer_type" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="total_product_cost" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Dərmanlama Action -->
     <record id="farm_treatment_action" model="ir.actions.act_window">
         <field name="name">Dərmanlama</field>
         <field name="res_model">farm.treatment</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Dərmanlama Pivot View -->
+    <record id="view_farm_treatment_pivot" model="ir.ui.view">
+        <field name="name">farm.treatment.pivot</field>
+        <field name="model">farm.treatment</field>
+        <field name="arch" type="xml">
+            <pivot string="Dərmanlama Pivot">
+                <field name="treatment_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="application_method" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="total_product_cost" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Şumlama Views -->
@@ -474,35 +547,93 @@
     <record id="farm_harvest_action" model="ir.actions.act_window">
         <field name="name">Yığım</field>
         <field name="res_model">farm.harvest</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Yığım Pivot View -->
+    <record id="view_farm_harvest_pivot" model="ir.ui.view">
+        <field name="name">farm.harvest.pivot</field>
+        <field name="model">farm.harvest</field>
+        <field name="arch" type="xml">
+            <pivot string="Yığım Pivot">
+                <field name="harvest_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="harvest_type" type="row"/>
+                <field name="total_cost" type="measure"/>
+                <field name="quantity_kg" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Proqnoz Action -->
     <record id="farm_forecast_action" model="ir.actions.act_window">
         <field name="name">Proqnozlaşdırma</field>
         <field name="res_model">farm.forecast</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Proqnoz Pivot View -->
+    <record id="view_farm_forecast_pivot" model="ir.ui.view">
+        <field name="name">farm.forecast.pivot</field>
+        <field name="model">farm.forecast</field>
+        <field name="arch" type="xml">
+            <pivot string="Proqnoz Pivot">
+                <field name="forecast_year" type="row"/>
+                <field name="forecast_month" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="expected_quantity_kg" type="measure"/>
+                <field name="confidence_level" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Zərərçəkmiş Ağaclar Action -->
     <record id="farm_damaged_trees_action" model="ir.actions.act_window">
         <field name="name">Zərərçəkmiş Ağaclar</field>
         <field name="res_model">farm.damaged.trees</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Zərərçəkmiş Ağaclar Pivot View -->
+    <record id="view_farm_damaged_trees_pivot" model="ir.ui.view">
+        <field name="name">farm.damaged.trees.pivot</field>
+        <field name="model">farm.damaged.trees</field>
+        <field name="arch" type="xml">
+            <pivot string="Zərərçəkmiş Ağaclar Pivot">
+                <field name="damage_date" type="row"/>
+                <field name="field_id" type="row"/>
+                <field name="damage_reason" type="row"/>
+                <field name="treatment_cost" type="measure"/>
+                <field name="damaged_tree_count" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Soyuducu Anbarı Action -->
     <record id="farm_cold_storage_action" model="ir.actions.act_window">
         <field name="name">Soyuducu Anbarı</field>
-        <field name="res_model">farm.cold.storage</field>
-        <field name="view_mode">list,form</field>
+        <field name="res_model">farm.cooler</field>
+        <field name="view_mode">list,form,pivot</field>
+    </record>
+
+    <!-- Soyuducu Anbarı Pivot View -->
+    <record id="view_farm_cold_storage_pivot" model="ir.ui.view">
+        <field name="name">farm.cold.storage.pivot</field>
+        <field name="model">farm.cooler</field>
+        <field name="arch" type="xml">
+            <pivot string="Soyuducu Anbarı Pivot">
+                <field name="status" type="row"/>
+                <field name="capacity_kg" type="measure"/>
+                <field name="current_temperature" type="measure"/>
+            </pivot>
+        </field>
     </record>
 
     <!-- Əlavə Xərclər Action -->
     <record id="farm_additional_expense_action" model="ir.actions.act_window">
         <field name="name">Əlavə Xərclər</field>
         <field name="res_model">farm.additional.expense</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,pivot</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 Yeni əlavə xərc yaradın.
@@ -510,6 +641,19 @@
             <p>
                 Əlavə xərclər bütün əməliyyatlarla əlaqələndirilə bilər.
             </p>
+        </field>
+    </record>
+
+    <!-- Əlavə Xərclər Pivot View -->
+    <record id="view_farm_additional_expense_pivot" model="ir.ui.view">
+        <field name="name">farm.additional.expense.pivot</field>
+        <field name="model">farm.additional.expense</field>
+        <field name="arch" type="xml">
+            <pivot string="Əlavə Xərclər Pivot">
+                <field name="expense_date" type="row"/>
+                <field name="expense_type" type="row"/>
+                <field name="amount" type="measure"/>
+            </pivot>
         </field>
     </record>
 

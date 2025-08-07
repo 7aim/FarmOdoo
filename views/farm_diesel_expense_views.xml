@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Dizel Xərclər Action -->
+        <record id="action_farm_diesel_expense" model="ir.actions.act_window">
+            <field name="name">Dizel Xərclər</field>
+            <field name="res_model">farm.diesel.expense</field>
+            <field name="view_mode">list,form,pivot</field>
+        </record>
+
+        <!-- Dizel Xərclər List View -->
+        <record id="view_farm_diesel_expense_list" model="ir.ui.view">
+            <field name="name">farm.diesel.expense.list</field>
+            <field name="model">farm.diesel.expense</field>
+            <field name="arch" type="xml">
+                <list string="Dizel Xərclər">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="fuel_station"/>
+                    <field name="liters"/>
+                    <field name="price_per_liter"/>
+                    <field name="amount" sum="Cəm"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Dizel Xərclər Form View -->
+        <record id="view_farm_diesel_expense_form" model="ir.ui.view">
+            <field name="name">farm.diesel.expense.form</field>
+            <field name="model">farm.diesel.expense</field>
+            <field name="arch" type="xml">
+                <form string="Dizel Xərc">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="fuel_station"/>
+                            </group>
+                            <group>
+                                <field name="liters"/>
+                                <field name="price_per_liter"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Dizel Xərclər Pivot View -->
+        <record id="view_farm_diesel_expense_pivot" model="ir.ui.view">
+            <field name="name">farm.diesel.expense.pivot</field>
+            <field name="model">farm.diesel.expense</field>
+            <field name="arch" type="xml">
+                <pivot string="Dizel Xərclər Pivot">
+                    <field name="expense_date" type="row"/>
+                    <field name="fuel_station" type="row"/>
+                    <field name="liters" type="measure"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+    </data>
+</odoo>

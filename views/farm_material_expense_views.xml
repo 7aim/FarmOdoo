@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Material Xərclər Action -->
+        <record id="action_farm_material_expense" model="ir.actions.act_window">
+            <field name="name">Mal-material Xərclər</field>
+            <field name="res_model">farm.material.expense</field>
+            <field name="view_mode">list,form,pivot</field>
+        </record>
+
+        <!-- Material Xərclər List View -->
+        <record id="view_farm_material_expense_list" model="ir.ui.view">
+            <field name="name">farm.material.expense.list</field>
+            <field name="model">farm.material.expense</field>
+            <field name="arch" type="xml">
+                <list string="Mal-material Xərclər">
+                    <field name="expense_date"/>
+                    <field name="name"/>
+                    <field name="material_type"/>
+                    <field name="supplier"/>
+                    <field name="quantity"/>
+                    <field name="unit_price"/>
+                    <field name="amount" sum="Cəm"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Material Xərclər Form View -->
+        <record id="view_farm_material_expense_form" model="ir.ui.view">
+            <field name="name">farm.material.expense.form</field>
+            <field name="model">farm.material.expense</field>
+            <field name="arch" type="xml">
+                <form string="Mal-material Xərc">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="expense_date"/>
+                                <field name="material_type"/>
+                                <field name="supplier"/>
+                            </group>
+                            <group>
+                                <field name="quantity"/>
+                                <field name="unit_price"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Material Xərclər Pivot View -->
+        <record id="view_farm_material_expense_pivot" model="ir.ui.view">
+            <field name="name">farm.material.expense.pivot</field>
+            <field name="model">farm.material.expense</field>
+            <field name="arch" type="xml">
+                <pivot string="Mal-material Xərclər Pivot">
+                    <field name="expense_date" type="row"/>
+                    <field name="material_type" type="row"/>
+                    <field name="supplier" type="row"/>
+                    <field name="quantity" type="measure"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+    </data>
+</odoo>

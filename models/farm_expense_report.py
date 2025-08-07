@@ -271,3 +271,31 @@ class FarmExpenseReport(models.Model):
                 AND po.date_order IS NOT NULL
             )
         """ % self._table)
+
+    @api.model
+    def add_total_expense_to_cash(self):
+        """Ümumi xərci kassaya əlavə edir"""
+        # Bütün xərclərin ümumi məbləğini hesabla
+        total_expenses = sum(self.search([]).mapped('amount'))
+        
+        if total_expenses > 0:
+            # Kassaya məxaric əlavə et
+            self.env['farm.cash.flow'].create({
+                'name': f'Ümumi Xərclər - {fields.Date.today()}',
+                'amount': total_expenses,
+                'transaction_type': 'expense',
+                'date': fields.Date.today(),
+                'reference': 'total_expense_report',
+                'note': f'Xərc hesabatından ümumi məbləğ: {total_expenses:.2f} AZN'
+            })
+            
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Uğurlu!',
+                'message': f'Ümumi xərc ({total_expenses:.2f} AZN) kassaya əlavə edildi.',
+                'sticky': False,
+                'type': 'success'
+            }
+        }

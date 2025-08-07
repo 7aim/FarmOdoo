@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Ümumi Xərc Hesabatı list View -->
-        <record id="view_farm_expense_report_list" model="ir.ui.view">
+        <!-- Ümumi Xərc Hesabatı Tree View -->
+        <record id="view_farm_expense_report_tree" model="ir.ui.view">
             <field name="name">farm.expense.report.list</field>
             <field name="model">farm.expense.report</field>
             <field name="arch" type="xml">
@@ -23,7 +23,7 @@
             <field name="name">farm.expense.report.pivot</field>
             <field name="model">farm.expense.report</field>
             <field name="arch" type="xml">
-                <pivot string="Xərc Təhlili">
+                <pivot string="Xərc Təhlili" sample="1">
                     <field name="expense_type" type="row"/>
                     <field name="year" type="col"/>
                     <field name="amount" type="measure"/>
