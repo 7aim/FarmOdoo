@@ -83,8 +83,35 @@
               action="product.product_normal_action" sequence="20"/>
     <menuitem id="farm_product_categories_menu" name="Məhsul Kateqoriyaları" parent="farm_products_menu" 
               action="product.product_category_action_form" sequence="30"/>
+
+    <!-- VII. Hesabatlıq -->
+    <menuitem id="farm_reporting_menu" name="Hesabatlıq" parent="farm_main_menu" sequence="70"/>
     
-    <!-- VII. Konfiqurasiya -->
+    <!-- Dashboard -->
+    <menuitem id="farm_reporting_dashboard_menu" name="Maliyyə Dashboard" parent="farm_reporting_menu" 
+              action="action_farm_summary_dashboard" sequence="10"/>
+    
+    <!-- Ümumi Hesabatlar -->
+    <menuitem id="farm_reporting_general_menu" name="Ümumi Hesabatlar" parent="farm_reporting_menu" sequence="20"/>
+    
+    <menuitem id="farm_reporting_all_menu" name="Ümumi Hesabatlıq" parent="farm_reporting_general_menu" 
+              action="action_farm_reporting" sequence="10"/>
+    <menuitem id="farm_financial_summary_menu" name="Maliyyə Xülasəsi" parent="farm_reporting_general_menu" 
+              action="action_farm_financial_summary" sequence="20"/>
+    
+    <!-- Detallı Hesabatlar -->
+    <menuitem id="farm_reporting_detailed_menu" name="Detallı Hesabatlar" parent="farm_reporting_menu" sequence="30"/>
+    
+    <menuitem id="farm_operation_report_menu" name="Əməliyyat Hesabatı" parent="farm_reporting_detailed_menu" 
+              action="action_farm_operation_report" sequence="10"/>
+    <menuitem id="farm_worker_report_menu" name="İşçi Hesabatı" parent="farm_reporting_detailed_menu" 
+              action="action_farm_worker_report" sequence="20"/>
+    <menuitem id="farm_purchase_report_menu" name="Satınalma Hesabatı" parent="farm_reporting_detailed_menu" 
+              action="action_farm_purchase_report" sequence="30"/>
+    <menuitem id="farm_expense_report_menu" name="Xərc Hesabatı" parent="farm_reporting_detailed_menu" 
+              action="action_farm_expense_report" sequence="40"/>
+    
+    <!-- VIII. Konfiqurasiya -->
     <menuitem id="farm_config_menu" name="Konfiqurasiya" parent="farm_main_menu" sequence="90"/>
     
     <menuitem id="farm_parcel_type_menu" name="Parsel Tipləri" parent="farm_config_menu" 

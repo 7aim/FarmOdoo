@@ -9,3 +9,4 @@ from . import farm_cooler
 from . import farm_operations
 from . import farm_worker
 from . import purchase_order
+from . import farm_reporting

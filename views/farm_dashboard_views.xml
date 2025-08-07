@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Farm Reporting Dashboard -->
+    <record id="view_farm_reporting_dashboard" model="ir.ui.view">
+        <field name="name">farm.reporting.dashboard</field>
+        <field name="model">farm.reporting</field>
+        <field name="arch" type="xml">
+            <form string="Kənd Təsərrüfatı Dashboard">
+                <group string="Hesabatlıq Dashboard">
+                    <!-- KPI Cards -->
+                    <group col="4" string="Bu Ay - Ümumi Statistika">
+                        <field name="total_cost" widget="monetary" readonly="1"/>
+                        <field name="worker_cost" widget="monetary" readonly="1"/>
+                        <field name="material_cost" widget="monetary" readonly="1"/>
+                        <field name="additional_cost" widget="monetary" readonly="1"/>
+                    </group>
+
+                    <!-- Quick Actions -->
+                    <group string="Tez Əməliyyatlar" col="4">
+                        <button name="%(action_farm_operation_report)d" string="Əməliyyat Hesabatı" type="action" class="btn-primary"/>
+                        <button name="%(action_farm_worker_report)d" string="İşçi Hesabatı" type="action" class="btn-info"/>
+                        <button name="%(action_farm_purchase_report)d" string="Satınalma Hesabatı" type="action" class="btn-success"/>
+                        <button name="%(action_farm_expense_report)d" string="Xərc Hesabatı" type="action" class="btn-warning"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_farm_reporting_dashboard" model="ir.actions.act_window">
+        <field name="name">Hesabatlıq Dashboard</field>
+        <field name="res_model">farm.reporting</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_farm_reporting_dashboard"/>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Hesabatlıq Dashboard
+            </p>
+            <p>
+                Bu dashboard-da bütün əməliyyatların və xərclərin ümumi məlumatlarını görə bilərsiniz.
+            </p>
+        </field>
+    </record>
+
+</odoo>

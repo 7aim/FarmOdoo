@@ -32,4 +32,9 @@ access_farm_cold_storage_worker,farm.cold.storage.worker,model_farm_cold_storage
 access_farm_worker,farm.worker,model_farm_worker,,1,1,1,1
 access_farm_worker_payment,farm.worker.payment,model_farm_worker_payment,,1,1,1,1
 access_farm_additional_expense,farm.additional.expense,model_farm_additional_expense,,1,1,1,1
-access_farm_additional_expense,farm.additional.expense,model_farm_additional_expense,,1,1,1,1
+access_farm_reporting,farm.reporting,model_farm_reporting,,1,0,0,0
+access_farm_operation_report,farm.operation.report,model_farm_operation_report,,1,0,0,0
+access_farm_worker_report,farm.worker.report,model_farm_worker_report,,1,0,0,0
+access_farm_purchase_report,farm.purchase.report,model_farm_purchase_report,,1,0,0,0
+access_farm_expense_report,farm.expense.report,model_farm_expense_report,,1,0,0,0
+access_farm_financial_summary,farm.financial.summary,model_farm_financial_summary,,1,0,0,0
