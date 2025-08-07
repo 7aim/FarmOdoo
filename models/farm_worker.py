@@ -106,18 +106,6 @@ class FarmWorker(models.Model):
             'context': {'default_worker_id': self.id}
         }
 
-    def action_view_operations(self):
-        """Əməliyyatları göstər"""
-        return {
-            'name': 'İşçi Əməliyyatları',
-            'type': 'ir.actions.act_window',
-            'view_mode': 'list',
-            'res_model': 'farm.worker',
-            'res_id': self.id,
-            'target': 'current'
-        }
-
-
 class FarmWorkerPayment(models.Model):
     """İşçi Ödənişləri"""
     _name = 'farm.worker.payment'
@@ -130,6 +118,7 @@ class FarmWorkerPayment(models.Model):
     amount = fields.Float('Məbləğ', required=True, tracking=True)
     payment_type = fields.Selection([
         ('salary', 'Maaş'),
+        ('daily', 'Günlük'),
         ('bonus', 'Bonus'),
         ('advance', 'Avans'),
         ('other', 'Digər')

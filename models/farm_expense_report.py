@@ -114,7 +114,7 @@ class FarmExpenseReport(models.Model):
                 
                 UNION ALL
                 
-                -- Maaş Ödənişləri
+                -- Maaş Ödənişləri (salary, bonus, advance, other)
                 SELECT 
                     row_number() OVER () + 50000 AS id,
                     'Maaş Ödənişi - ' || fw.name AS name,
@@ -129,7 +129,28 @@ class FarmExpenseReport(models.Model):
                     fwp.id AS original_id
                 FROM farm_worker_payment fwp
                 JOIN farm_worker fw ON fwp.worker_id = fw.id
-                WHERE fwp.payment_date IS NOT NULL
+                WHERE fwp.payment_date IS NOT NULL 
+                AND fwp.payment_type != 'daily'
+                
+                UNION ALL
+                
+                -- Günlük Ödənişlər (daily - fəhlə kateqoriyasında)
+                SELECT 
+                    row_number() OVER () + 51000 AS id,
+                    'Günlük Ödəniş - ' || fw.name AS name,
+                    fwp.payment_date AS date,
+                    fwp.amount,
+                    'Fəhlə' AS expense_type,
+                    COALESCE(fwp.description, '') AS note,
+                    EXTRACT(year FROM fwp.payment_date)::text AS year,
+                    EXTRACT(month FROM fwp.payment_date)::text AS month,
+                    'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter,
+                    'farm.worker.payment' AS original_model,
+                    fwp.id AS original_id
+                FROM farm_worker_payment fwp
+                JOIN farm_worker fw ON fwp.worker_id = fw.id
+                WHERE fwp.payment_date IS NOT NULL 
+                AND fwp.payment_type = 'daily'
                 
                 UNION ALL
                 
@@ -304,22 +325,75 @@ class FarmExpenseReport(models.Model):
                 
                 UNION ALL
                 
-                -- Satınalmalar
+                -- Gübrə Satınalmaları
                 SELECT 
                     row_number() OVER () + 70000 AS id,
-                    'Satınalma - ' || po.name AS name,
+                    'Gübrə Satınalması - ' || po.name AS name,
                     po.date_order::date AS date,
                     po.amount_total,
-                    'Satınalmalar' AS expense_type,
-                    'Satınalma sifarişi' AS note,
+                    'Gübrələr' AS expense_type,
+                    'Gübrə satın alışı' AS note,
                     EXTRACT(year FROM po.date_order)::text AS year,
                     EXTRACT(month FROM po.date_order)::text AS month,
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
                     po.id AS original_id
                 FROM purchase_order po
+                JOIN purchase_order_line pol ON po.id = pol.order_id
+                JOIN product_product pp ON pol.product_id = pp.id
+                JOIN product_template pt ON pp.product_tmpl_id = pt.id
+                JOIN product_category pc ON pt.categ_id = pc.id
                 WHERE po.state IN ('purchase', 'done') 
                 AND po.date_order IS NOT NULL
+                AND pc.name = 'Fertilizer'
+                
+                UNION ALL
+                
+                -- Dərman Satınalmaları
+                SELECT 
+                    row_number() OVER () + 71000 AS id,
+                    'Dərman Satınalması - ' || po.name AS name,
+                    po.date_order::date AS date,
+                    po.amount_total,
+                    'Dərmanlar' AS expense_type,
+                    'Dərman satın alışı' AS note,
+                    EXTRACT(year FROM po.date_order)::text AS year,
+                    EXTRACT(month FROM po.date_order)::text AS month,
+                    'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
+                    'purchase.order' AS original_model,
+                    po.id AS original_id
+                FROM purchase_order po
+                JOIN purchase_order_line pol ON po.id = pol.order_id
+                JOIN product_product pp ON pol.product_id = pp.id
+                JOIN product_template pt ON pp.product_tmpl_id = pt.id
+                JOIN product_category pc ON pt.categ_id = pc.id
+                WHERE po.state IN ('purchase', 'done') 
+                AND po.date_order IS NOT NULL
+                AND pc.name = 'Pestisid'
+                
+                UNION ALL
+                
+                -- Digər Satınalmalar
+                SELECT 
+                    row_number() OVER () + 72000 AS id,
+                    'Digər Satınalma - ' || po.name AS name,
+                    po.date_order::date AS date,
+                    po.amount_total,
+                    'Digər Satınalmalar' AS expense_type,
+                    'Digər məhsul satın alışı' AS note,
+                    EXTRACT(year FROM po.date_order)::text AS year,
+                    EXTRACT(month FROM po.date_order)::text AS month,
+                    'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
+                    'purchase.order' AS original_model,
+                    po.id AS original_id
+                FROM purchase_order po
+                LEFT JOIN purchase_order_line pol ON po.id = pol.order_id
+                LEFT JOIN product_product pp ON pol.product_id = pp.id
+                LEFT JOIN product_template pt ON pp.product_tmpl_id = pt.id
+                LEFT JOIN product_category pc ON pt.categ_id = pc.id
+                WHERE po.state IN ('purchase', 'done') 
+                AND po.date_order IS NOT NULL
+                AND (pc.name IS NULL OR pc.name NOT IN ('Fertilizer', 'Pestisid'))
             )
         """ % self._table)
 

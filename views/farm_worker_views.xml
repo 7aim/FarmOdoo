@@ -52,12 +52,6 @@
                                 <span class="o_stat_text">Ümumi Ödəniş</span>
                             </div>
                         </button>
-                        <button class="oe_stat_button" type="object" name="action_view_operations" icon="fa-tasks">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="total_operations"/></span>
-                                <span class="o_stat_text">Əməliyyatlar</span>
-                            </div>
-                        </button>
                     </div>
                     
                     <group>

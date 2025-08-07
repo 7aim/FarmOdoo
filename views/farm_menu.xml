@@ -72,7 +72,7 @@
     <menuitem id="farm_additional_expense_menu" name="Əlavə Xərclər" parent="farm_other_expenses_menu" 
               action="farm_additional_expense_action" sequence="30"/>
 
-    <!-- IV. Planlaşdırma və Təhlil -->
+    <!-- IV. Planlaşdırma və Təhlil 
     <menuitem id="farm_operations_planning_menu" name="Planlaşdırma və Təhlil" 
               parent="farm_main_menu" sequence="40"/>
     
@@ -80,6 +80,7 @@
               action="farm_forecast_action" sequence="10"/>
     <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_planning_menu" 
               action="farm_damaged_trees_action" sequence="20"/>
+    -->
 
     <!-- V. Ümumi Xərc Hesabatı -->
     <menuitem id="farm_expense_report_menu" name="Xərc Hesabatı" parent="farm_main_menu" 
