@@ -29,7 +29,7 @@
                         <div class="oe_button_box" name="button_box">
                             <button name="open_original_record" type="object" 
                                     class="oe_stat_button" icon="fa-external-link"
-                                    string="Orijinal Əməliyyat"/>
+                                    string="Əməliyyat"/>
                         </div>
                         <group>
                             <group>

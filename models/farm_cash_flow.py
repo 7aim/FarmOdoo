@@ -45,7 +45,29 @@ class FarmCashBalance(models.TransientModel):
         
         res.update({
             'total_income': total_income,
-            'total_expense': total_expense,
-            'current_balance': total_income - total_expense,
+            'total_expense': total_expense + self._get_all_expenses(),
+            'current_balance': total_income - total_expense - self._get_all_expenses(),
         })
         return res
+
+    def _get_all_expenses(self):
+        """Bütün xərclərin ümumi məbləğini hesablayır"""
+        total = 0
+        
+        # Kommunal
+        total += sum(self.env['farm.communal.expense'].search([]).mapped('amount'))
+        # Dizel  
+        total += sum(self.env['farm.diesel.expense'].search([]).mapped('amount'))
+        # Traktor
+        total += sum(self.env['farm.tractor.expense'].search([]).mapped('amount'))
+        # Material
+        total += sum(self.env['farm.material.expense'].search([]).mapped('amount'))
+        # Otel
+        total += sum(self.env['farm.hotel.expense'].search([]).mapped('amount'))
+        # İşçi maaşları
+        total += sum(self.env['farm.worker.payment'].search([]).mapped('amount'))
+        # Satınalmalar
+        purchase_orders = self.env['purchase.order'].search([('state', 'in', ['purchase', 'done'])])
+        total += sum(purchase_orders.mapped('amount_total'))
+        
+        return total

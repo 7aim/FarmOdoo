@@ -398,7 +398,7 @@
                         <page string="Məhsul Xərcləri" name="product_costs">
                             <field name="product_line_ids">
                                 <list editable="bottom">
-                                    <field name="product_id" options="{'no_create_edit': True}"/>
+                                    <field name="product_id" options="{'no_create_edit': True}" domain="[('categ_id.name', '=', 'Fertilizer')]"/>
                                     <field name="available_qty" readonly="1" string="Anbardan Mövcud"/>
                                     <field name="product_qty"/>
                                     <field name="product_uom_id" readonly="1"/>
@@ -487,7 +487,7 @@
                         <page string="Dərman Xərcləri" name="medicine_costs">
                             <field name="product_line_ids">
                                 <list editable="bottom">
-                                    <field name="product_id" options="{'no_create_edit': True}"/>
+                                    <field name="product_id" options="{'no_create_edit': True}" domain="[('categ_id.name', '=', 'Pestisid')]"/>
                                     <field name="available_qty" readonly="1" string="Anbardan Mövcud"/>
                                     <field name="product_qty"/>
                                     <field name="product_uom_id" readonly="1"/>
