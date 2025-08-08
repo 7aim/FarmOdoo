@@ -85,7 +85,7 @@ class FarmPlanting(models.Model):
     
     # Ağac məlumatları
     variety_id = fields.Many2one('farm.variety', string='Sort (Ağac)', required=True, ondelete='cascade', tracking=True)
-    tree_count = fields.Integer('Say (ağac sayı)', required=True, default=1, tracking=True)
+    tree_count = fields.Integer('Ağac sayı', required=True, default=1, tracking=True)
 
     # Fidan məlumatları
     seedling_type = fields.Selection([

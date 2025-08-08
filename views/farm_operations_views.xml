@@ -224,14 +224,14 @@
                             <field name="field_id"/>
                             <field name="parcel_id"/>
                             <field name="row_id"/>
-                            <field name="supplier"/>
                         </group>
                         <group string="Ağac Məlumatları">
                             <field name="variety_id"/>
                             <field name="seedling_type"/>
                             <field name="tree_count"/>
-                            <field name="unit_price"/>
-                            <field name="total_cost"/>
+                            <field name="supplier"/>
+                            <!-- <field name="unit_price"/> -->
+                            <!-- <field name="total_cost"/> -->
                         </group>
                     </group>
                     <notebook>
@@ -311,7 +311,7 @@
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>
                             <field name="water_liters"/>
-                            <field name="water_cost"/>
+                            <!--<field name="water_cost"/>-->
                             <field name="water_source"/>
                             <field name="operator_id"/>
                         </group>

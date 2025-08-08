@@ -78,9 +78,10 @@
     
     <menuitem id="farm_forecast_menu" name="Proqnozlaşdırma" parent="farm_operations_planning_menu" 
               action="farm_forecast_action" sequence="10"/>
-    <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_planning_menu" 
-              action="farm_damaged_trees_action" sequence="20"/>
+
     -->
+    <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_gardening_menu" 
+              action="farm_damaged_trees_action" sequence="80"/>
 
     <!-- V. Ümumi Xərc Hesabatı -->
     <menuitem id="farm_expense_report_menu" name="Xərc Hesabatı" parent="farm_main_menu" 
