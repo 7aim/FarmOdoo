@@ -4,7 +4,7 @@
     <menuitem id="farm_main_menu" name="Kənd Təsərrüfatı" sequence="1"/>
     
     <!-- I. Saheler Menyusu -->
-    <menuitem id="farm_master_menu" name="Saheler" parent="farm_main_menu" sequence="10"/>
+    <menuitem id="farm_master_menu" name="Sahələr" parent="farm_main_menu" sequence="10"/>
     
     <!-- Saheler Alt Menyuları -->
     <menuitem id="farm_field_menu" name="Sahələr" parent="farm_master_menu" 
