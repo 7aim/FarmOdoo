@@ -14,7 +14,9 @@
                 <field name="total_parcel"/>
                 <field name="total_rows"/>
                 <field name="total_trees"/>
-                <field name="status"/>
+                <field name="status" 
+                       decoration-success="status == 'active'"
+                       decoration-muted="status == 'passive'"/>
             </list>
         </field>
     </record>

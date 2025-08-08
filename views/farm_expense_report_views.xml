@@ -6,7 +6,7 @@
             <field name="name">farm.expense.report.list</field>
             <field name="model">farm.expense.report</field>
             <field name="arch" type="xml">
-                <list string="Ümumi Xərc Hesabatı" create="false" edit="false" delete="false">
+                <list string="Xərc Hesabatı">
                     <field name="date"/>
                     <field name="expense_type"/>
                     <field name="name"/>
@@ -24,7 +24,7 @@
             <field name="name">farm.expense.report.form</field>
             <field name="model">farm.expense.report</field>
             <field name="arch" type="xml">
-                <form string="Xərc Təfərrüatı" create="false" edit="false" delete="false">
+                <form string="Xərc Təfərrüatı">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="open_original_record" type="object" 
@@ -79,7 +79,7 @@
 
         <!-- Ümumi Xərc Hesabatı Action -->
         <record id="action_farm_expense_report" model="ir.actions.act_window">
-            <field name="name">Ümumi Xərc Hesabatı</field>
+            <field name="name">Xərc Hesabatı</field>
             <field name="res_model">farm.expense.report</field>
             <field name="view_mode">pivot,list,form,graph</field>
             <field name="context">{}</field>
@@ -88,7 +88,7 @@
                     Xərc hesabatı
                 </p>
                 <p>
-                    Bütün xərc növlərinin ümumi hesabatı.
+                    Bütün xərc növlərinin hesabatı.
                 </p>
             </field>
         </record>
