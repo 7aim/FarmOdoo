@@ -69,14 +69,21 @@ class FarmTree(models.Model):
                 if not row.code:
                     raise ValidationError('Cərgə kodu olmayan bir cərgədə ağac yarada bilməzsiniz!')
                 
-                # Ağac nömrəsini generasiya et
+                # Ağac nömrəsini generasiya et - bütün sahədə ardıcıl
                 if not vals.get('tree_id'):
-                    last_tree = self.search([('row_id', '=', row.id)], order='tree_id desc', limit=1)
+                    # Bütün sahədəki son ağacı tap
+                    last_tree = self.search([
+                        ('field_id', '=', row.field_id.id)
+                    ], order='tree_id desc', limit=1)
                     
                     if last_tree and last_tree.tree_id:
                         try:
-                            # Son ağacın nömrəsini götür (məsələn: SAH01-P001-C1-A5 -> 5)
-                            number = int(last_tree.tree_id.split('-A')[1]) + 1
+                            # Son ağacın nömrəsini götür (məsələn: S1-P1-C1-A5 -> 5)
+                            parts = last_tree.tree_id.split('-A')
+                            if len(parts) == 2:
+                                number = int(parts[1]) + 1
+                            else:
+                                number = 1
                         except (ValueError, IndexError):
                             number = 1
                     else:

@@ -73,16 +73,22 @@ class FarmRow(models.Model):
                 if not parcel.code:
                     raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
                 
-                # Cərgə kodunu generasiya et
+                # Cərgə kodunu generasiya et - bütün sahədə ardıcıl
                 if not vals.get('code'):
+                    # Bütün sahədəki son cərgəni tap
                     last_row = self.search([
-                        ('parcel_id', '=', parcel.id),
-                        ('code', 'like', f'{parcel.code}-C%')
+                        ('field_id', '=', parcel.field_id.id),
+                        ('code', 'like', f'{parcel.field_id.code}-%')
                     ], order='code desc', limit=1)
                     
                     if last_row and last_row.code:
                         try:
-                            number = int(last_row.code.split('-C')[1]) + 1
+                            # Kodu parse et: S1-P1-C5 -> 5
+                            parts = last_row.code.split('-')
+                            if len(parts) >= 3 and parts[2].startswith('C'):
+                                number = int(parts[2][1:]) + 1
+                            else:
+                                number = 1
                         except (ValueError, IndexError):
                             number = 1
                     else:
