@@ -9,7 +9,7 @@
                 <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_type_id"/>
-                <field name="irrigation_available"/>
+                <!--field name="irrigation_available"/-->
                 <field name="area_hectare"/>
                 <field name="total_rows"/>
                 <field name="total_trees"/>
@@ -27,13 +27,13 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name" placeholder="Nar parseli"/>
                             <field name="code" readonly="1"/>
-                            <field name="parcel_type_id"/>
                             <field name="field_id"/>
                         </group>
                         <group string="Texniki Məlumatlar">
+                            <field name="parcel_type_id"/>
                             <field name="area_hectare"/>
                             <field name="soil_depth"/>
-                            <field name="irrigation_available"/>
+                            <!--field name="irrigation_available"/-->
                         </group>
                     </group>
                     <notebook>

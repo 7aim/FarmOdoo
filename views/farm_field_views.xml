@@ -36,13 +36,12 @@
                             <field name="code" readonly="1"/>
                             <field name="area_hectare"/>
                             <field name="soil_type"/>
-                            <field name="active"/>
                         </group>
                         <group string="Yer Məlumatları">
                             <field name="district" placeholder='Naxçıvan'/>
                             <field name="village" placeholder='Qaraçuq'/>
-                            <field name="gps_latitude"/>
-                            <field name="gps_longitude"/>
+                            <field name="google_earth_link" widget="url" placeholder='https://earth.google.com/web/search/Baku,+Azerbaijan/...'/>
+                            <field name="active"/>
                         </group>
                     </group>
                     <group>

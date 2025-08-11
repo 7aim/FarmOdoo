@@ -1,12 +1,11 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class FarmParcel(models.Model):
     _name = 'farm.parcel'
     _description = 'Parsel'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'field_id, name'
+    _order = 'code'
 
     name = fields.Char('Parsel Adı', tracking=True)
     code = fields.Char('Parsel Kodu', copy=False, readonly=True)
@@ -29,6 +28,7 @@ class FarmParcel(models.Model):
 
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
+    
     
     @api.depends('row_ids', 'row_ids.tree_ids')
     def _compute_statistics(self):

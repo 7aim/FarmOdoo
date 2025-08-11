@@ -12,84 +12,19 @@ class FarmField(models.Model):
     
     # Yer məlumatları
     district = fields.Selection([
-        ('absheron', 'Abşeron'),
-        ('agadash', 'Ağdaş'),
-        ('agdam', 'Ağdam'),
-        ('agjabadi', 'Ağcabədi'),
-        ('agstafa', 'Ağstafa'),
-        ('agsu', 'Ağsu'),
-        ('astara', 'Astara'),
-        ('baku', 'Bakı'),
-        ('babek', 'Babək'),
-        ('balakan', 'Balakən'),
-        ('barda', 'Bərdə'),
-        ('beylagan', 'Beyləqan'),
-        ('bilasuvar', 'Biləsuvar'),
-        ('dashkasan', 'Daşkəsən'),
-        ('davachi', 'Şabran'),
-        ('fizuli', 'Füzuli'),
-        ('gakh', 'Qax'),
-        ('gandja', 'Gəncə'),
-        ('goranboy', 'Goranboy'),
-        ('goychay', 'Göyçay'),
-        ('goygol', 'Göygöl'),
-        ('guba', 'Quba'),
-        ('gusar', 'Qusar'),
-        ('hajigabul', 'Hacıqabul'),
-        ('imtishad', 'İmişli'),
-        ('ismayilli', 'İsmayıllı'),
-        ('jabrayil', 'Cəbrayıl'),
-        ('jalilabad', 'Cəlilabad'),
-        ('julfa', 'Culfa'),
-        ('kalbajar', 'Kəlbəcər'),
-        ('kangarli', 'Kəngərli'),
-        ('kurdamir', 'Kürdəmir'),
-        ('lacin', 'Laçın'),
-        ('lerik', 'Lerik'),
-        ('lankaran', 'Lənkəran'),
-        ('masalli', 'Masallı'),
-        ('mingachevir', 'Mingəçevir'),
-        ('naftalan', 'Naftalan'),
-        ('neftchala', 'Neftçala'),
-        ('oguz', 'Oğuz'),
-        ('ordubad', 'Ordubad'),
-        ('qabala', 'Qəbələ'),
-        ('qakh', 'Qax'),
-        ('qazakh', 'Qazax'),
-        ('qobustan', 'Qobustan'),
-        ('quba', 'Quba'),
-        ('qusar', 'Qusar'),
-        ('saatli', 'Saatlı'),
-        ('sabirabad', 'Sabirabad'),
-        ('shaki', 'Şəki'),
-        ('shamakhi', 'Şamaxı'),
-        ('shamkir', 'Şəmkir'),
-        ('sharur', 'Şərur'),
-        ('shatakh', 'Şahbuz'),
-        ('shirvan', 'Şirvan'),
-        ('shusha', 'Şuşa'),
-        ('siazan', 'Siyəzən'),
-        ('sumgait', 'Sumqayıt'),
-        ('terter', 'Tərtər'),
-        ('tovuz', 'Tovuz'),
-        ('ughuz', 'Uğuz'),
-        ('ujaar', 'Ucar'),
-        ('yardimli', 'Yardımlı'),
-        ('yevlakh', 'Yevlax'),
-        ('zagatala', 'Zaqatala'),
-        ('zardab', 'Zərdab'),
-        ('nakhchivan', 'Naxçıvan'),
-        ('khizi', 'Xızı'),
-        ('khachmaz', 'Xaçmaz'),
-        ('khojali', 'Xocalı'),
-        ('khojavend', 'Xocavənd'),
-        ('gazakh', 'Qazax'),
-        ('salyan', 'Salyan'),
-        ('other', 'Digər')
+        ('absheron', 'Abşeron'),('agadash', 'Ağdaş'),('agdam', 'Ağdam'),('agjabadi', 'Ağcabədi'),('agstafa', 'Ağstafa'),('agsu', 'Ağsu'),('astara', 'Astara'),('baku', 'Bakı'),
+        ('babek', 'Babək'),('balakan', 'Balakən'),('barda', 'Bərdə'),('beylagan', 'Beyləqan'),('bilasuvar', 'Biləsuvar'),('dashkasan', 'Daşkəsən'),('davachi', 'Şabran'),('fizuli', 'Füzuli'),('gakh', 'Qax'),('gandja', 'Gəncə'),('goranboy', 'Goranboy'),('goychay', 'Göyçay'),('goygol', 'Göygöl'),('guba', 'Quba'),('gusar', 'Qusar'),('hajigabul', 'Hacıqabul'),
+        ('imtishad', 'İmişli'),('ismayilli', 'İsmayıllı'),('jabrayil', 'Cəbrayıl'),('jalilabad', 'Cəlilabad'),('julfa', 'Culfa'),('kalbajar', 'Kəlbəcər'),('kangarli', 'Kəngərli'),('kurdamir', 'Kürdəmir'),('lacin', 'Laçın'),('lerik', 'Lerik'),('lankaran', 'Lənkəran'),('naftalan', 'Naftalan'),('neftchala', 'Neftçala'),('oguz', 'Oğuz'),('ordubad', 'Ordubad'),('qabala', 'Qəbələ'),('qakh', 'Qax'),
+        ('qazakh', 'Qazax'),('qobustan', 'Qobustan'),('quba', 'Quba'),('qusar', 'Qusar'),('saatli', 'Saatlı'),('sabirabad', 'Sabirabad'),('shaki', 'Şəki'),('shamakhi', 'Şamaxı'),('shamkir', 'Şəmkir'),('sharur', 'Şərur'),('shatakh', 'Şahbuz'),('shirvan', 'Şirvan'),('shusha', 'Şuşa'),('siazan', 'Siyəzən'),('sumgait', 'Sumqayıt'),('terter', 'Tərtər'),('tovuz', 'Tovuz'),
+        ('ughuz', 'Uğuz'),('ujaar', 'Ucar'),('yardimli', 'Yardımlı'),('yevlakh', 'Yevlax'),('zagatala', 'Zaqatala'),('zardab', 'Zərdab'),('nakhchivan', 'Naxçıvan'),('khizi', 'Xızı'),('khachmaz', 'Xaçmaz'),('khojali', 'Xocalı'),('khojavend', 'Xocavənd'),('gazakh', 'Qazax'),('salyan', 'Salyan'),('other', 'Digər')
     ], string='Rayonlar', required=True, default='baku', tracking=True)
+
     village = fields.Char('Kənd')
-    gps_latitude = fields.Float('GPS Enlemi', digits=(10, 6), default=40.712776, tracking=True)
-    gps_longitude = fields.Float('GPS Uzunluğu', digits=(10, 6), default=-74.005974, tracking=True)
+
+    google_earth_link = fields.Char(
+        string="Google Earth Linki",
+        help="Sahənin Google Earth-dəki ünvan linkini bura daxil edin. Məsələn: https://earth.google.com/web/search/Baku,+Azerbaijan/..."
+    )
 
     # Sahənin ölçüsü və məlumatları
     area_hectare = fields.Float('Sahənin Ölçüsü (Hektar)', default=40.0, tracking=True)
@@ -118,6 +53,7 @@ class FarmField(models.Model):
     
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
+
 
     @api.onchange('active')
     def _onchange_active(self):
