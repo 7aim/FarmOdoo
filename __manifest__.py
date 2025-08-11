@@ -9,6 +9,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/farm_data.xml',
+        'views/farm_field_wizard_views.xml',
         'views/farm_field_views.xml',
         'views/farm_parcel_views.xml',
         'views/farm_row_views.xml',

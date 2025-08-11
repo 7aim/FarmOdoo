@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sahə Yaratma Sihirbazı View -->
+        <record id="view_farm_field_wizard_form" model="ir.ui.view">
+            <field name="name">farm.field.wizard.form</field>
+            <field name="model">farm.field.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sahə Yaratma Sihirbazı">
+                    <group>
+                        <group string="Sahə Məlumatları">
+                            <field name="field_name"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Parsel Məlumatları">
+                            <group>
+                                <group>
+                                    <field name="parcel_count"/>
+                                    <field name="area_per_parcel"/>
+                                    <field name="max_trees_per_row"/>
+                                </group>
+                                <group>
+                                    <field name="soil_depth"/>
+                                    <field name="irrigation_available"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Cərgə Məlumatları">
+                            <group>
+                                <group>
+                                    <field name="rows_per_parcel"/>
+                                    <field name="row_length"/>
+                                    <field name="tree_spacing"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Ağac Məlumatları">
+                            <group>
+                                <group>
+                                    <field name="create_trees"/>
+                                    <field name="trees_per_row" invisible="not create_trees"/>
+                                    <field name="variety_id" invisible="not create_trees" required="create_trees"/>
+                                </group>
+                            </group>
+                            
+                            <div invisible="not create_trees" class="alert alert-warning">
+                                <strong>Diqqət:</strong> Ağac yaradılacaqsa sort seçilməlidir!
+                            </div>
+                        </page>
+                    </notebook>
+                    
+                    <div class="alert alert-info">
+                        <strong>Xülasə:</strong>
+                        <br/>📍 Cəmi sahə: <field name="estimated_area" readonly="1"/> ha
+                        <br/>📦 Cəmi parsel: <field name="parcel_count" readonly="1"/>
+                        <br/>📏 Cəmi cərgə: <field name="total_rows" readonly="1"/>
+                        <div invisible="not create_trees">
+                            🌳 Cəmi ağac: <field name="total_trees" readonly="1"/>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <strong>Diqqət:</strong> Bu əməliyyat çoxlu məlumat yaradacaq və vaxt ala bilər.
+                    </div>
+                    
+                    <footer>
+                        <button string="Sahəni Yarat" name="action_create_field" type="object" class="btn-primary"/>
+                        <button string="Ləğv Et" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Sahə Yaratma Sihirbazı Action -->
+        <record id="action_farm_field_wizard" model="ir.actions.act_window">
+            <field name="name">Sahə Yaratma Sihirbazı</field>
+            <field name="res_model">farm.field.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_farm_field_wizard_form"/>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="menu_farm_field_wizard" 
+                  name="Sahə Sihirbazı" 
+                  parent="farm_operations_menu"
+                  action="action_farm_field_wizard"
+                  sequence="1"/>
+
+    </data>
+</odoo>

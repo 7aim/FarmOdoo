@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_farm_field_wizard,farm.field.wizard,model_farm_field_wizard,,1,1,1,1
 access_farm_field,farm.field,model_farm_field,,1,1,1,1
 access_farm_parcel,farm.parcel,model_farm_parcel,,1,1,1,1
 access_farm_row,farm.row,model_farm_row,,1,1,1,1
