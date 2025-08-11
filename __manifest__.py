@@ -4,16 +4,7 @@
     'name': 'Kənd Təsərrüfatı İdarəetmə Sistemi',
     'version': '18.0.1.0.0',
     'category': 'Agriculture',
-    'summary': 'Sahə, Parsel, Cərgə və Ağac İdarəetmə Sistemi',
-    'description': """
-        Kənd təsərrüfatı üçün tam həll:
-        - Sahələrin idarə edilməsi
-        - Parsellərin və cərgələrin izlənilməsi
-        - Ağacların nömrələnməsi və sort idarəetməsi
-        - Xəstəlik və zərərvericilərin izlənilməsi
-        - Palet və soyuducu idarəetməsi
-    """,
-    'website': 'https://www.github.com/7aim/FarmOdoo',
+    'website': 'https://www.github.com/7aim',
     'depends': ['base', 'stock', 'product','purchase'],
     'data': [
         'security/ir.model.access.csv',
