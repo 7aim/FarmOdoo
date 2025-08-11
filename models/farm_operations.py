@@ -377,9 +377,15 @@ class FarmFertilizingLine(models.Model):
 
     fertilizing_id = fields.Many2one('farm.fertilizing', string='Gübrələmə', ondelete='cascade', required=True)
     product_id = fields.Many2one('product.product', string='Gübrə Məhsulu', required=True, domain="[('type', '=', 'consu')]", ondelete='cascade')
-    product_qty = fields.Float(string='Miqdar (kq/litr)', required=True, default=1.0)
+    product_qty = fields.Float(string='Quantity', required=True, default=1.0)
     product_uom_id = fields.Many2one('uom.uom', string='Ölçü Vahidi', related='product_id.uom_id')
-    available_qty = fields.Float(string='Anbardakı Miqdar', compute='_compute_available_qty', store=False, readonly=True)
+    available_qty = fields.Float(string='Anbarda Mövcud', compute='_compute_available_qty', store=False, readonly=True)
+    product_weight = fields.Float(
+        string='Çəki (kg)',
+        related='product_id.weight',
+        readonly=True,
+        help='Məhsulun vahid çəkisi'
+    )
     
     unit_cost = fields.Float(string='Vahid Qiymət', related='product_id.standard_price')
     cost = fields.Float(string='Xərc', compute='_compute_cost', store=True)
@@ -418,9 +424,15 @@ class FarmTreatmentLine(models.Model):
 
     treatment_id = fields.Many2one('farm.treatment', string='Dərmanlama', ondelete='cascade', required=True)
     product_id = fields.Many2one('product.product', string='Dərman Məhsulu', required=True, domain="[('type', '=', 'consu')]", ondelete='cascade')
-    product_qty = fields.Float(string='Miqdar (litr/kq)', required=True, default=1.0)
+    product_qty = fields.Float(string='Miqdar', required=True, default=1.0)
     product_uom_id = fields.Many2one('uom.uom', string='Ölçü Vahidi', related='product_id.uom_id')
-    available_qty = fields.Float(string='Anbardakı Miqdar', compute='_compute_available_qty', store=False, readonly=True)
+    available_qty = fields.Float(string='Anbarda Mövcud', compute='_compute_available_qty', store=False, readonly=True)
+    product_weight = fields.Float(
+        string='Çəki (kg)',
+        related='product_id.weight',
+        readonly=True,
+        help='Məhsulun vahid çəkisi'
+    )
     
     unit_cost = fields.Float(string='Vahid Qiymət', related='product_id.standard_price')
     cost = fields.Float(string='Xərc', compute='_compute_cost', store=True)

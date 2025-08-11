@@ -399,7 +399,8 @@
                             <field name="product_line_ids">
                                 <list editable="bottom">
                                     <field name="product_id" options="{'no_create_edit': True}" domain="[('categ_id.name', '=', 'Fertilizer')]"/>
-                                    <field name="available_qty" readonly="1" string="Anbardan Mövcud"/>
+                                    <field name="available_qty" readonly="1" string="Anbarda"/>
+                                    <field name="product_weight" readonly="1" string="Çəki (kg)"/>
                                     <field name="product_qty"/>
                                     <field name="product_uom_id" readonly="1"/>
                                     <field name="unit_cost" readonly="1"/>
@@ -488,7 +489,8 @@
                             <field name="product_line_ids">
                                 <list editable="bottom">
                                     <field name="product_id" options="{'no_create_edit': True}" domain="[('categ_id.name', '=', 'Pestisid')]"/>
-                                    <field name="available_qty" readonly="1" string="Anbardan Mövcud"/>
+                                    <field name="available_qty" readonly="1" string="Anbarda"/>
+                                    <field name="product_weight" readonly="1" string="Çəki (kg)"/>
                                     <field name="product_qty"/>
                                     <field name="product_uom_id" readonly="1"/>
                                     <field name="unit_cost" readonly="1"/>

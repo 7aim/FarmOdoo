@@ -18,6 +18,7 @@ class FarmParcel(models.Model):
     area_hectare = fields.Float('Parselin Ölçüsü (ha)', default=20.0, tracking=True)
     soil_depth = fields.Float('Torpaq Dərinliyi (cm)', default=30.0, tracking=True)
     irrigation_available = fields.Boolean('Suvarma İmkanı', default=False, tracking=True)
+    max_trees_per_row = fields.Integer('Cərgədə Maksimum Ağac Sayı', required=True, tracking=True, help='Bu parseldə bir cərgədə maksimum nə qədər ağac ola bilər')
 
     # Əlaqəli sahələr
     row_ids = fields.One2many('farm.row', 'parcel_id', string='Cərgələr')
@@ -95,11 +96,13 @@ class FarmParcel(models.Model):
                 vals['name'] = vals['code']
         return super().create(vals_list)
 
-    @api.constrains('area_hectare')
+    @api.constrains('area_hectare', 'max_trees_per_row')
     def _check_area(self):
         for record in self:
             if record.area_hectare <= 0:
                 raise ValidationError('Parselin ölçüsü müsbət olmalıdır!')
+            if record.max_trees_per_row <= 0:
+                raise ValidationError('Cərgədə maksimum ağac sayı müsbət olmalıdır!')
 
     # SQL constraints üçün unikal kod təmin edilir
     _sql_constraints = [

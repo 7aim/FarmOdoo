@@ -11,6 +11,7 @@
                 <field name="parcel_type_id"/>
                 <!--field name="irrigation_available"/-->
                 <field name="area_hectare"/>
+                <field name="max_trees_per_row"/>
                 <field name="total_rows"/>
                 <field name="total_trees"/>
             </list>
@@ -33,6 +34,7 @@
                             <field name="parcel_type_id"/>
                             <field name="area_hectare"/>
                             <field name="soil_depth"/>
+                            <field name="max_trees_per_row"/>
                             <!--field name="irrigation_available"/-->
                         </group>
                     </group>
@@ -42,8 +44,8 @@
                                 <list>
                                     <field name="code"/>
                                     <field name="name"/>
+                                    <field name="max_trees"/>
                                     <field name="tree_count"/>
-                                    <field name="length_meter"/>
                                 </list>
                             </field>
                         </page>

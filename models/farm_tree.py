@@ -59,25 +59,30 @@ class FarmTree(models.Model):
             if not vals.get('row_id') and self._context.get('default_row_id'):
                 vals['row_id'] = self._context.get('default_row_id')
             
-            if not vals.get('tree_id') and vals.get('row_id'):
+            if vals.get('row_id'):
                 row = self.env['farm.row'].browse(vals['row_id'])
+                
+                # Maksimum ağac sayı limitini yoxla
+                if row.max_trees > 0 and row.tree_count >= row.max_trees:
+                    raise ValidationError(f'Bu cərgədə maksimum {row.max_trees} ağac ola bilər. Hazırda {row.tree_count} ağac mövcuddur.')
                 
                 if not row.code:
                     raise ValidationError('Cərgə kodu olmayan bir cərgədə ağac yarada bilməzsiniz!')
                 
                 # Ağac nömrəsini generasiya et
-                last_tree = self.search([('row_id', '=', row.id)], order='tree_id desc', limit=1)
-                
-                if last_tree and last_tree.tree_id:
-                    try:
-                        # Son ağacın nömrəsini götür (məsələn: SAH01-P001-C1-A5 -> 5)
-                        number = int(last_tree.tree_id.split('-A')[1]) + 1
-                    except (ValueError, IndexError):
+                if not vals.get('tree_id'):
+                    last_tree = self.search([('row_id', '=', row.id)], order='tree_id desc', limit=1)
+                    
+                    if last_tree and last_tree.tree_id:
+                        try:
+                            # Son ağacın nömrəsini götür (məsələn: SAH01-P001-C1-A5 -> 5)
+                            number = int(last_tree.tree_id.split('-A')[1]) + 1
+                        except (ValueError, IndexError):
+                            number = 1
+                    else:
                         number = 1
-                else:
-                    number = 1
-                
-                vals['tree_id'] = f'{row.code}-A{number}'
+                    
+                    vals['tree_id'] = f'{row.code}-A{number}'
             
             # Default ad ver
             if not vals.get('name') and vals.get('tree_id'):
