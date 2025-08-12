@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Product Template Form View Extension -->
+        <record id="product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <!-- İstehsalçı məlumatları üçün yeni notebook page -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="İstehsalçı Məlumatları" name="manufacturer_info">
+                        <group>
+                            <group string="İstehsalçı">
+                                <field name="manufacturer_country_id"/>
+                                <field name="manufacturer_company"/>
+                                <field name="registration_number"/>
+                            </group>
+                            <group string="Məhsul Xüsusiyyətləri">
+                                <field name="formulation"/>
+                                <field name="concentration"/>
+                                <field name="expiry_months"/>
+                            </group>
+                        </group>
+                        <group string="Təsir Edici Ana Maddə">
+                            <field name="active_ingredient" placeholder="Məhsulun təsir edici ana maddələrini daxil edin..."/>
+                        </group>
+                        <group string="Saxlama Şəraiti">
+                            <field name="storage_conditions" placeholder="Saxlama şərtlərini qeyd edin (temperatur, rütubət və s.)..."/>
+                        </group>
+                    </page>
+                </xpath>
+                
+                <!-- Ümumi məlumatlar səhifəsində də əsas sahələri göstər -->
+                <xpath expr="//group[@name='group_general']" position="after">
+                    <group string="İstehsalçı" name="manufacturer_basic" col="2">
+                        <field name="manufacturer_company"/>
+                        <field name="manufacturer_country_id"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Template Tree View Extension -->
+        <record id="product_template_tree_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.tree.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='list_price']" position="after">
+                    <field name="manufacturer_company" optional="hide"/>
+                    <field name="manufacturer_country_id" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Template Search View Extension -->
+        <record id="product_template_search_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.search.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <!-- Axtarış sahələrini əlavə et -->
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="manufacturer_company"/>
+                    <field name="manufacturer_country_id"/>
+                    <field name="active_ingredient"/>
+                    <field name="registration_number"/>
+                </xpath>
+                
+                <!-- Filtrlər və Group By-ları birləşdirək -->
+                <xpath expr="//search" position="inside">
+                    <separator/>
+                    <filter name="with_manufacturer" string="İstehsalçısı Olan" domain="[('manufacturer_company', '!=', False)]"/>
+                    <filter name="with_active_ingredient" string="Ana Maddəsi Olan" domain="[('active_ingredient', '!=', False)]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_manufacturer" string="İstehsalçı Firma" context="{'group_by': 'manufacturer_company'}"/>
+                        <filter name="group_by_country" string="İstehsalçı Ölkə" context="{'group_by': 'manufacturer_country_id'}"/>
+                        <filter name="group_by_formulation" string="Formulyasiya" context="{'group_by': 'formulation'}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Product Form View Extension -->
+        <record id="product_normal_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <!-- Product variant formunda da sahələri göstər -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="İstehsalçı Məlumatları" name="manufacturer_info">
+                        <group>
+                            <group string="İstehsalçı">
+                                <field name="manufacturer_country_id"/>
+                                <field name="manufacturer_company"/>
+                                <field name="registration_number"/>
+                            </group>
+                            <group string="Məhsul Xüsusiyyətləri">
+                                <field name="formulation"/>
+                                <field name="concentration"/>
+                                <field name="expiry_months"/>
+                            </group>
+                        </group>
+                        <group string="Təsir Edici Ana Maddə">
+                            <field name="active_ingredient" placeholder="Məhsulun təsir edici ana maddələrini daxil edin..."/>
+                        </group>
+                        <group string="Saxlama Şəraiti">
+                            <field name="storage_conditions" placeholder="Saxlama şərtlərini qeyd edin..."/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Product Tree View Extension -->
+        <record id="product_product_tree_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.tree.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lst_price']" position="after">
+                    <field name="manufacturer_company" optional="hide"/>
+                    <field name="manufacturer_country_id" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -18,9 +18,9 @@ class FarmTractorExpense(models.Model):
     expense_type = fields.Selection([
         ('fuel', 'Yanacaq'),
         ('repair', 'Təmir'),
-        ('maintenance', 'Texniki Baxım'),
         ('parts', 'Ehtiyat Hissələri'),
-        ('service', 'Xidmət'),
+        ('oil_change', 'Yağ dəyişdirmə'),
+        ('rental', 'Kirayə'),
         ('other', 'Digər')
     ], string='Xərc Növü', default='fuel')
     

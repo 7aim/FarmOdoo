@@ -171,7 +171,7 @@ class FarmIrrigation(models.Model):
     ], string='Sulama Tipi', required=True, tracking=True)
     
     # Su məlumatları
-    water_liters = fields.Float('Su Miqdarı', required=True, default=1000.0, tracking=True)
+    water_liters = fields.Float('Su Miqdarı (m³)', required=True, default=1000.0, tracking=True)
     water_source = fields.Char('Su Mənbəyi', tracking=True)
     water_cost = fields.Float('Su Məsrəfi', tracking=True)
 

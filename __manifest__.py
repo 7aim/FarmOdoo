@@ -28,6 +28,7 @@
         'views/farm_tractor_expense_views.xml',
         'views/farm_material_expense_views.xml',
         'views/farm_hotel_expense_views.xml',
+        'views/product_template_views.xml',
         'views/farm_menu.xml',
         'views/purchase_order.xml',
     ],

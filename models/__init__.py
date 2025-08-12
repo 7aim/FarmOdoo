@@ -16,3 +16,4 @@ from . import farm_material_expense
 from . import farm_hotel_expense
 from . import farm_cash_flow
 from . import farm_expense_report
+from . import product_template
