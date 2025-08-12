@@ -91,9 +91,9 @@
         </field>
     </record>
 
-    <!-- Xəstəlik Actions -->
+    <!-- Zərərli orqanizmlər Actions -->
     <record id="farm_disease_type_action" model="ir.actions.act_window">
-        <field name="name">Xəstəlik Növləri</field>
+        <field name="name">Zərərli orqanizmlər</field>
         <field name="res_model">farm.disease.type</field>
         <field name="view_mode">list,form</field>
     </record>
@@ -103,4 +103,4 @@
         <field name="res_model">farm.disease.record</field>
         <field name="view_mode">list,form</field>
     </record>
-</odoo>
+</odoo> 

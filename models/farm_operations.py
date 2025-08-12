@@ -501,9 +501,9 @@ class FarmAdditionalExpense(models.Model):
                 raise ValidationError('Xərc məbləği mənfi ola bilməz!')
 
 class FarmPruning(models.Model):
-    """Budama və Təmizləmə Əməliyyatı"""
+    """Budama Əməliyyatı"""
     _name = 'farm.pruning'
-    _description = 'Budama və Təmizləmə'
+    _description = 'Budama'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'pruning_date desc'
 
@@ -517,10 +517,8 @@ class FarmPruning(models.Model):
     # Budama məlumatları
     pruned_tree_count = fields.Integer('Budanan Ağac Sayı', required=True, tracking=True)
     pruning_type = fields.Selection([
-        ('dry', 'Quru Budama'),
-        ('formal', 'Formal Budama'),
-        ('cleaning', 'Təmizləmə'),
-        ('shaping', 'Formalaşdırma')
+        ('summerpruning', 'Yaz budaması'),
+        ('winterpruning', 'Qış budaması'),
     ], string='Budama Növü', required=True, tracking=True)
     
     # Alətlər və işçilər

@@ -118,7 +118,7 @@
     
     <menuitem id="farm_parcel_type_menu" name="Parsel Tipləri" parent="farm_config_menu" 
               action="farm_parcel_type_action" sequence="10"/>
-    <menuitem id="farm_disease_type_menu" name="Xəstəliklər" parent="farm_config_menu" 
+    <menuitem id="farm_disease_type_menu" name="Zərərli orqanizmlər" parent="farm_config_menu" 
               action="farm_disease_type_action" sequence="30"/>
     <menuitem id="farm_pallet_menu" name="Paletlər" parent="farm_config_menu" 
               action="farm_pallet_action" sequence="40"/>
