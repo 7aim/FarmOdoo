@@ -68,6 +68,18 @@ class FarmFieldWizard(models.TransientModel):
         
         total_trees = 0
         
+        # Bütün sahədəki son ağac nömrəsini tap
+        last_tree = self.env['farm.tree'].search([], order='tree_id desc', limit=1)
+        tree_counter = 1
+        if last_tree and last_tree.tree_id:
+            try:
+                # Son ağacın nömrəsini götür (məsələn: S1-P1-C1-A5 -> 5)
+                parts = last_tree.tree_id.split('-A')
+                if len(parts) == 2:
+                    tree_counter = int(parts[1]) + 1
+            except (ValueError, IndexError):
+                tree_counter = 1
+        
         # 2. Parselləri yarat
         for parcel_num in range(1, self.parcel_count + 1):
             parcel = self.env['farm.parcel'].create({
@@ -94,15 +106,20 @@ class FarmFieldWizard(models.TransientModel):
                         raise ValidationError('Ağac yaradılacaqsa sort seçilməlidir!')
                     
                     for tree_num in range(1, self.trees_per_row + 1):
+                        # Unikal tree_id generasiya et
+                        tree_id = f'{row.code}-A{tree_counter}'
                         tree_vals = {
                             'row_id': row.id,
-                            'name': f'Ağac {tree_num}',
+                            'tree_id': tree_id,
+                            'name': tree_id,
+                            'field_id': field.id,
                             'status': 'healthy',
                             'variety_id': self.variety_id.id,
                         }
                         
                         self.env['farm.tree'].create(tree_vals)
                         total_trees += 1
+                        tree_counter += 1
         
         # Nəticə mesajı
         message = f"""

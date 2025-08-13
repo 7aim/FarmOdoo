@@ -5,35 +5,15 @@ class FarmDiseaseType(models.Model):
     _name = 'farm.disease.type'
     _description = 'Xəstəlik Səbəbi'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'category, name'
+    _order = 'name'
 
-    name = fields.Char('Xəstəlik/Zərərverici Adı')
-    code = fields.Char('Xəstəlik/Zərərverici Kodu', copy=False, readonly=True)
+    name = fields.Char('Zərərverici Adı')
+    code = fields.Char('Zərərverici Kodu', copy=False, readonly=True)
 
-    # Kateqoriya
-    category = fields.Selection([
-        ('pest', 'Zərərverici'),
-        ('disease', 'Xəstəlik')
-    ], string='Kateqoriya', required=True)
-    
-    # Zərərverici növləri
-    pest_type = fields.Selection([
-        ('aphid', 'Afid'),
-        ('mite', 'Qırpız'),
-        ('caterpillar', 'Tırtıl'),
-        ('scale', 'Qabıqlı bit'),
-        ('thrips', 'Trips'),
-        ('other_pest', 'Digər zərərverici')
-    ], string='Zərərverici Tipi')
-    
-    # Xəstəlik növləri
-    disease_type = fields.Selection([
-        ('fungal', 'Göbələk'),
-        ('bacterial', 'Bakteriya'),
-        ('viral', 'Virus'),
-        ('physiological', 'Fizioloji'),
-        ('other_disease', 'Digər xəstəlik')
-    ], string='Xəstəlik Tipi')
+    genus_type = fields.Char('Cins', required=True)
+    species_type = fields.Char('Növ', required=True)
+    latin_name = fields.Char('Latın Adı', required=True)
+    group_type = fields.Char('Qrup', required=True)
     
     description = fields.Text('Açıqlama')
 
@@ -80,7 +60,7 @@ class FarmDiseaseType(models.Model):
 
 class FarmDiseaseRecord(models.Model):
     _name = 'farm.disease.record'
-    _description = 'Xəstəlik Qeydi'
+    _description = 'Zərərverici qeydi'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'detection_date desc'
 
@@ -93,7 +73,7 @@ class FarmDiseaseRecord(models.Model):
     field_id = fields.Many2one(related='tree_id.field_id', string='Sahə', store=True, readonly=True)
     
     # Xəstəlik məlumatları
-    disease_type_id = fields.Many2one('farm.disease.type', string='Xəstəlik/Zərərverici', required=True, tracking=True)
+    disease_type_id = fields.Many2one('farm.disease.type', string='Zərərverici', required=True, tracking=True)
     detection_date = fields.Datetime('Təyin Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
     # Zərər səviyyəsi
@@ -121,4 +101,4 @@ class FarmDiseaseRecord(models.Model):
             if record.tree_id and record.disease_type_id and record.detection_date:
                 record.name = f"{record.tree_id.tree_id} - {record.disease_type_id.name} ({record.detection_date})"
             else:
-                record.name = 'Yeni Xəstəlik Qeydi'
+                record.name = 'Yeni Zərərverici qeydi'

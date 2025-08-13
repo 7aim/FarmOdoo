@@ -52,15 +52,19 @@ class FarmTree(models.Model):
             result.append((record.id, name))
         return result
 
-    @api.model_create_multi
+    @api.model
     def create(self, vals_list):
+        """Ağac yaratarkən avtomatik kod generasiyası"""
+        if not isinstance(vals_list, list):
+            vals_list = [vals_list]
+        
         for vals in vals_list:
-            # Row ID context-dən götür
-            if not vals.get('row_id') and self._context.get('default_row_id'):
-                vals['row_id'] = self._context.get('default_row_id')
-            
             if vals.get('row_id'):
                 row = self.env['farm.row'].browse(vals['row_id'])
+                
+                # Field_id avtomatik əlavə et
+                if not vals.get('field_id') and row.field_id:
+                    vals['field_id'] = row.field_id.id
                 
                 # Maksimum ağac sayı limitini yoxla
                 if row.max_trees > 0 and row.tree_count >= row.max_trees:

@@ -10,6 +10,7 @@
                     <field name="date"/>
                     <field name="name"/>
                     <field name="transaction_type"/>
+                    <field name="income_type" optional="hide"/>
                     <field name="amount" sum="Cəm"/>
                     <field name="reference"/>
                 </list>
@@ -28,6 +29,7 @@
                                 <field name="name"/>
                                 <field name="date"/>
                                 <field name="transaction_type"/>
+                                <field name="income_type" invisible="[('transaction_type', '!=', 'income')]" required="[('transaction_type', '=', 'income')]" help="Subsidiya üçün 'Subsidiya (Ümumi)', Borc üçün 'Borc (Ümumi)' seçin"/>
                             </group>
                             <group>
                                 <field name="amount"/>
@@ -52,7 +54,12 @@
                     Kassa hərəkatı əlavə edin
                 </p>
                 <p>
-                    Mədaxil və məxaric əməliyyatlarını qeyd edin.
+                    <strong>Mədaxil üçün:</strong><br/>
+                    • Subsidiya qeyd etmək üçün: Növ = Mədaxil, Gəlir Növü = Subsidiya (Ümumi)<br/>
+                    • Borc qeyd etmək üçün: Növ = Mədaxil, Gəlir Növü = Borc (Ümumi)<br/>
+                    • Digər gəlirlər üçün: Növ = Mədaxil, Gəlir Növü = Digər Gəlir<br/><br/>
+                    <strong>Məxaric üçün:</strong><br/>
+                    • Bütün xərc növləri üçün: Növ = Məxaric
                 </p>
             </field>
         </record>
@@ -71,7 +78,35 @@
                             </h1>
                             <h3>Cari Balans</h3>
                         </div>
-                        <group>
+                        
+                        <group string="Gəlir Təfsilatı">
+                            <group>
+                                <label for="subsidy_income" string="Subsidiya (Ümumi)"/>
+                                <div>
+                                    <field name="subsidy_income" class="oe_inline" readonly="1"/>
+                                    <span> AZN</span>
+                                </div>
+                                <label for="debt_income" string="Borc (Ümumi)"/>
+                                <div>
+                                    <field name="debt_income" class="oe_inline" readonly="1"/>
+                                    <span> AZN</span>
+                                </div>
+                                <label for="other_income" string="Digər Gəlir"/>
+                                <div>
+                                    <field name="other_income" class="oe_inline" readonly="1"/>
+                                    <span> AZN</span>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="founder_investments_total" string="Təsisçi İnvestisiyaları"/>
+                                <div>
+                                    <field name="founder_investments_total" class="oe_inline" readonly="1"/>
+                                    <span> AZN</span>
+                                </div>
+                            </group>
+                        </group>
+                        
+                        <group string="Nəticə">
                             <group>
                                 <label for="total_income" string="Ümumi Mədaxil"/>
                                 <div>
@@ -89,6 +124,223 @@
                         </group>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+        <!-- Təsisçi List View -->
+        <record id="view_farm_founder_list" model="ir.ui.view">
+            <field name="name">farm.founder.list</field>
+            <field name="model">farm.founder</field>
+            <field name="arch" type="xml">
+                <list string="Təsisçilər">
+                    <field name="name"/>
+                    <field name="current_investment"/>
+                    <field name="current_expense"/>
+                    <field name="available_balance"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Təsisçi Form View -->
+        <record id="view_farm_founder_form" model="ir.ui.view">
+            <field name="name">farm.founder.form</field>
+            <field name="model">farm.founder</field>
+            <field name="arch" type="xml">
+                <form string="Təsisçi">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" 
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" 
+                                       options='{"terminology": "active"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Təsisçi Adı"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Cari Vəziyyət">
+                                <field name="current_investment" readonly="1"/>
+                                <field name="current_expense" readonly="1"/>
+                                <field name="available_balance" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="İnvestisiya Qeydləri">
+                                <field name="investment_records">
+                                    <list editable="bottom">
+                                        <field name="date"/>
+                                        <field name="name"/>
+                                        <field name="amount" sum="Cəm"/>
+                                        <field name="reference"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Xərc Qeydləri">
+                                <field name="expense_records">
+                                    <list editable="bottom">
+                                        <field name="date"/>
+                                        <field name="name"/>
+                                        <field name="expense_type"/>
+                                        <field name="amount" sum="Cəm"/>
+                                        <field name="reference"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Təsisçi Action -->
+        <record id="action_farm_founder" model="ir.actions.act_window">
+            <field name="name">Təsisçilər</field>
+            <field name="res_model">farm.founder</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Yeni təsisçi əlavə edin
+                </p>
+                <p>
+                    Təsisçilər üçün borc limitlərini təyin edin və borc/investisiya qeydlərini aparın.
+                </p>
+            </field>
+        </record>
+
+        <!-- Təsisçi İnvestisiya Action -->
+        <record id="action_farm_founder_investment" model="ir.actions.act_window">
+            <field name="name">Təsisçi İnvestisiyaları</field>
+            <field name="res_model">farm.founder.investment</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Təsisçi İnvestisiya List View -->
+        <record id="view_farm_founder_investment_list" model="ir.ui.view">
+            <field name="name">farm.founder.investment.list</field>
+            <field name="model">farm.founder.investment</field>
+            <field name="arch" type="xml">
+                <list string="Təsisçi İnvestisiyaları">
+                    <field name="date"/>
+                    <field name="founder_id"/>
+                    <field name="name"/>
+                    <field name="amount" sum="Cəm"/>
+                    <field name="reference"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Təsisçi İnvestisiya Form View -->
+        <record id="view_farm_founder_investment_form" model="ir.ui.view">
+            <field name="name">farm.founder.investment.form</field>
+            <field name="model">farm.founder.investment</field>
+            <field name="arch" type="xml">
+                <form string="Təsisçi İnvestisiyası">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="founder_id"/>
+                                <field name="name"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="reference"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Təsisçi Xərc Action -->
+        <record id="action_farm_founder_expense" model="ir.actions.act_window">
+            <field name="name">Təsisçi Xərcləri</field>
+            <field name="res_model">farm.founder.expense</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Təsisçi Xərc List View -->
+        <record id="view_farm_founder_expense_list" model="ir.ui.view">
+            <field name="name">farm.founder.expense.list</field>
+            <field name="model">farm.founder.expense</field>
+            <field name="arch" type="xml">
+                <list string="Təsisçi Xərcləri">
+                    <field name="date"/>
+                    <field name="founder_id"/>
+                    <field name="name"/>
+                    <field name="expense_type"/>
+                    <field name="amount" sum="Cəm"/>
+                    <field name="reference"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Təsisçi Xərc Form View -->
+        <record id="view_farm_founder_expense_form" model="ir.ui.view">
+            <field name="name">farm.founder.expense.form</field>
+            <field name="model">farm.founder.expense</field>
+            <field name="arch" type="xml">
+                <form string="Təsisçi Xərci">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="founder_id"/>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="expense_type"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="reference"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Subsidiya Qeydi Action -->
+        <record id="action_farm_subsidy" model="ir.actions.act_window">
+            <field name="name">Subsidiya Qeydləri</field>
+            <field name="res_model">farm.cash.flow</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('transaction_type', '=', 'income'), ('income_type', '=', 'subsidy')]</field>
+            <field name="context">{'default_transaction_type': 'income', 'default_income_type': 'subsidy'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Subsidiya qeydi əlavə edin
+                </p>
+                <p>
+                    Bu bölmədən subsidiya qeydlərini əlavə edə və görə bilərsiniz.
+                </p>
+            </field>
+        </record>
+
+        <!-- Borc Qeydi Action -->
+        <record id="action_farm_debt" model="ir.actions.act_window">
+            <field name="name">Borc Qeydləri</field>
+            <field name="res_model">farm.cash.flow</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('transaction_type', '=', 'income'), ('income_type', '=', 'debt')]</field>
+            <field name="context">{'default_transaction_type': 'income', 'default_income_type': 'debt'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Borc qeydi əlavə edin
+                </p>
+                <p>
+                    Bu bölmədən borc qeydlərini əlavə edə və görə bilərsiniz.
+                </p>
             </field>
         </record>
 

@@ -8,9 +8,10 @@
             <list string="Xəstəlik Növləri">
                 <field name="code"/>
                 <field name="name"/>
-                <field name="category"/>
-                <field name="pest_type"/>
-                <field name="disease_type"/>
+                <field name="genus_type"/>
+                <field name="species_type"/>
+                <field name="latin_name"/>
+                <field name="group_type"/>
             </list>
         </field>
     </record>
@@ -26,9 +27,10 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name" placeholder="Xəstəlik Adı"/>
                             <field name="code"/>
-                            <field name="category"/>
-                            <field name="pest_type" invisible="category != 'pest'"/>
-                            <field name="disease_type" invisible="category != 'disease'"/>
+                            <field name="genus_type"/>
+                            <field name="species_type"/>
+                            <field name="latin_name"/>
+                            <field name="group_type"/>
                         </group>
                     </group>
                     <group string="Açıqlama">
@@ -40,12 +42,12 @@
         </field>
     </record>
 
-    <!-- Xəstəlik Qeydi list View -->
+    <!-- Zərərverici Qeydi list View -->
     <record id="farm_disease_record_list_view" model="ir.ui.view">
         <field name="name">farm.disease.record.list</field>
         <field name="model">farm.disease.record</field>
         <field name="arch" type="xml">
-            <list string="Xəstəlik Qeydləri">
+            <list string="Zərərverici qeydləri">
                 <field name="name"/>
                 <field name="tree_id"/>
                 <field name="field_id"/>
@@ -58,12 +60,12 @@
         </field>
     </record>
 
-    <!-- Xəstəlik Qeydi Form View -->
+    <!-- Zərərverici Qeydi Form View -->
     <record id="farm_disease_record_form_view" model="ir.ui.view">
         <field name="name">farm.disease.record.form</field>
         <field name="model">farm.disease.record</field>
         <field name="arch" type="xml">
-            <form string="Xəstəlik Qeydi">
+            <form string="Zərərverici qeydi">
                 <header>
                     <field name="status" widget="statusbar"/>
                 </header>

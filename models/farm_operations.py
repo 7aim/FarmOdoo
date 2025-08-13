@@ -474,7 +474,7 @@ class FarmAdditionalExpense(models.Model):
     description = fields.Text('Açıqlama')
     amount = fields.Float('Məbləğ', required=True)
     expense_type = fields.Selection([
-        ('transport', 'Nəqliyyat'),
+        ('technical', 'Texnika'),
         ('fuel', 'Yanacaq'),
         ('equipment', 'Avadanlıq'),
         ('material', 'Material'),
@@ -719,7 +719,6 @@ class FarmDamagedTrees(models.Model):
     # Müalicə tədbiri
     treatment_applied = fields.Boolean('Müalicə Tədbiri Görülübmü?', default=False, tracking=True)
     treatment_date = fields.Date('Müalicə Tarixi', tracking=True)
-    treatment_cost = fields.Float('Müalicə Xərci', tracking=True)
 
     # Nəticə
     recovery_status = fields.Selection([

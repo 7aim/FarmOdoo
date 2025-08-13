@@ -605,7 +605,6 @@
                 <field name="damage_date" type="row"/>
                 <field name="field_id" type="row"/>
                 <field name="damage_reason" type="row"/>
-                <field name="treatment_cost" type="measure"/>
                 <field name="damaged_tree_count" type="measure"/>
             </pivot>
         </field>
@@ -883,7 +882,6 @@
                 <field name="damaged_tree_count"/>
                 <field name="damage_date"/>
                 <field name="treatment_applied"/>
-                <field name="treatment_cost"/>
                 <field name="recovery_status"/>
             </list>
         </field>
@@ -909,7 +907,6 @@
                             <field name="recovery_status"/>
                             <field name="treatment_applied"/>
                             <field name="treatment_date"/>
-                            <field name="treatment_cost"/>
                         </group>
                     </group>
                     <group string="Əlavə Qeydlər">

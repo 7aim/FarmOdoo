@@ -2,13 +2,14 @@
 
 {
     'name': 'Kənd Təsərrüfatı İdarəetmə Sistemi',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.1.0',
     'category': 'Agriculture',
     'website': 'https://www.github.com/7aim',
     'depends': ['base', 'stock', 'product','purchase'],
     'data': [
         'security/ir.model.access.csv',
         'data/farm_data.xml',
+        #'data/founder_demo_data.xml',
         'views/farm_field_wizard_views.xml',
         'views/farm_field_views.xml',
         'views/farm_parcel_views.xml',

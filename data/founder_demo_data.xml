@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Təsisçilər -->
+        <record id="founder_1" model="farm.founder">
+            <field name="name">Təsisçi 1 - Əhməd Əliyev</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="founder_2" model="farm.founder">
+            <field name="name">Təsisçi 2 - Fərid Həsənov</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="founder_3" model="farm.founder">
+            <field name="name">Təsisçi 3 - Nigar Məmmədova</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Demo Subsidiya Qeydləri -->
+        <record id="demo_subsidy_1" model="farm.cash.flow">
+            <field name="name">Dövlət Subsidiyası - Kənd Təsərrüfatı Dəstəyi</field>
+            <field name="transaction_type">income</field>
+            <field name="income_type">subsidy</field>
+            <field name="amount">25000.0</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=10)).date()"/>
+            <field name="note">İlk subsidiya ödənişi</field>
+        </record>
+
+        <!-- Demo Borc Qeydləri (Ümumi) -->
+        <record id="demo_debt_1" model="farm.cash.flow">
+            <field name="name">Bank Krediti</field>
+            <field name="transaction_type">income</field>
+            <field name="income_type">debt</field>
+            <field name="amount">20000.0</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=5)).date()"/>
+            <field name="note">Kənd təsərrüfatı krediti</field>
+        </record>
+
+        <record id="demo_debt_2" model="farm.cash.flow">
+            <field name="name">Fərdi Borc</field>
+            <field name="transaction_type">income</field>
+            <field name="income_type">debt</field>
+            <field name="amount">15000.0</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=3)).date()"/>
+            <field name="note">Fərdi borc</field>
+        </record>
+
+        <!-- Demo Təsisçi İnvestisiya Qeydləri -->
+        <record id="demo_investment_1" model="farm.founder.investment">
+            <field name="name">İlkin İnvestisiya</field>
+            <field name="founder_id" ref="founder_3"/>
+            <field name="amount">30000.0</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=7)).date()"/>
+            <field name="note">Şəxsi investisiya</field>
+        </record>
+
+        <record id="demo_investment_2" model="farm.founder.investment">
+            <field name="name">Əlavə Vəsait</field>
+            <field name="founder_id" ref="founder_1"/>
+            <field name="amount">10000.0</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=2)).date()"/>
+            <field name="note">Əlavə şəxsi vəsait</field>
+        </record>
+
+        <!-- Demo Təsisçi Xərc Qeydləri -->
+        <record id="demo_expense_1" model="farm.founder.expense">
+            <field name="name">Təsərrüfat Aləti Alışı</field>
+            <field name="founder_id" ref="founder_1"/>
+            <field name="amount">5000.0</field>
+            <field name="expense_type">farm_material</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=1)).date()"/>
+            <field name="note">Bağ üçün alətlər</field>
+        </record>
+
+        <record id="demo_expense_2" model="farm.founder.expense">
+            <field name="name">Şəxsi Xərc</field>
+            <field name="founder_id" ref="founder_2"/>
+            <field name="amount">3000.0</field>
+            <field name="expense_type">personal</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=4)).date()"/>
+            <field name="note">Fərdi ehtiyaclar</field>
+        </record>
+
+        <record id="demo_expense_3" model="farm.founder.expense">
+            <field name="name">Avadanlıq Təmiri</field>
+            <field name="founder_id" ref="founder_3"/>
+            <field name="amount">8000.0</field>
+            <field name="expense_type">equipment</field>
+            <field name="date" eval="(datetime.now() - timedelta(days=6)).date()"/>
+            <field name="note">Traktor təmiri</field>
+        </record>
+
+    </data>
+</odoo>

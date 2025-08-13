@@ -46,10 +46,6 @@
                                     <field name="variety_id" invisible="not create_trees" required="create_trees"/>
                                 </group>
                             </group>
-                            
-                            <div invisible="not create_trees" class="alert alert-warning">
-                                <strong>Diqqət:</strong> Ağac yaradılacaqsa sort seçilməlidir!
-                            </div>
                         </page>
                     </notebook>
                     
@@ -64,7 +60,7 @@
                     </div>
                     
                     <div class="alert alert-warning">
-                        <strong>Diqqət:</strong> Bu əməliyyat çoxlu məlumat yaradacaq və vaxt ala bilər.
+                        <strong>Diqqət:</strong> Bu əməliyyat çoxlu məlumat yaradacaq və vaxt ala bilər. Əməliyyat bittikdən sonra səhifəni yeniləyin.
                     </div>
                     
                     <footer>
@@ -84,12 +80,7 @@
             <field name="view_id" ref="view_farm_field_wizard_form"/>
         </record>
 
-        <!-- Menu Item -->
-        <menuitem id="menu_farm_field_wizard" 
-                  name="Sahə Sihirbazı" 
-                  parent="farm_operations_menu"
-                  action="action_farm_field_wizard"
-                  sequence="1"/>
+
 
     </data>
 </odoo>

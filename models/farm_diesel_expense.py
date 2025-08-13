@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 from datetime import datetime
 
 
@@ -17,6 +18,22 @@ class FarmDieselExpense(models.Model):
     liters = fields.Float('Litr Miqdarı')
     price_per_liter = fields.Float('Litr Qiyməti')
     fuel_station = fields.Char('Yanacaq Stansiyası')
+
+    @api.constrains('amount')
+    def _check_balance_limit(self):
+        """Xərc etməzdən əvvəl balansı yoxlayır"""
+        for record in self:
+            if record.amount > 0:
+                cash_flow = self.env['farm.cash.flow']
+                total_income = cash_flow._get_total_income()
+                total_expense = cash_flow._get_total_expense() + record.amount
+                
+                if total_income < total_expense:
+                    raise ValidationError(
+                        f"Kifayət qədər balans yoxdur!\n"
+                        f"Ümumi gəlir: {total_income} AZN\n"
+                        f"Ümumi xərc: {total_expense} AZN"
+                    )
     
     # Hesabat üçün
     year = fields.Integer('İl', compute='_compute_date_fields', store=True)
