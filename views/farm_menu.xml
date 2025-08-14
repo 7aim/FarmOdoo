@@ -7,6 +7,9 @@
     <menuitem id="farm_master_menu" name="Sahələr" parent="farm_main_menu" sequence="10"/>
     
     <!-- Saheler Alt Menyuları -->
+    <menuitem id="menu_farm_field_wizard" name="Avto Sahə" parent="farm_master_menu"
+              action="action_farm_field_wizard" sequence="50"/>
+
     <menuitem id="farm_field_menu" name="Sahələr" parent="farm_master_menu" 
               action="farm_field_action" sequence="10"/>
     <menuitem id="farm_parcel_menu" name="Parsellər" parent="farm_master_menu" 
@@ -19,9 +22,6 @@
     <!-- II. Operativ Formlar Menyusu -->
     <menuitem id="farm_operations_menu" name="Əməliyyatlar" parent="farm_main_menu" sequence="20"/>
 
-    <menuitem id="menu_farm_field_wizard" name="Sahə Sihirbazı" parent="farm_operations_menu"
-                action="action_farm_field_wizard" sequence="5"/>
-                
     <!-- Bağçılık Əməliyyatları -->
     <menuitem id="farm_operations_gardening_menu" name="Bağçılık Əməliyyatları" 
               parent="farm_operations_menu" sequence="10"/>
@@ -103,13 +103,10 @@
     <!-- V.5. Kassa -->
     <menuitem id="farm_cash_menu" name="Kassa" parent="farm_main_menu" sequence="55"/>
     
-    <menuitem id="farm_cash_flow_menu" name="Kassa Hərəkatı" parent="farm_cash_menu" 
+    <menuitem id="farm_cash_main_menu" name="Kassa" parent="farm_cash_menu" sequence="5"/>
+    <menuitem id="farm_cash_flow_menu" name="Kassa Hərəkatı" parent="farm_cash_main_menu" 
               action="action_farm_cash_flow" sequence="10"/>
-    <menuitem id="farm_subsidy_menu" name="Subsidiya" parent="farm_cash_menu" 
-              action="action_farm_subsidy" sequence="21"/>
-    <menuitem id="farm_debt_menu" name="Borc" parent="farm_cash_menu" 
-              action="action_farm_debt" sequence="22"/>
-    <menuitem id="farm_cash_balance_menu" name="Kassa Balansı" parent="farm_cash_menu" 
+    <menuitem id="farm_cash_balance_menu" name="Kassa Balansı" parent="farm_cash_main_menu" 
               action="action_farm_cash_balance" sequence="20"/>
     
     <!-- Təsisçi Alt Menyuları -->

@@ -28,15 +28,7 @@ class FarmHotelExpense(models.Model):
         for record in self:
             if record.amount > 0:
                 cash_flow = self.env['farm.cash.flow']
-                total_income = cash_flow._get_total_income()
-                total_expense = cash_flow._get_total_expense() + record.amount
-                
-                if total_income < total_expense:
-                    raise ValidationError(
-                        f"Kifayət qədər balans yoxdur!\n"
-                        f"Ümumi gəlir: {total_income} AZN\n"
-                        f"Ümumi xərc: {total_expense} AZN"
-                    )
+                cash_flow.check_expense_balance(record.amount, 'farm.hotel.expense', record.id)
     
     @api.depends('expense_date')
     def _compute_date_fields(self):

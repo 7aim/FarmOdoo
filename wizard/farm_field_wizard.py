@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 
 class FarmFieldWizard(models.TransientModel):
     _name = 'farm.field.wizard'
-    _description = 'Sahə Yaratma Sihirbazı'
+    _description = 'Avto Sahə'
 
     # Sahə məlumatları
     field_name = fields.Char('Sahə Adı', required=True)

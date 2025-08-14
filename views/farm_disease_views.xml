@@ -34,7 +34,7 @@
                         </group>
                     </group>
                     <group string="Açıqlama">
-                        <field name="description" placeholder="Xəstəlik/Zərərverici haqqında qeydler..." nolabel="1"/>
+                        <field name="description" placeholder="Zərərverici haqqında qeydler..." nolabel="1"/>
                     </group>
                 </sheet>
                 <chatter/>

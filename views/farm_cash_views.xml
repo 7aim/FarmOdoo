@@ -6,11 +6,10 @@
             <field name="name">farm.cash.flow.list</field>
             <field name="model">farm.cash.flow</field>
             <field name="arch" type="xml">
-                <list string="Kassa Hərəkatı" decoration-success="transaction_type=='income'" decoration-danger="transaction_type=='expense'">
+                <list string="Kassa Hərəkatı" decoration-success="transaction_type in ('income', 'subsidy', 'debt')" decoration-danger="transaction_type=='expense'">
                     <field name="date"/>
                     <field name="name"/>
                     <field name="transaction_type"/>
-                    <field name="income_type" optional="hide"/>
                     <field name="amount" sum="Cəm"/>
                     <field name="reference"/>
                 </list>
@@ -29,7 +28,6 @@
                                 <field name="name"/>
                                 <field name="date"/>
                                 <field name="transaction_type"/>
-                                <field name="income_type" invisible="[('transaction_type', '!=', 'income')]" required="[('transaction_type', '=', 'income')]" help="Subsidiya üçün 'Subsidiya (Ümumi)', Borc üçün 'Borc (Ümumi)' seçin"/>
                             </group>
                             <group>
                                 <field name="amount"/>
@@ -54,12 +52,11 @@
                     Kassa hərəkatı əlavə edin
                 </p>
                 <p>
-                    <strong>Mədaxil üçün:</strong><br/>
-                    • Subsidiya qeyd etmək üçün: Növ = Mədaxil, Gəlir Növü = Subsidiya (Ümumi)<br/>
-                    • Borc qeyd etmək üçün: Növ = Mədaxil, Gəlir Növü = Borc (Ümumi)<br/>
-                    • Digər gəlirlər üçün: Növ = Mədaxil, Gəlir Növü = Digər Gəlir<br/><br/>
-                    <strong>Məxaric üçün:</strong><br/>
-                    • Bütün xərc növləri üçün: Növ = Məxaric
+                    <strong>4 növ əməliyyat mövcuddur:</strong><br/>
+                    • <strong>Mədaxil:</strong> Ümumi gəlir qeydləri<br/>
+                    • <strong>Məxaric:</strong> Ümumi xərc qeydləri<br/>
+                    • <strong>Subsidiya:</strong> Dövlət subsidiyaları<br/>
+                    • <strong>Borc:</strong> Alınan borc və kreditlər
                 </p>
             </field>
         </record>
@@ -69,57 +66,31 @@
             <field name="name">farm.cash.balance.form</field>
             <field name="model">farm.cash.balance</field>
             <field name="arch" type="xml">
-                <form string="Kassa Balansı">
+                <form string="Kassa Balansı" create="false" edit="false" delete="false">
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <field name="current_balance" readonly="1"/>
+                                <field name="current_balance" readonly="1" 
+                                       decoration-success="current_balance >= 0" 
+                                       decoration-danger="current_balance &lt; 0"/>
                                 <span> AZN</span>
                             </h1>
                             <h3>Cari Balans</h3>
                         </div>
+                        <group>
+                            <group string="Gəlir Hissəsi">
+                                <field name="subsidy_income" string="Subsidiya" readonly="1"/>
+                                <field name="debt_income" string="Borc" readonly="1"/>
+                                <field name="founder_investments_total" string="Təsisçi İnvestisiyası" readonly="1"/>
+                                <field name="other_income" string="Mədaxil" readonly="1"/>
+                                <field name="total_income" string="Ümumi Gəlir" readonly="1"/>
+                            </group>
                         
-                        <group string="Gəlir Təfsilatı">
-                            <group>
-                                <label for="subsidy_income" string="Subsidiya (Ümumi)"/>
-                                <div>
-                                    <field name="subsidy_income" class="oe_inline" readonly="1"/>
-                                    <span> AZN</span>
-                                </div>
-                                <label for="debt_income" string="Borc (Ümumi)"/>
-                                <div>
-                                    <field name="debt_income" class="oe_inline" readonly="1"/>
-                                    <span> AZN</span>
-                                </div>
-                                <label for="other_income" string="Digər Gəlir"/>
-                                <div>
-                                    <field name="other_income" class="oe_inline" readonly="1"/>
-                                    <span> AZN</span>
-                                </div>
-                            </group>
-                            <group>
-                                <label for="founder_investments_total" string="Təsisçi İnvestisiyaları"/>
-                                <div>
-                                    <field name="founder_investments_total" class="oe_inline" readonly="1"/>
-                                    <span> AZN</span>
-                                </div>
-                            </group>
-                        </group>
-                        
-                        <group string="Nəticə">
-                            <group>
-                                <label for="total_income" string="Ümumi Mədaxil"/>
-                                <div>
-                                    <field name="total_income" class="oe_inline" readonly="1"/>
-                                    <span> AZN</span>
-                                </div>
-                            </group>
-                            <group>
-                                <label for="total_expense" string="Ümumi Məxaric"/>
-                                <div>
-                                    <field name="total_expense" class="oe_inline" readonly="1"/>
-                                    <span> AZN</span>
-                                </div>
+                            <group string="Xərc Hissəsi">
+                                <field name="cash_expense_only" string="Məxaric" readonly="1"/>
+                                <field name="founder_expenses_total" string="Təsisçi Məxarici" readonly="1"/>
+                                <field name="expense_report_total" string="Bağ Xərcləri" readonly="1"/>
+                                <field name="all_expenses_total" string="Ümumi Xərc" readonly="1"/>
                             </group>
                         </group>
                     </sheet>
@@ -315,8 +286,8 @@
             <field name="name">Subsidiya Qeydləri</field>
             <field name="res_model">farm.cash.flow</field>
             <field name="view_mode">list,form</field>
-            <field name="domain">[('transaction_type', '=', 'income'), ('income_type', '=', 'subsidy')]</field>
-            <field name="context">{'default_transaction_type': 'income', 'default_income_type': 'subsidy'}</field>
+            <field name="domain">[('transaction_type', '=', 'subsidy')]</field>
+            <field name="context">{'default_transaction_type': 'subsidy'}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Subsidiya qeydi əlavə edin
@@ -332,8 +303,8 @@
             <field name="name">Borc Qeydləri</field>
             <field name="res_model">farm.cash.flow</field>
             <field name="view_mode">list,form</field>
-            <field name="domain">[('transaction_type', '=', 'income'), ('income_type', '=', 'debt')]</field>
-            <field name="context">{'default_transaction_type': 'income', 'default_income_type': 'debt'}</field>
+            <field name="domain">[('transaction_type', '=', 'debt')]</field>
+            <field name="context">{'default_transaction_type': 'debt'}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Borc qeydi əlavə edin

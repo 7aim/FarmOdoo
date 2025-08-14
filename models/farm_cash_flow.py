@@ -76,22 +76,11 @@ class FarmFounderExpense(models.Model):
     
     @api.constrains('amount', 'founder_id')
     def _check_founder_balance(self):
-        """Təsisçinin xərc edə biləcəyini yoxlayır"""
+        """Təsisçi xərci üçün ümumi kassa balansından yoxlayır"""
         for record in self:
-            if record.amount > 0 and record.founder_id:
-                # Təsisçinin ümumi gəliri (yalnız investisiya)
-                founder_income = record.founder_id.current_investment
-                
-                # Təsisçinin ümumi xərci (mövcud + yeni)
-                founder_expenses = sum(record.founder_id.expense_records.mapped('amount')) + record.amount
-                
-                if founder_expenses > founder_income:
-                    raise ValidationError(
-                        f"{record.founder_id.name} üçün kifayət qədər vəsait yoxdur!\n"
-                        f"Ümumi gəlir: {founder_income} AZN\n"
-                        f"Ümumi xərc: {founder_expenses} AZN\n"
-                        f"Əlavə edilə bilən maksimum: {founder_income - (founder_expenses - record.amount)} AZN"
-                    )
+            if record.amount > 0:
+                cash_flow = self.env['farm.cash.flow']
+                cash_flow.check_expense_balance(record.amount, 'farm.founder.expense', record.id)
 
 class FarmCashFlow(models.Model):
     _name = 'farm.cash.flow'
@@ -102,50 +91,47 @@ class FarmCashFlow(models.Model):
     date = fields.Date('Tarix', default=fields.Date.context_today, required=True)
     transaction_type = fields.Selection([
         ('income', 'Mədaxil'),
-        ('expense', 'Məxaric')
+        ('expense', 'Məxaric'),
+        ('subsidy', 'Subsidiya'),
+        ('debt', 'Borc')
     ], string='Növ', required=True)
-    
-    # Sadələşdirilmiş gəlir növləri - subsidiya və borc ümumi
-    income_type = fields.Selection([
-        ('subsidy', 'Subsidiya (Ümumi)'),
-        ('debt', 'Borc (Ümumi)'),
-        ('other', 'Digər Gəlir')
-    ], string='Gəlir Növü')
     
     amount = fields.Float('Məbləğ', required=True)
     note = fields.Text('Qeyd')
     reference = fields.Char('Əsas')
 
-    @api.constrains('amount')
+    @api.constrains('amount', 'transaction_type')
     def _check_balance_limit_expense(self):
-        """Yalnız məxaric üçün balans yoxlanışı"""
+        """Məxaric üçün balans yoxlanışı"""
         for record in self:
             if record.transaction_type == 'expense' and record.amount > 0:
-                # Ümumi gəlir hesabla
-                total_income = self._get_total_income()
-                total_expense = self._get_total_expense() + record.amount
+                # Cari balansı hesabla (bu qeydsiz)
+                current_balance = self._get_current_balance()
                 
-                if total_income < total_expense:
+                if record.amount > current_balance:
                     raise ValidationError(
                         f"Kifayət qədər balans yoxdur!\n"
-                        f"Ümumi gəlir: {total_income} AZN\n"
-                        f"Ümumi xərc: {total_expense} AZN"
+                        f"Cari balans: {current_balance:.2f} AZN\n"
+                        f"Çıxarılmaq istənən: {record.amount:.2f} AZN\n"
+                        f"Çatışmayan məbləğ: {record.amount - current_balance:.2f} AZN"
                     )
 
-    def _get_total_income(self):
-        """Ümumi gəlir hesabla"""
-        # Kassa gəlirləri (subsidiya, borc, digər)
-        cash_income = sum(self.env['farm.cash.flow'].search([('transaction_type', '=', 'income')]).mapped('amount'))
-        
-        # Təsisçi investisiyaları
-        founder_investments = sum(self.env['farm.founder.investment'].search([]).mapped('amount'))
-        
-        return cash_income + founder_investments
+    def _get_current_balance(self):
+        """Cari balansı hesabla (bu qeydi çıxaraq)"""
+        total_income = self._get_total_income()
+        total_expense = self._get_total_expense_excluding_current()
+        return total_income - total_expense
     
-    def _get_total_expense(self):
-        """Ümumi xərc hesabla"""
-        # Kassa xərcləri
-        cash_expense = sum(self.env['farm.cash.flow'].search([('transaction_type', '=', 'expense')]).mapped('amount'))
+    def _get_total_expense_excluding_current(self):
+        """Ümumi xərc hesabla (cari qeydi istisna etməklə)"""
+        # Bu qeydi istisna etmək üçün ID-ni götürürük
+        exclude_id = self.id if self.id else 0
+        
+        # Kassa xərcləri (cari qeydsiz)
+        cash_expense = sum(self.env['farm.cash.flow'].search([
+            ('transaction_type', '=', 'expense'),
+            ('id', '!=', exclude_id)
+        ]).mapped('amount'))
         
         # Digər xərc modellərindən
         total = cash_expense
@@ -160,11 +146,64 @@ class FarmCashFlow(models.Model):
         
         return total
 
-    @api.onchange('transaction_type')
-    def _onchange_transaction_type(self):
-        """Gəlir növünü sıfırla"""
-        if self.transaction_type != 'income':
-            self.income_type = False
+    def _get_total_income(self):
+        """Ümumi gəlir hesabla"""
+        # Kassa gəlirləri (mədaxil, subsidiya, borc)
+        income_records = self.env['farm.cash.flow'].search([('transaction_type', 'in', ['income', 'subsidy', 'debt'])])
+        cash_income = sum(income_records.mapped('amount'))
+        
+        # Təsisçi investisiyaları
+        founder_investments = sum(self.env['farm.founder.investment'].search([]).mapped('amount'))
+        
+        return cash_income + founder_investments
+    
+    def _get_total_expense(self):
+        """Ümumi xərc hesabla"""
+        # Kassa xərcləri
+        cash_expense = sum(self.env['farm.cash.flow'].search([('transaction_type', '=', 'expense')]).mapped('amount'))
+        
+        # Digər xərc modellərindən (artıq farm.expense.report-da daxildir, təkrarlamaq olmaz)
+        total = cash_expense
+        
+        # Bağ xərcləri (farm.expense.report-dakı bütün xərclər)
+        bag_expenses = sum(self.env['farm.expense.report'].search([]).mapped('amount'))
+        total += bag_expenses
+        
+        # Təsisçi xərcləri
+        total += sum(self.env['farm.founder.expense'].search([]).mapped('amount'))
+        
+        return total
+
+    @api.model
+    def check_expense_balance(self, amount, expense_model=None, record_id=None):
+        """Universal balans yoxlaması bütün xərc növləri üçün"""
+        if amount <= 0:
+            return True
+            
+        # Cari balansı hesabla
+        total_income = self._get_total_income()
+        total_expense = self._get_total_expense()
+        
+        # Əgər qeyd yenilənir və köhnə məbləği varsa çıxar
+        if expense_model and record_id:
+            try:
+                old_record = self.env[expense_model].browse(record_id)
+                if old_record.exists():
+                    total_expense -= old_record.amount
+            except:
+                pass
+        
+        current_balance = total_income - total_expense
+        
+        if amount > current_balance:
+            raise ValidationError(
+                f"Kifayət qədər balans yoxdur!\n"
+                f"Cari balans: {current_balance:.2f} AZN\n"
+                f"Xərc məbləği: {amount:.2f} AZN\n"
+                f"Çatışmayan: {amount - current_balance:.2f} AZN"
+            )
+        
+        return True
 
     @api.model
     def get_balance(self):
@@ -182,15 +221,17 @@ class FarmCashFlow(models.Model):
             'total_income': 0
         }
         
-        # Kassa gəlirləri
-        cash_records = self.search([('transaction_type', '=', 'income')])
-        for record in cash_records:
-            if record.income_type == 'subsidy':
-                result['subsidy_income'] += record.amount
-            elif record.income_type == 'debt':
-                result['debt_income'] += record.amount
-            else:
-                result['other_income'] += record.amount
+        # Subsidiya qeydləri
+        subsidy_records = self.search([('transaction_type', '=', 'subsidy')])
+        result['subsidy_income'] = sum(subsidy_records.mapped('amount'))
+        
+        # Borc qeydləri
+        debt_records = self.search([('transaction_type', '=', 'debt')])
+        result['debt_income'] = sum(debt_records.mapped('amount'))
+        
+        # Digər gəlir qeydləri
+        other_records = self.search([('transaction_type', '=', 'income')])
+        result['other_income'] = sum(other_records.mapped('amount'))
         
         # Təsisçi investisiyaları
         result['founder_investments'] = sum(self.env['farm.founder.investment'].search([]).mapped('amount'))
@@ -212,6 +253,10 @@ class FarmCashBalance(models.TransientModel):
     total_income = fields.Float('Ümumi Mədaxil')
     
     # Xərc məlumatları
+    cash_expense_only = fields.Float('Kassa Məxarici')
+    founder_expenses_total = fields.Float('Təsisçi Xərcləri')
+    expense_report_total = fields.Float('Xərc Hesabatındakı Xərcləri')
+    all_expenses_total = fields.Float('Bütün Xərclər')
     total_expense = fields.Float('Ümumi Məxaric')
     current_balance = fields.Float('Cari Balans')
 
@@ -226,12 +271,26 @@ class FarmCashBalance(models.TransientModel):
         # Xərc məlumatları
         dummy_record = cash_flow_obj.browse()
         total_expense = dummy_record._get_total_expense()
+        founder_expenses = sum(cash_flow_obj.env['farm.founder.expense'].search([]).mapped('amount'))
+        
+        # Yalnız kassa məxarici (cash flow-dakı expense)
+        cash_expense_only = sum(cash_flow_obj.env['farm.cash.flow'].search([('transaction_type', '=', 'expense')]).mapped('amount'))
+        
+        # Xərc hesabatındakı xərclər (bağ xərcləri)
+        expense_report_expenses = sum(self.env['farm.expense.report'].search([]).mapped('amount'))
+        
+        # Bütün xərclər
+        all_expenses = total_expense
         
         res.update({
             'subsidy_income': income_data['subsidy_income'],
             'debt_income': income_data['debt_income'],
             'other_income': income_data['other_income'],
             'founder_investments_total': income_data['founder_investments'],
+            'cash_expense_only': cash_expense_only,
+            'founder_expenses_total': founder_expenses,
+            'expense_report_total': expense_report_expenses,
+            'all_expenses_total': all_expenses,
             'total_income': income_data['total_income'],
             'total_expense': total_expense,
             'current_balance': income_data['total_income'] - total_expense,

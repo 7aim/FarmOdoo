@@ -21,8 +21,7 @@
         <!-- Demo Subsidiya Qeydləri -->
         <record id="demo_subsidy_1" model="farm.cash.flow">
             <field name="name">Dövlət Subsidiyası - Kənd Təsərrüfatı Dəstəyi</field>
-            <field name="transaction_type">income</field>
-            <field name="income_type">subsidy</field>
+            <field name="transaction_type">subsidy</field>
             <field name="amount">25000.0</field>
             <field name="date" eval="(datetime.now() - timedelta(days=10)).date()"/>
             <field name="note">İlk subsidiya ödənişi</field>
@@ -31,8 +30,7 @@
         <!-- Demo Borc Qeydləri (Ümumi) -->
         <record id="demo_debt_1" model="farm.cash.flow">
             <field name="name">Bank Krediti</field>
-            <field name="transaction_type">income</field>
-            <field name="income_type">debt</field>
+            <field name="transaction_type">debt</field>
             <field name="amount">20000.0</field>
             <field name="date" eval="(datetime.now() - timedelta(days=5)).date()"/>
             <field name="note">Kənd təsərrüfatı krediti</field>
@@ -40,8 +38,7 @@
 
         <record id="demo_debt_2" model="farm.cash.flow">
             <field name="name">Fərdi Borc</field>
-            <field name="transaction_type">income</field>
-            <field name="income_type">debt</field>
+            <field name="transaction_type">debt</field>
             <field name="amount">15000.0</field>
             <field name="date" eval="(datetime.now() - timedelta(days=3)).date()"/>
             <field name="note">Fərdi borc</field>
