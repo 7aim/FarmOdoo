@@ -10,6 +10,7 @@
                 <field name="name"/>
                 <field name="field_id"/>
                 <field name="parcel_id"/>
+                <field name="row_variety"/>
                 <field name="max_trees"/>
                 <field name="tree_count"/>
             </list>
@@ -31,6 +32,7 @@
                             <field name="parcel_id"/>
                         </group>
                         <group string="Ağac Məlumatları">
+                            <field name="row_variety"/>
                             <field name="length_meter"/>
                             <field name="tree_spacing"/>
                             <field name="max_trees"/>

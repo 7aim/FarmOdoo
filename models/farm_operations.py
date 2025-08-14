@@ -13,11 +13,12 @@ class FarmPlowing(models.Model):
     operation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
 
     # Texniki məlumatlar
-    equipment = fields.Many2one('res.partner', string='İcrakar', tracking=True)
+    equipment = fields.Many2one('res.partner', string='İcraçı', domain="[('category_id.name', '=', 'İcracı')]", tracking=True)
     plowing_depth = fields.Float('Şumlama Dərinliyi (cm)', default=5.0, required=True, tracking=True)
     area_hectare = fields.Float('Genişlik (ha)', default=10.0, required=True, tracking=True)
 
@@ -58,15 +59,43 @@ class FarmPlowing(models.Model):
             if record.area_hectare <= 0:
                 raise ValidationError('Genişlik müsbət olmalıdır!')
 
-    @api.depends('field_id', 'parcel_id', 'operation_date')
+    @api.depends('field_id', 'parcel_ids', 'operation_date')
     def _compute_name(self):
         for record in self:
-            if record.field_id and record.parcel_id and record.operation_date:
-                record.name = f" Şumlama - {record.field_id.name} - {record.parcel_id.name} - ({record.operation_date})"
+            if record.field_id and record.parcel_ids and record.operation_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Şumlama - {record.field_id.name} - {parcel_names} - ({record.operation_date})"
             elif record.field_id and record.operation_date:
                 record.name = f" Şumlama - {record.field_id.name} - ({record.operation_date})"
             else:
                 record.name = 'Yeni Şumlama Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
     
 class FarmPlanting(models.Model):
@@ -80,8 +109,9 @@ class FarmPlanting(models.Model):
     planting_date = fields.Datetime('Əkin Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Ağac məlumatları
     variety_id = fields.Many2one('farm.variety', string='Sort (Ağac)', required=True, ondelete='cascade', tracking=True)
@@ -138,15 +168,43 @@ class FarmPlanting(models.Model):
             if record.tree_count <= 0:
                 raise ValidationError('Ağac sayı müsbət olmalıdır!')
 
-    @api.depends('field_id', 'parcel_id', 'planting_date')
+    @api.depends('field_id', 'parcel_ids', 'planting_date')
     def _compute_name(self):
         for record in self:
-            if record.field_id and record.parcel_id and record.planting_date:
-                record.name = f" Əkin - {record.field_id.name} - {record.parcel_id.name} - ({record.planting_date})"
+            if record.field_id and record.parcel_ids and record.planting_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Əkin - {record.field_id.name} - {parcel_names} - ({record.planting_date})"
             elif record.field_id and record.planting_date:
                 record.name = f" Əkin - {record.field_id.name} - ({record.planting_date})"
             else:
                 record.name = 'Yeni Əkin Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 
 class FarmIrrigation(models.Model):
@@ -160,8 +218,9 @@ class FarmIrrigation(models.Model):
     irrigation_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
 
     # Sulama tipi
     irrigation_type = fields.Selection([
@@ -171,7 +230,7 @@ class FarmIrrigation(models.Model):
     ], string='Sulama Tipi', required=True, tracking=True)
     
     # Su məlumatları
-    water_liters = fields.Float('Su Miqdarı (m³)', required=True, default=1000.0, tracking=True)
+    water_liters = fields.Float('Su Miqdarı', required=True, default=1000.0, tracking=True)
     water_source = fields.Char('Su Mənbəyi', tracking=True)
     water_cost = fields.Float('Su Məsrəfi', tracking=True)
 
@@ -211,15 +270,43 @@ class FarmIrrigation(models.Model):
             if record.water_liters <= 0:
                 raise ValidationError('Su miqdarı müsbət olmalıdır!')
 
-    @api.depends('field_id', 'parcel_id', 'irrigation_date')
+    @api.depends('field_id', 'parcel_ids', 'irrigation_date')
     def _compute_name(self):
         for record in self:
-            if  record.parcel_id and record.field_id and record.irrigation_date:
-                record.name = f" Sulama - {record.field_id.name} - {record.parcel_id.name} - ({record.irrigation_date})"
+            if record.parcel_ids and record.field_id and record.irrigation_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Sulama - {record.field_id.name} - {parcel_names} - ({record.irrigation_date})"
             elif record.field_id and record.irrigation_date:
                 record.name = f" Sulama - {record.field_id.name} - ({record.irrigation_date})"
             else:
                 record.name = 'Yeni Sulama Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 
 class FarmFertilizing(models.Model):
@@ -233,8 +320,9 @@ class FarmFertilizing(models.Model):
     fertilizing_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
 
 
     # Gübrə tipi
@@ -287,15 +375,43 @@ class FarmFertilizing(models.Model):
         for record in self:
             record.total_cost = record.total_product_cost + record.total_worker_cost + record.total_additional_cost
 
-    @api.depends('field_id', 'parcel_id', 'fertilizing_date')
+    @api.depends('field_id', 'parcel_ids', 'fertilizing_date')
     def _compute_name(self):
         for record in self:
-            if  record.parcel_id and record.field_id and record.fertilizing_date:
-                record.name = f" Gübrələmə - {record.field_id.name} - {record.parcel_id.name} - ({record.fertilizing_date})"
+            if record.parcel_ids and record.field_id and record.fertilizing_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Gübrələmə - {record.field_id.name} - {parcel_names} - ({record.fertilizing_date})"
             elif record.field_id and record.fertilizing_date:
                 record.name = f" Gübrələmə - {record.field_id.name} - ({record.fertilizing_date})"
             else:
                 record.name = 'Yeni Gübrələmə Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 
 class FarmTreatment(models.Model):
@@ -309,8 +425,9 @@ class FarmTreatment(models.Model):
     treatment_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Tətbiq üsulu
     application_method = fields.Selection([
@@ -359,15 +476,43 @@ class FarmTreatment(models.Model):
         for record in self:
             record.total_cost = record.total_worker_cost + record.total_additional_cost + record.total_product_cost
 
-    @api.depends('field_id', 'parcel_id', 'treatment_date')
+    @api.depends('field_id', 'parcel_ids', 'treatment_date')
     def _compute_name(self):
         for record in self:
-            if  record.parcel_id and record.field_id and record.treatment_date:
-                record.name = f" Dərmanlama - {record.field_id.name} - {record.parcel_id.name} - ({record.treatment_date})"
+            if record.parcel_ids and record.field_id and record.treatment_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Dərmanlama - {record.field_id.name} - {parcel_names} - ({record.treatment_date})"
             elif record.field_id and record.treatment_date:
                 record.name = f" Dərmanlama - {record.field_id.name} - ({record.treatment_date})"
             else:
                 record.name = 'Yeni Dərmanlama Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 
 class FarmFertilizingLine(models.Model):
@@ -511,8 +656,9 @@ class FarmPruning(models.Model):
     pruning_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Budama məlumatları
     pruned_tree_count = fields.Integer('Budanan Ağac Sayı', required=True, tracking=True)
@@ -556,15 +702,43 @@ class FarmPruning(models.Model):
             if record.pruned_tree_count <= 0:
                 raise ValidationError('Budanan ağac sayı müsbət olmalıdır!')
 
-    @api.depends('field_id', 'parcel_id', 'pruning_date')
+    @api.depends('field_id', 'parcel_ids', 'pruning_date')
     def _compute_name(self):
         for record in self:
-            if  record.parcel_id and record.field_id and record.pruning_date:
-                record.name = f" Budama - {record.field_id.name} - {record.parcel_id.name} - ({record.pruning_date})"
+            if record.parcel_ids and record.field_id and record.pruning_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Budama - {record.field_id.name} - {parcel_names} - ({record.pruning_date})"
             elif record.field_id and record.pruning_date:
                 record.name = f" Budama - {record.field_id.name} - ({record.pruning_date})"
             else:
                 record.name = 'Yeni Budama Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 
 class FarmHarvest(models.Model):
@@ -578,8 +752,9 @@ class FarmHarvest(models.Model):
     harvest_date = fields.Datetime('Yığım Tarixi', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Yığım məlumatları
     harvest_type = fields.Selection([
@@ -633,15 +808,43 @@ class FarmHarvest(models.Model):
             if record.quantity_kg <= 0:
                 raise ValidationError('Məhsul miqdarı müsbət olmalıdır!')
             
-    @api.depends('field_id', 'parcel_id', 'harvest_date')
+    @api.depends('field_id', 'parcel_ids', 'harvest_date')
     def _compute_name(self):
         for record in self:
-            if  record.parcel_id and record.field_id and record.harvest_date:
-                record.name = f" Yığım - {record.field_id.name} - {record.parcel_id.name} - ({record.harvest_date})"
+            if record.parcel_ids and record.field_id and record.harvest_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Yığım - {record.field_id.name} - {parcel_names} - ({record.harvest_date})"
             elif record.field_id and record.harvest_date:
                 record.name = f" Yığım - {record.field_id.name} - ({record.harvest_date})"
             else:
                 record.name = 'Yeni Yığım Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 class FarmForecast(models.Model):
     """Proqnozlaşdırma"""
@@ -660,8 +863,9 @@ class FarmForecast(models.Model):
     ], string='Ay', required=True, default=lambda self: fields.Date.today().month, tracking=True)
     
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Proqnoz məlumatları
     expected_quantity_kg = fields.Float('Gözlənən Miqdar (kq)', required=True, tracking=True)
@@ -688,6 +892,33 @@ class FarmForecast(models.Model):
             if not (0 <= record.confidence_level <= 100):
                 raise ValidationError('Etibarlılıq səviyyəsi 0-100 arasında olmalıdır!')
 
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
+
 
 class FarmDamagedTrees(models.Model):
     """Zərərçəkmiş Ağaclar"""
@@ -700,8 +931,9 @@ class FarmDamagedTrees(models.Model):
     damage_date = fields.Datetime('Tarix', required=True, default=fields.Datetime.now, tracking=True)
 
     field_id = fields.Many2one('farm.field', string='Sahə', ondelete='cascade', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', domain="[('field_id', '=', field_id)]", ondelete='cascade', tracking=True)
-    row_id = fields.Many2one('farm.row', string='Cərgə', domain="[('parcel_id', '=', parcel_id)]", ondelete='cascade', tracking=True)
+    parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
+    row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
+    tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Zərər məlumatları
     damaged_tree_count = fields.Integer('Zərərçəkmiş Ağac Sayı', required=True, tracking=True)
@@ -738,15 +970,43 @@ class FarmDamagedTrees(models.Model):
             if record.damaged_tree_count <= 0:
                 raise ValidationError('Zərərçəkmiş ağac sayı müsbət olmalıdır!')
 
-    @api.depends('field_id', 'parcel_id', 'treatment_date')
+    @api.depends('field_id', 'parcel_ids', 'treatment_date')
     def _compute_name(self):
         for record in self:
-            if  record.parcel_id and record.field_id and record.treatment_date:
-                record.name = f" Zərərçəkmiş Ağaclar - {record.field_id.name} - {record.parcel_id.name} - ({record.treatment_date})"
+            if record.parcel_ids and record.field_id and record.treatment_date:
+                parcel_names = ', '.join(record.parcel_ids.mapped('name'))
+                record.name = f" Zərərçəkmiş Ağaclar - {record.field_id.name} - {parcel_names} - ({record.treatment_date})"
             elif record.field_id and record.treatment_date:
                 record.name = f" Zərərçəkmiş Ağaclar - {record.field_id.name} - ({record.treatment_date})"
             else:
                 record.name = 'Yeni Zərərçəkmiş Ağaclar Qeydi'
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        if self.field_id:
+            return {'domain': {'parcel_ids': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_ids = [(5,)]
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'parcel_ids': []}}
+
+    @api.onchange('parcel_ids')
+    def _onchange_parcel_ids(self):
+        if self.parcel_ids:
+            return {'domain': {'row_ids': [('parcel_id', 'in', self.parcel_ids.ids)]}}
+        else:
+            self.row_ids = [(5,)]
+            self.tree_ids = [(5,)]
+            return {'domain': {'row_ids': []}}
+
+    @api.onchange('row_ids')
+    def _onchange_row_ids(self):
+        if self.row_ids:
+            return {'domain': {'tree_ids': [('row_id', 'in', self.row_ids.ids)]}}
+        else:
+            self.tree_ids = [(5,)]
+            return {'domain': {'tree_ids': []}}
 
 class FarmColdStorage(models.Model):
     """Malların Soyuducuya Yerləşdirilməsi"""

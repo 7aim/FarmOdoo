@@ -10,7 +10,8 @@ class FarmRow(models.Model):
 
     name = fields.Char('Cərgə Adı', tracking=True)
     code = fields.Char('Cərgə Kodu', copy=False, readonly=True)
-    
+    row_variety = fields.Many2one('farm.variety', string='Cərgə Sortu', required=True, ondelete='cascade', tracking=True)
+
     # Parsel əlaqəsi
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
     field_id = fields.Many2one(related='parcel_id.field_id', string='Sahə', store=True, readonly=True)

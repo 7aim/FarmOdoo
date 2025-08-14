@@ -116,8 +116,9 @@
             <list string="Şumlama Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="equipment"/>
                 <field name="operator_id"/>
                 <field name="plowing_depth"/>
@@ -141,8 +142,9 @@
                             <field name="name"/>
                             <field name="operation_date"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Texniki Məlumatlar">
                             <field name="plowing_depth"/>
@@ -197,8 +199,9 @@
             <list string="Əkin Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="variety_id"/>
                 <field name="seedling_type"/>
                 <field name="supplier"/>
@@ -220,16 +223,17 @@
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
-                            <field name="planting_date"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Ağac Məlumatları">
                             <field name="variety_id"/>
                             <field name="seedling_type"/>
                             <field name="tree_count"/>
                             <field name="supplier"/>
+                            <field name="planting_date"/>
                             <!-- <field name="unit_price"/> -->
                             <!-- <field name="total_cost"/> -->
                         </group>
@@ -280,12 +284,12 @@
             <list string="Sulama Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="irrigation_type"/>
                 <field name="operator_id"/>
-                <field name="water_liters"/>
-                <field name="water_cost"/>
+                <field name="water_liters" sum="Cəmi Su"/>
                 <field name="irrigation_date"/>
                 <field name="total_worker_cost"/>
                 <field name="total_additional_cost"/>
@@ -303,10 +307,10 @@
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
-                            <field name="irrigation_date"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>
@@ -314,6 +318,7 @@
                             <!--<field name="water_cost"/>-->
                             <field name="water_source"/>
                             <field name="operator_id"/>
+                            <field name="irrigation_date"/>
                         </group>
                     </group>
                     <notebook>
@@ -362,8 +367,9 @@
             <list string="Gübrələmə Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="fertilizer_type"/>
                 <field name="supplier"/>
                 <field name="fertilizing_date"/>
@@ -385,13 +391,14 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Əlavə Məlumatlar">
-                            <field name="fertilizing_date"/>
                             <field name="fertilizer_type"/>
                             <field name="supplier"/>
+                            <field name="fertilizing_date"/>
                         </group>
                     </group>
                     <notebook>
@@ -456,8 +463,9 @@
             <list string="Dərmanlama Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="application_method"/>
                 <field name="treatment_date"/>
                 <field name="total_product_cost"/>
@@ -477,11 +485,14 @@
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
-                            <field name="treatment_date"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Əlavə Məlumatlar">
                             <field name="application_method"/>
+                            <field name="treatment_date"/>
                         </group>
                     </group>
                     <notebook>
@@ -666,8 +677,9 @@
             <list string="Budama Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="pruning_type"/>
                 <field name="pruned_tree_count"/>
                 <field name="pruning_date"/>
@@ -688,8 +700,9 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Budama Məlumatları">
                             <field name="pruning_date"/>
@@ -743,8 +756,9 @@
             <list string="Yığım Əməliyyatları">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="harvest_type"/>
                 <field name="tree_count"/>
                 <field name="quantity_kg"/>
@@ -768,8 +782,9 @@
                             <field name="name"/>
                             <field name="harvest_date"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Yığım Məlumatları">
                             <field name="harvest_type"/>
@@ -827,8 +842,9 @@
                 <field name="forecast_year"/>
                 <field name="forecast_month"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="expected_quantity_kg"/>
                 <field name="climate_risk_factor"/>
                 <field name="confidence_level"/>
@@ -849,8 +865,9 @@
                             <field name="forecast_year"/>
                             <field name="forecast_month"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Proqnoz Məlumatları">
                             <field name="expected_quantity_kg"/>
@@ -876,8 +893,9 @@
             <list string="Zərərçəkmiş Ağaclar">
                 <field name="name"/>
                 <field name="field_id"/>
-                <field name="parcel_id"/>
-                <field name="row_id"/>
+                <field name="parcel_ids" widget="many2many_tags"/>
+                <field name="row_ids" widget="many2many_tags"/>
+                <field name="tree_ids" widget="many2many_tags"/>
                 <field name="damage_reason"/>
                 <field name="damaged_tree_count"/>
                 <field name="damage_date"/>
@@ -898,8 +916,9 @@
                             <field name="name"/>
                             <field name="damage_date"/>
                             <field name="field_id"/>
-                            <field name="parcel_id"/>
-                            <field name="row_id"/>
+                            <field name="parcel_ids" widget="many2many_tags"/>
+                            <field name="row_ids" widget="many2many_tags"/>
+                            <field name="tree_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Zərər Məlumatları">
                             <field name="damaged_tree_count"/>

@@ -25,8 +25,8 @@ class FarmMaterialExpense(models.Model):
         ('packaging', 'Qablaşdırma'),
         ('other', 'Digər')
     ], string='Material Növü', default='tools')
-    
-    supplier = fields.Char('Təchizatçı')
+
+    supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Təchizatçı')]", tracking=True)
     quantity = fields.Float('Miqdar')
     unit_price = fields.Float('Vahid Qiymət')
     

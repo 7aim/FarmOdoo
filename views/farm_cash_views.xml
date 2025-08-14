@@ -69,13 +69,13 @@
                 <form string="Kassa Balansı" create="false" edit="false" delete="false">
                     <sheet>
                         <div class="oe_title">
+                            <h3>Cari Balans</h3>
                             <h1>
                                 <field name="current_balance" readonly="1" 
                                        decoration-success="current_balance >= 0" 
                                        decoration-danger="current_balance &lt; 0"/>
                                 <span> AZN</span>
                             </h1>
-                            <h3>Cari Balans</h3>
                         </div>
                         <group>
                             <group string="Gəlir Hissəsi">
