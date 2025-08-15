@@ -2,7 +2,7 @@
 
 {
     'name': 'Kənd Təsərrüfatı İdarəetmə Sistemi',
-    'version': '18.0.1.4.0',
+    'version': '18.0.1.5.3',
     'category': 'Agriculture',
     'website': 'https://www.github.com/7aim',
     'depends': ['base', 'stock', 'product','purchase'],
@@ -30,7 +30,7 @@
         'views/farm_tractor_income_views.xml',
         'views/farm_material_expense_views.xml',
         'views/farm_hotel_expense_views.xml',
-        'views/farm_dashboard_views.xml',
+        'views/farm_dashboard_wizard_views.xml',
         'views/product_template_views.xml',
         'views/farm_menu.xml',
         'views/purchase_order.xml',

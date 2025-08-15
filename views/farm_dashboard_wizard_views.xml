@@ -145,4 +145,11 @@
         <field name="context">{'default_field_id': active_id}</field>
     </record>
 
+    <!-- Dashboard Menu Action - bütün sahələr üçün -->
+    <record id="action_farm_dashboard_menu" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">farm.dashboard.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
 </odoo>

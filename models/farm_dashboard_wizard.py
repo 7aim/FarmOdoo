@@ -10,10 +10,10 @@ class FarmDashboardWizard(models.TransientModel):
     field_id = fields.Many2one('farm.field', string='Sahə', required=True)
     year = fields.Integer('İl', default=lambda self: datetime.now().year, required=True)
     month = fields.Selection([
-        (1, 'Yanvar'), (2, 'Fevral'), (3, 'Mart'), (4, 'Aprel'),
-        (5, 'May'), (6, 'İyun'), (7, 'İyul'), (8, 'Avqust'),
-        (9, 'Sentyabr'), (10, 'Oktyabr'), (11, 'Noyabr'), (12, 'Dekabr')
-    ], string='Ay', default=lambda self: datetime.now().month, required=True)
+        ('1', 'Yanvar'), ('2', 'Fevral'), ('3', 'Mart'), ('4', 'Aprel'),
+        ('5', 'May'), ('6', 'İyun'), ('7', 'İyul'), ('8', 'Avqust'),
+        ('9', 'Sentyabr'), ('10', 'Oktyabr'), ('11', 'Noyabr'), ('12', 'Dekabr')
+    ], string='Ay', default=lambda self: str(datetime.now().month), required=True)
     
     # Əsas statistikalar
     total_parcels = fields.Integer('Parsel Sayı', readonly=True)
@@ -73,6 +73,18 @@ class FarmDashboardWizard(models.TransientModel):
     # Qiymətləndirmə tarixi
     calculation_date = fields.Datetime('Hesablama Tarixi', readonly=True, default=fields.Datetime.now)
 
+    @api.model
+    def default_get(self, fields_list):
+        """Wizard yaratılanda default məlumatları təyin et"""
+        result = super().default_get(fields_list)
+        
+        # Context-dən field_id al
+        field_id = self.env.context.get('default_field_id')
+        if field_id:
+            result['field_id'] = field_id
+        
+        return result
+
     @api.onchange('field_id', 'year', 'month')
     def _onchange_field_data(self):
         """Sahə, il və ya ay dəyişəndə məlumatları yenilə"""
@@ -84,15 +96,212 @@ class FarmDashboardWizard(models.TransientModel):
         if not self.field_id:
             return
             
-        # Dashboard servisindən məlumatları al
-        dashboard_data = self.env['farm.dashboard'].get_dashboard_data(
-            self.field_id.id, self.year, self.month
+        # Dashboard məlumatlarını hesabla
+        month_int = int(self.month) if self.month else datetime.now().month
+        dashboard_data = self._get_dashboard_data(
+            self.field_id.id, self.year, month_int
         )
         
         # Məlumatları wizard-a yaz
         for field_name, value in dashboard_data.items():
             if hasattr(self, field_name):
                 setattr(self, field_name, value)
+
+    def _get_dashboard_data(self, field_id, year=None, month=None):
+        """Müəyyən sahə üçün dashboard məlumatlarını hesablayır"""
+        if not year:
+            year = datetime.now().year
+        if not month:
+            month = datetime.now().month
+            
+        field = self.env['farm.field'].browse(field_id)
+        if not field.exists():
+            return {}
+            
+        # Tarix filtri
+        date_from = datetime(year, month, 1).date()
+        if month == 12:
+            date_to = datetime(year + 1, 1, 1).date() - timedelta(days=1)
+        else:
+            date_to = datetime(year, month + 1, 1).date() - timedelta(days=1)
+            
+        dashboard_data = {
+            'field_id': field.id,
+            'field_name': field.name,
+            'field_code': field.code,
+            'area_hectare': field.area_hectare,
+            'total_parcels': field.total_parcel,
+            'total_rows': field.total_rows,
+            'total_trees': field.total_trees,
+            'calculation_date': fields.Datetime.now(),
+            'year': year,
+            'month': str(month),
+        }
+        
+        # Ağac sayı 0 olarsa, hesablama etmə
+        trees_count = field.total_trees or 1
+        
+        # Gübrə xərcləri
+        fertilizing_records = self.env['farm.fertilizing'].search([
+            ('field_id', '=', field_id),
+            ('fertilizing_date', '>=', date_from),
+            ('fertilizing_date', '<=', date_to)
+        ])
+        
+        total_fertilizer_cost = sum(fertilizing_records.mapped('total_cost'))
+        dashboard_data.update({
+            'total_fertilizer_cost': total_fertilizer_cost,
+            'fertilizer_per_tree': total_fertilizer_cost / trees_count,
+            'last_fertilizing_date': max(fertilizing_records.mapped('fertilizing_date')) if fertilizing_records else False,
+        })
+        
+        # Sulama xərcləri
+        irrigation_records = self.env['farm.irrigation'].search([
+            ('field_id', '=', field_id),
+            ('irrigation_date', '>=', date_from),
+            ('irrigation_date', '<=', date_to)
+        ])
+        
+        total_water_cost = sum(irrigation_records.mapped('total_cost'))
+        dashboard_data.update({
+            'total_water_cost': total_water_cost,
+            'water_per_tree': total_water_cost / trees_count,
+            'last_irrigation_date': max(irrigation_records.mapped('irrigation_date')) if irrigation_records else False,
+            'total_irrigation_count': len(irrigation_records),
+        })
+        
+        # İşçi xərcləri (bütün əməliyyatlardan)
+        total_worker_cost = 0
+        
+        # Şumlama işçi xərcləri
+        plowing_records = self.env['farm.plowing'].search([
+            ('field_id', '=', field_id),
+            ('operation_date', '>=', date_from),
+            ('operation_date', '<=', date_to)
+        ])
+        total_worker_cost += sum(plowing_records.mapped('total_worker_cost'))
+        last_plowing = max(plowing_records.mapped('operation_date')) if plowing_records else False
+        
+        # Gübrələmə işçi xərcləri
+        total_worker_cost += sum(fertilizing_records.mapped('total_worker_cost'))
+        
+        # Sulama işçi xərcləri
+        total_worker_cost += sum(irrigation_records.mapped('total_worker_cost'))
+        
+        # Müalicə işçi xərcləri
+        treatment_records = self.env['farm.treatment'].search([
+            ('field_id', '=', field_id),
+            ('treatment_date', '>=', date_from),
+            ('treatment_date', '<=', date_to)
+        ])
+        total_worker_cost += sum(treatment_records.mapped('total_worker_cost'))
+        last_treatment = max(treatment_records.mapped('treatment_date')) if treatment_records else False
+        
+        # Budama işçi xərcləri
+        pruning_records = self.env['farm.pruning'].search([
+            ('field_id', '=', field_id),
+            ('pruning_date', '>=', date_from),
+            ('pruning_date', '<=', date_to)
+        ])
+        total_worker_cost += sum(pruning_records.mapped('total_worker_cost'))
+        last_pruning = max(pruning_records.mapped('pruning_date')) if pruning_records else False
+        
+        # Məhsul yığımı işçi xərcləri
+        harvest_records = self.env['farm.harvest'].search([
+            ('field_id', '=', field_id),
+            ('harvest_date', '>=', date_from),
+            ('harvest_date', '<=', date_to)
+        ])
+        total_worker_cost += sum(harvest_records.mapped('total_worker_cost'))
+        last_harvest = max(harvest_records.mapped('harvest_date')) if harvest_records else False
+        
+        dashboard_data.update({
+            'total_worker_cost': total_worker_cost,
+            'worker_cost_per_tree': total_worker_cost / trees_count,
+            'last_plowing_date': last_plowing,
+            'last_treatment_date': last_treatment,
+            'last_pruning_date': last_pruning,
+            'last_harvest_date': last_harvest,
+        })
+        
+        # Material xərcləri
+        material_expenses = self.env['farm.material.expense'].search([
+            ('expense_date', '>=', date_from),
+            ('expense_date', '<=', date_to)
+        ])
+        total_material_cost = sum(material_expenses.mapped('amount'))
+        dashboard_data.update({
+            'total_material_cost': total_material_cost,
+            'material_cost_per_tree': total_material_cost / trees_count,
+        })
+        
+        # Traktor xərcləri
+        tractor_expenses = self.env['farm.tractor.expense'].search([
+            ('expense_date', '>=', date_from),
+            ('expense_date', '<=', date_to)
+        ])
+        total_tractor_cost = sum(tractor_expenses.mapped('amount'))
+        dashboard_data.update({
+            'total_tractor_cost': total_tractor_cost,
+            'tractor_cost_per_tree': total_tractor_cost / trees_count,
+        })
+        
+        # Diesel xərcləri
+        diesel_expenses = self.env['farm.diesel.expense'].search([
+            ('expense_date', '>=', date_from),
+            ('expense_date', '<=', date_to)
+        ])
+        total_diesel_cost = sum(diesel_expenses.mapped('amount'))
+        dashboard_data.update({
+            'total_diesel_cost': total_diesel_cost,
+            'diesel_cost_per_tree': total_diesel_cost / trees_count,
+        })
+        
+        # Hotel xərcləri
+        hotel_expenses = self.env['farm.hotel.expense'].search([
+            ('expense_date', '>=', date_from),
+            ('expense_date', '<=', date_to)
+        ])
+        total_hotel_cost = sum(hotel_expenses.mapped('amount'))
+        dashboard_data.update({
+            'total_hotel_cost': total_hotel_cost,
+            'hotel_cost_per_tree': total_hotel_cost / trees_count,
+        })
+        
+        # Kommunal xərcələr
+        communal_expenses = self.env['farm.communal.expense'].search([
+            ('expense_date', '>=', date_from),
+            ('expense_date', '<=', date_to)
+        ])
+        total_communal_cost = sum(communal_expenses.mapped('amount'))
+        dashboard_data.update({
+            'total_communal_cost': total_communal_cost,
+            'communal_cost_per_tree': total_communal_cost / trees_count,
+        })
+        
+        # Ümumi xərclər
+        total_expenses = (total_fertilizer_cost + total_water_cost + total_worker_cost + 
+                         total_material_cost + total_tractor_cost + total_diesel_cost + 
+                         total_hotel_cost + total_communal_cost)
+        
+        dashboard_data.update({
+            'total_expenses': total_expenses,
+            'cost_per_tree': total_expenses / trees_count,
+        })
+        
+        # Xəstəlik məlumatları
+        diseases = self.env['farm.disease.record'].search([
+            ('field_id', '=', field_id),
+            ('status', '=', 'active')
+        ])
+        active_diseases_text = ', '.join(diseases.mapped('disease_name')) if diseases else 'Xəstəlik yoxdur'
+        
+        dashboard_data.update({
+            'disease_count': len(diseases),
+            'active_diseases': active_diseases_text,
+        })
+        
+        return dashboard_data
 
     def action_refresh(self):
         """Dashboard məlumatlarını yenilə"""
