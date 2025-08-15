@@ -66,10 +66,14 @@
             <field name="name">farm.cash.balance.form</field>
             <field name="model">farm.cash.balance</field>
             <field name="arch" type="xml">
-                <form string="Kassa Balansı" create="false" edit="false" delete="false">
+                <form string="Kassa Balansı" create="false" delete="false">
+                    <header>
+                        <button name="action_refresh" string="🔄 Yenilə" type="object" 
+                                class="btn-primary"/>
+                    </header>
                     <sheet>
                         <div class="oe_title">
-                            <h3>Cari Balans</h3>
+                            <h3>Kassa Balansı</h3>
                             <h1>
                                 <field name="current_balance" readonly="1" 
                                        decoration-success="current_balance >= 0" 
@@ -77,21 +81,37 @@
                                 <span> AZN</span>
                             </h1>
                         </div>
+                        
+                        <!-- Tarix Filtr Hissəsi -->
+                        <group string="📅 Tarix Filtri" col="4">
+                            <field name="date_filter" widget="selection" colspan="2"/>
+                            <field name="year" invisible="date_filter not in ['year', 'month']"/>
+                            <field name="month" invisible="date_filter != 'month'"/>
+                            <field name="date_from" invisible="date_filter != 'custom'" 
+                                   required="date_filter == 'custom'" colspan="2"/>
+                            <field name="date_to" invisible="date_filter != 'custom'" 
+                                   required="date_filter == 'custom'" colspan="2"/>
+                        </group>
+                        
                         <group>
-                            <group string="Gəlir Hissəsi">
-                                <field name="subsidy_income" string="Subsidiya" readonly="1"/>
-                                <field name="debt_income" string="Borc" readonly="1"/>
-                                <field name="founder_investments_total" string="Təsisçi İnvestisiyası" readonly="1"/>
-                                <field name="tractor_income_total" string="Traktor Gəliri" readonly="1"/>
-                                <field name="other_income" string="Mədaxil" readonly="1"/>
-                                <field name="total_income" string="Ümumi Gəlir" readonly="1"/>
+                            <group string="💰 Gəlir Hissəsi">
+                                <field name="subsidy_income" string="💸 Subsidiya" readonly="1"/>
+                                <field name="debt_income" string="🏦 Borc" readonly="1"/>
+                                <field name="founder_investments_total" string="👥 Təsisçi İnvestisiyası" readonly="1"/>
+                                <field name="tractor_income_total" string="🚜 Traktor Gəliri" readonly="1"/>
+                                <field name="other_income" string="💼 Digər Mədaxil" readonly="1"/>
+                                <separator string=""/>
+                                <field name="total_income" string="📈 Ümumi Gəlir" readonly="1" 
+                                       class="oe_subtotal_footer_separator"/>
                             </group>
                         
-                            <group string="Xərc Hissəsi">
-                                <field name="cash_expense_only" string="Məxaric" readonly="1"/>
-                                <field name="founder_expenses_total" string="Təsisçi Məxarici" readonly="1"/>
-                                <field name="expense_report_total" string="Bağ Xərcləri" readonly="1"/>
-                                <field name="all_expenses_total" string="Ümumi Xərc" readonly="1"/>
+                            <group string="💸 Xərc Hissəsi">
+                                <field name="cash_expense_only" string="💳 Kassa Məxarici" readonly="1"/>
+                                <field name="founder_expenses_total" string="👥 Təsisçi Məxarici" readonly="1"/>
+                                <field name="expense_report_total" string="🌱 Bağ Xərcləri" readonly="1"/>
+                                <separator string=""/>
+                                <field name="all_expenses_total" string="📉 Ümumi Xərc" readonly="1" 
+                                       class="oe_subtotal_footer_separator"/>
                             </group>
                         </group>
                     </sheet>

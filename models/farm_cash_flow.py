@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import datetime, timedelta
 
 class FarmFounder(models.Model):
     _name = 'farm.founder'
@@ -252,6 +253,24 @@ class FarmCashBalance(models.TransientModel):
     _name = 'farm.cash.balance'
     _description = 'Kassa Balansı'
 
+    # Tarix filtr sahələri
+    date_filter = fields.Selection([
+        ('all', 'Bütün Tarixlər'),
+        ('year', 'İl üzrə'),
+        ('month', 'Ay üzrə'),
+        ('custom', 'Özel Tarix')
+    ], string='📅 Tarix Filtri', default='all', required=True)
+    
+    year = fields.Integer('İl', default=lambda self: fields.Date.today().year)
+    month = fields.Selection([
+        ('1', 'Yanvar'), ('2', 'Fevral'), ('3', 'Mart'), ('4', 'Aprel'),
+        ('5', 'May'), ('6', 'İyun'), ('7', 'İyul'), ('8', 'Avqust'),
+        ('9', 'Sentyabr'), ('10', 'Oktyabr'), ('11', 'Noyabr'), ('12', 'Dekabr')
+    ], string='Ay', default=lambda self: str(fields.Date.today().month))
+    
+    date_from = fields.Date('📅 Başlanğıc Tarix')
+    date_to = fields.Date('📅 Bitmə Tarix')
+
     # Gəlir növləri
     subsidy_income = fields.Float('Subsidiya Gəlirləri')
     debt_income = fields.Float('Borc Gəlirləri')
@@ -271,21 +290,52 @@ class FarmCashBalance(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
+        # İlkin yükləmədə filtrsiz hesabla
+        self._calculate_balance_data(res)
+        return res
+
+    def _get_date_domain(self):
+        """Tarix filtrinə əsasən domain qaytarır"""
+        if self.date_filter == 'all':
+            return []
+        elif self.date_filter == 'custom' and self.date_from and self.date_to:
+            return [('date', '>=', self.date_from), ('date', '<=', self.date_to)]
+        elif self.date_filter == 'year' and self.year:
+            date_from = fields.Date.from_string(f'{self.year}-01-01')
+            date_to = fields.Date.from_string(f'{self.year}-12-31')
+            return [('date', '>=', date_from), ('date', '<=', date_to)]
+        elif self.date_filter == 'month' and self.year and self.month:
+            month_int = int(self.month)
+            date_from = fields.Date.from_string(f'{self.year}-{month_int:02d}-01')
+            # Ayın son günü
+            if month_int == 12:
+                date_to = fields.Date.from_string(f'{self.year + 1}-01-01') - timedelta(days=1)
+            else:
+                date_to = fields.Date.from_string(f'{self.year}-{month_int + 1:02d}-01') - timedelta(days=1)
+            return [('date', '>=', date_from), ('date', '<=', date_to)]
+        return []
+
+    def _calculate_balance_data(self, res=None):
+        """Balans məlumatlarını tarix filtrinə əsasən hesablayır"""
+        if res is None:
+            res = {}
+            
         cash_flow_obj = self.env['farm.cash.flow']
+        date_domain = self._get_date_domain()
         
-        # Gəlir məlumatları
-        income_data = cash_flow_obj.get_income_summary()
+        # Gəlir məlumatları (tarix filtri ilə)
+        income_data = self._get_filtered_income_summary(date_domain)
         
-        # Xərc məlumatları
-        dummy_record = cash_flow_obj.browse()
-        total_expense = dummy_record._get_total_expense()
-        founder_expenses = sum(cash_flow_obj.env['farm.founder.expense'].search([]).mapped('amount'))
+        # Xərc məlumatları (tarix filtri ilə)  
+        total_expense = self._get_filtered_total_expense(date_domain)
+        founder_expenses = self._get_filtered_founder_expenses(date_domain)
         
         # Yalnız kassa məxarici (cash flow-dakı expense)
-        cash_expense_only = sum(cash_flow_obj.env['farm.cash.flow'].search([('transaction_type', '=', 'expense')]).mapped('amount'))
+        cash_expense_domain = [('transaction_type', '=', 'expense')] + date_domain
+        cash_expense_only = sum(cash_flow_obj.search(cash_expense_domain).mapped('amount'))
         
-        # Xərc hesabatındakı xərclər (bağ xərcləri)
-        expense_report_expenses = sum(self.env['farm.expense.report'].search([]).mapped('amount'))
+        # Xərc hesabatındakı xərclər (bağ xərcləri) - tarix filtri ilə
+        expense_report_expenses = self._get_filtered_expense_report_total(date_domain)
         
         # Bütün xərclər
         all_expenses = total_expense
@@ -305,6 +355,153 @@ class FarmCashBalance(models.TransientModel):
             'current_balance': income_data['total_income'] - total_expense,
         })
         return res
+
+    def _get_filtered_income_summary(self, date_domain):
+        """Tarix filtrinə əsasən gəlir xülasəsi"""
+        cash_flow_obj = self.env['farm.cash.flow']
+        
+        # Subsidiya gəlirləri
+        subsidies_domain = [('transaction_type', '=', 'subsidy')] + date_domain
+        subsidy_income = sum(cash_flow_obj.search(subsidies_domain).mapped('amount'))
+        
+        # Borc gəlirləri  
+        debt_domain = [('transaction_type', '=', 'debt')] + date_domain
+        debt_income = sum(cash_flow_obj.search(debt_domain).mapped('amount'))
+        
+        # Digər gəlirlər
+        income_domain = [('transaction_type', '=', 'income')] + date_domain
+        other_income = sum(cash_flow_obj.search(income_domain).mapped('amount'))
+        
+        # Təsisçi investisiyaları (tarix filtri ilə)
+        founder_investments = self._get_filtered_founder_investments(date_domain)
+        
+        # Traktor gəlirləri (tarix filtri ilə)
+        tractor_income = self._get_filtered_tractor_income(date_domain)
+        
+        total_income = subsidy_income + debt_income + other_income + founder_investments + tractor_income
+        
+        return {
+            'subsidy_income': subsidy_income,
+            'debt_income': debt_income,
+            'other_income': other_income,
+            'founder_investments': founder_investments,
+            'tractor_income': tractor_income,
+            'total_income': total_income,
+        }
+
+    def _get_filtered_founder_investments(self, date_domain):
+        """Tarix filtrinə əsasən təsisçi investisiyalarını hesablayır"""
+        try:
+            domain = date_domain.copy()
+            # date sahəsini uyğun sahə ilə əvəz et
+            filtered_domain = []
+            for condition in domain:
+                if condition[0] == 'date':
+                    filtered_domain.append(('date', condition[1], condition[2]))
+                else:
+                    filtered_domain.append(condition)
+            
+            investments = self.env['farm.founder.investment'].search(filtered_domain)
+            return sum(investments.mapped('amount'))
+        except Exception:
+            return 0
+
+    def _get_filtered_tractor_income(self, date_domain):
+        """Tarix filtrinə əsasən traktor gəlirlərini hesablayır"""
+        try:
+            domain = date_domain.copy()
+            # date sahəsini income_date ilə əvəz et
+            filtered_domain = []
+            for condition in domain:
+                if condition[0] == 'date':
+                    filtered_domain.append(('income_date', condition[1], condition[2]))
+                else:
+                    filtered_domain.append(condition)
+            
+            tractor_incomes = self.env['farm.tractor.income'].search(filtered_domain)
+            return sum(tractor_incomes.mapped('amount'))
+        except Exception:
+            return 0
+
+    def _get_filtered_total_expense(self, date_domain):
+        """Tarix filtrinə əsasən ümumi xərci hesablayır"""
+        cash_flow_obj = self.env['farm.cash.flow']
+        
+        # Cash flow xərcləri
+        expense_domain = [('transaction_type', '=', 'expense')] + date_domain
+        cash_expenses = sum(cash_flow_obj.search(expense_domain).mapped('amount'))
+        
+        # Digər xərc növləri (expense_date sahəsi olan)
+        expense_models = [
+            'farm.diesel.expense',
+            'farm.tractor.expense', 
+            'farm.hotel.expense',
+            'farm.material.expense',
+            'farm.communal.expense'
+        ]
+        
+        other_expenses = 0
+        for model_name in expense_models:
+            try:
+                if model_name in self.env:
+                    domain = self._convert_date_domain_for_model(date_domain, 'expense_date')
+                    expenses = self.env[model_name].search(domain)
+                    other_expenses += sum(expenses.mapped('amount'))
+            except Exception:
+                # Model mövcud deyilsə burax
+                pass
+        
+        # Bağ xərcləri (farm.expense.report)
+        try:
+            expense_reports = self._get_filtered_expense_report_total(date_domain)
+        except Exception:
+            expense_reports = 0
+        
+        return cash_expenses + other_expenses + expense_reports
+
+    def _get_filtered_founder_expenses(self, date_domain):
+        """Tarix filtrinə əsasən təsisçi xərclərini hesablayır"""
+        try:
+            domain = self._convert_date_domain_for_model(date_domain, 'date')
+            founder_expenses = self.env['farm.founder.expense'].search(domain)
+            return sum(founder_expenses.mapped('amount'))
+        except Exception:
+            return 0
+
+    def _get_filtered_expense_report_total(self, date_domain):
+        """Tarix filtrinə əsasən xərc hesabatı xərclərini hesablayır"""
+        try:
+            domain = self._convert_date_domain_for_model(date_domain, 'date')
+            expense_reports = self.env['farm.expense.report'].search(domain)
+            return sum(expense_reports.mapped('amount'))
+        except Exception:
+            return 0
+
+    def _convert_date_domain_for_model(self, date_domain, date_field):
+        """Date domain-ini müxtəlif modellər üçün uyğun sahə adı ilə çevirir"""
+        converted_domain = []
+        for condition in date_domain:
+            if condition[0] == 'date':
+                converted_domain.append((date_field, condition[1], condition[2]))
+            else:
+                converted_domain.append(condition)
+        return converted_domain
+
+    def action_refresh(self):
+        """Balansı yenilə düyməsi"""
+        values = {}
+        self._calculate_balance_data(values)
+        self.write(values)
+        # Sadəcə True qaytarmaq formu yenilənməyə məcbur edir
+        return True
+
+    @api.onchange('date_filter', 'year', 'month', 'date_from', 'date_to')
+    def _onchange_date_filter(self):
+        """Tarix filtri dəyişəndə balansı yenilə"""
+        values = {}
+        self._calculate_balance_data(values)
+        for field, value in values.items():
+            setattr(self, field, value)
 
     def check_expense_limit(self, expense_amount):
         """Xərc limitini yoxlayır"""

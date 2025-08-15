@@ -17,7 +17,6 @@ access_farm_fertilizing,farm.fertilizing,model_farm_fertilizing,,1,1,1,1
 access_farm_treatment,farm.treatment,model_farm_treatment,,1,1,1,1
 access_farm_pruning,farm.pruning,model_farm_pruning,,1,1,1,1
 access_farm_harvest,farm.harvest,model_farm_harvest,,1,1,1,1
-access_farm_forecast,farm.forecast,model_farm_forecast,,1,1,1,1
 access_farm_damaged_trees,farm.damaged.trees,model_farm_damaged_trees,,1,1,1,1
 access_farm_cold_storage,farm.cold.storage,model_farm_cold_storage,,1,1,1,1
 access_farm_fertilizing_line,farm.fertilizing.line,model_farm_fertilizing_line,,1,1,1,1
