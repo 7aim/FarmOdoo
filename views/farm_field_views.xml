@@ -27,6 +27,7 @@
         <field name="arch" type="xml">
             <form string="Sahə">
                 <header>
+                    <button name="action_view_dashboard" string="📊 Dashboard" type="object" class="btn-primary"/>
                     <field name="status" widget="statusbar"/>
                 </header>
                 <sheet>

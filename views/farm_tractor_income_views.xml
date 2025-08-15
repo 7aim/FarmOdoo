@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Traktor Gəlir Action -->
+        <record id="action_farm_tractor_income" model="ir.actions.act_window">
+            <field name="name">Traktor Gəlirləri</field>
+            <field name="res_model">farm.tractor.income</field>
+            <field name="view_mode">list,form,pivot</field>
+        </record>
+
+        <!-- Traktor Gəlir List View -->
+        <record id="view_farm_tractor_income_list" model="ir.ui.view">
+            <field name="name">farm.tractor.income.list</field>
+            <field name="model">farm.tractor.income</field>
+            <field name="arch" type="xml">
+                <list string="Traktor Gəlirləri" decoration-success="amount > 0">
+                    <field name="income_date"/>
+                    <field name="name"/>
+                    <field name="tractor_name"/>
+                    <field name="income_type"/>
+                    <field name="customer_name"/>
+                    <field name="amount" sum="Cəm"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Traktor Gəlir Form View -->
+        <record id="view_farm_tractor_income_form" model="ir.ui.view">
+            <field name="name">farm.tractor.income.form</field>
+            <field name="model">farm.tractor.income</field>
+            <field name="arch" type="xml">
+                <form string="Traktor Gəliri">
+                    <sheet>
+                        <group>
+                            <group string="Traktor Məlumatları">
+                                <field name="name"/>
+                                <field name="income_date"/>
+                                <field name="income_type"/>
+                            </group>
+                            <group string="Müştəri Məlumatları">
+                                <field name="tractor_name"/>
+                                <field name="customer_name"/>
+                                <field name="customer_phone"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="note" placeholder="Əlavə qeydlər..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Traktor Gəlir Pivot View -->
+        <record id="view_farm_tractor_income_pivot" model="ir.ui.view">
+            <field name="name">farm.tractor.income.pivot</field>
+            <field name="model">farm.tractor.income</field>
+            <field name="arch" type="xml">
+                <pivot string="Traktor Gəlirləri Pivot">
+                    <field name="income_date" type="row"/>
+                    <field name="tractor_name" type="row"/>
+                    <field name="income_type" type="row"/>
+                    <field name="customer_name" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Traktor Gəlir Graph View -->
+        <record id="view_farm_tractor_income_graph" model="ir.ui.view">
+            <field name="name">farm.tractor.income.graph</field>
+            <field name="model">farm.tractor.income</field>
+            <field name="arch" type="xml">
+                <graph string="Traktor Gəlirləri Qrafiği" type="bar">
+                    <field name="income_date" type="row"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -91,6 +91,19 @@ class FarmField(models.Model):
             if record.area_hectare <= 0:
                 raise ValidationError('Sahənin ölçüsü müsbət olmalıdır!')
 
+    def action_view_dashboard(self):
+        """Sahə üçün dashboard aç"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': f'{self.name} - Dashboard',
+            'res_model': 'farm.dashboard.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_field_id': self.id,
+            }
+        }
+
     # SQL constraints üçün unikal kod təmin edilir
     _sql_constraints = [
         ('code_unique', 'unique(code)', 'Sahə kodu unikal olmalıdır!'),

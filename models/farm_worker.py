@@ -18,11 +18,10 @@ class FarmWorker(models.Model):
     # Status və məlumatlar
     active = fields.Boolean('Aktiv', default=True)
     hire_date = fields.Date('İşə Başlama Tarixi', default=fields.Date.today, tracking=True)
-    hourly_rate = fields.Float('Saatlıq Tarif', required=True, default=0.0, tracking=True)
+    salary = fields.Float('Maaş', required=True, tracking=True)
 
     # Hesablanmış sahələr
     total_operations = fields.Integer('Ümumi Əməliyyat Sayı', compute='_compute_statistics', store=True)
-    total_hours = fields.Float('Ümumi İş Saatı', compute='_compute_statistics', store=True)
     total_earned = fields.Float('Əməliyyat Qazancı', compute='_compute_statistics', store=True)
     total_paid = fields.Float('Ümumi Ödəniş', compute='_compute_total_paid', store=True)
     balance = fields.Float('Balans', compute='_compute_balance', store=True)
@@ -51,15 +50,6 @@ class FarmWorker(models.Model):
                               len(worker.treatment_line_ids) + len(worker.pruning_line_ids) +
                               len(worker.harvest_line_ids) + len(worker.cold_storage_line_ids))
             
-            total_hours = (sum(line.hours_worked for line in worker.plowing_line_ids) +
-                          sum(line.hours_worked for line in worker.planting_line_ids) +
-                          sum(line.hours_worked for line in worker.irrigation_line_ids) +
-                          sum(line.hours_worked for line in worker.fertilizing_line_ids) +
-                          sum(line.hours_worked for line in worker.treatment_line_ids) +
-                          sum(line.hours_worked for line in worker.pruning_line_ids) +
-                          sum(line.hours_worked for line in worker.harvest_line_ids) +
-                          sum(line.hours_worked for line in worker.cold_storage_line_ids))
-            
             total_earned = (sum(line.amount for line in worker.plowing_line_ids) +
                            sum(line.amount for line in worker.planting_line_ids) +
                            sum(line.amount for line in worker.irrigation_line_ids) +
@@ -70,7 +60,6 @@ class FarmWorker(models.Model):
                            sum(line.amount for line in worker.cold_storage_line_ids))
             
             worker.total_operations = total_operations
-            worker.total_hours = total_hours
             worker.total_earned = total_earned
 
     @api.depends('payment_line_ids.amount')
@@ -82,12 +71,6 @@ class FarmWorker(models.Model):
     def _compute_balance(self):
         for worker in self:
             worker.balance = worker.total_earned + worker.total_paid
-
-    @api.constrains('hourly_rate')
-    def _check_hourly_rate(self):
-        for worker in self:
-            if worker.hourly_rate < 0:
-                raise ValidationError('Saatlıq tarif mənfi ola bilməz!')
 
     @api.constrains('employee_code')
     def _check_unique_code(self):

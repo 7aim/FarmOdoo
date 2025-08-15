@@ -158,9 +158,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -243,9 +241,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -326,9 +322,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -422,9 +416,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -516,9 +508,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -715,9 +705,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -799,9 +787,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">
@@ -998,9 +984,7 @@
                             <field name="worker_line_ids">
                                 <list editable="bottom">
                                     <field name="worker_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="amount" sum="Cəmi Xərc" readonly="1"/>
+                                    <field name="amount" sum="Cəmi Xərc"/>
                                 </list>
                             </field>
                             <group class="oe_subtotal_footer oe_right">

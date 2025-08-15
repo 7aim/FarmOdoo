@@ -17,13 +17,10 @@
                                 <field name="registration_number"/>
                             </group>
                             <group string="Məhsul Xüsusiyyətləri">
-                                <field name="formulation"/>
+                                <field name="active_ingredient"/>
                                 <field name="concentration"/>
                                 <field name="expiry_months"/>
                             </group>
-                        </group>
-                        <group string="Təsir Edici Ana Maddə">
-                            <field name="active_ingredient" placeholder="Məhsulun təsir edici ana maddələrini daxil edin..."/>
                         </group>
                         <group string="Saxlama Şəraiti">
                             <field name="storage_conditions" placeholder="Saxlama şərtlərini qeyd edin (temperatur, rütubət və s.)..."/>
@@ -33,10 +30,6 @@
                 
                 <!-- Ümumi məlumatlar səhifəsində də əsas sahələri göstər -->
                 <xpath expr="//group[@name='group_general']" position="after">
-                    <group string="İstehsalçı" name="manufacturer_basic" col="2">
-                        <field name="manufacturer_company"/>
-                        <field name="manufacturer_country_id"/>
-                    </group>
                 </xpath>
             </field>
         </record>
@@ -77,7 +70,6 @@
                     <group expand="0" string="Group By">
                         <filter name="group_by_manufacturer" string="İstehsalçı Firma" context="{'group_by': 'manufacturer_company'}"/>
                         <filter name="group_by_country" string="İstehsalçı Ölkə" context="{'group_by': 'manufacturer_country_id'}"/>
-                        <filter name="group_by_formulation" string="Formulyasiya" context="{'group_by': 'formulation'}"/>
                     </group>
                 </xpath>
             </field>
@@ -99,13 +91,10 @@
                                 <field name="registration_number"/>
                             </group>
                             <group string="Məhsul Xüsusiyyətləri">
-                                <field name="formulation"/>
+                                <field name="active_ingredient"/>
                                 <field name="concentration"/>
                                 <field name="expiry_months"/>
                             </group>
-                        </group>
-                        <group string="Təsir Edici Ana Maddə">
-                            <field name="active_ingredient" placeholder="Məhsulun təsir edici ana maddələrini daxil edin..."/>
                         </group>
                         <group string="Saxlama Şəraiti">
                             <field name="storage_conditions" placeholder="Saxlama şərtlərini qeyd edin..."/>

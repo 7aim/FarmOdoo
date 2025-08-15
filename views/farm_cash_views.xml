@@ -82,6 +82,7 @@
                                 <field name="subsidy_income" string="Subsidiya" readonly="1"/>
                                 <field name="debt_income" string="Borc" readonly="1"/>
                                 <field name="founder_investments_total" string="Təsisçi İnvestisiyası" readonly="1"/>
+                                <field name="tractor_income_total" string="Traktor Gəliri" readonly="1"/>
                                 <field name="other_income" string="Mədaxil" readonly="1"/>
                                 <field name="total_income" string="Ümumi Gəlir" readonly="1"/>
                             </group>

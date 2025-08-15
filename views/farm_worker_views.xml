@@ -23,9 +23,8 @@
                 <field name="employee_code"/>
                 <field name="name"/>
                 <field name="phone"/>
-                <field name="hourly_rate"/>
+                <field name="salary"/>
                 <field name="total_operations"/>
-                <field name="total_hours"/>
                 <field name="total_earned"/>
                 <field name="total_paid"/>
                 <field name="balance"/>
@@ -52,8 +51,7 @@
                                 <span class="o_stat_text">Ümumi Ödəniş</span>
                             </div>
                         </button>
-                    </div>
-                    
+                    </div>              
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
@@ -64,8 +62,7 @@
                         </group>
                         <group string="İş Məlumatları">
                             <field name="hire_date"/>
-                            <field name="hourly_rate"/>
-                            <field name="total_hours" readonly="1"/>
+                            <field name="salary"/>
                             <field name="balance" readonly="1"/>
                         </group>
                     </group>
@@ -96,7 +93,6 @@
                             <group>
                                 <group string="Ümumi Statistika">
                                     <field name="total_operations"/>
-                                    <field name="total_hours"/>
                                     <field name="total_earned"/>
                                 </group>
                             </group>
@@ -106,8 +102,6 @@
                             <field name="plowing_line_ids" readonly="1">
                                 <list>
                                     <field name="plowing_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -117,8 +111,6 @@
                             <field name="planting_line_ids" readonly="1">
                                 <list>
                                     <field name="planting_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -128,8 +120,6 @@
                             <field name="irrigation_line_ids" readonly="1">
                                 <list>
                                     <field name="irrigation_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -139,8 +129,6 @@
                             <field name="fertilizing_line_ids" readonly="1">
                                 <list>
                                     <field name="fertilizing_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -150,8 +138,6 @@
                             <field name="treatment_line_ids" readonly="1">
                                 <list>
                                     <field name="treatment_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -161,8 +147,6 @@
                             <field name="pruning_line_ids" readonly="1">
                                 <list>
                                     <field name="pruning_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -172,8 +156,6 @@
                             <field name="harvest_line_ids" readonly="1">
                                 <list>
                                     <field name="harvest_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -183,8 +165,6 @@
                             <field name="cold_storage_line_ids" readonly="1">
                                 <list>
                                     <field name="cold_storage_id"/>
-                                    <field name="hours_worked"/>
-                                    <field name="hourly_rate"/>
                                     <field name="amount"/>
                                 </list>
                             </field>
@@ -207,7 +187,6 @@
                 <field name="payment_type"/>
                 <field name="amount" sum="Cəmi"/>
                 <field name="description"/>
-                <field name="reference"/>
             </list>
         </field>
     </record>
@@ -225,9 +204,6 @@
                             <field name="payment_date"/>
                             <field name="amount"/>
                             <field name="payment_type"/>
-                        </group>
-                        <group string="Əlavə Məlumatlar">
-                            <field name="reference"/>
                         </group>
                     </group>
                     <group string="Açıqlama">
@@ -247,7 +223,6 @@
             <pivot string="İşçilər Pivot">
                 <field name="active" type="row"/>
                 <field name="hire_date" type="row"/>
-                <field name="hourly_rate" type="measure"/>
                 <field name="total_earned" type="measure"/>
                 <field name="total_paid" type="measure"/>
             </pivot>
@@ -266,5 +241,4 @@
             </pivot>
         </field>
     </record>
-
 </odoo>

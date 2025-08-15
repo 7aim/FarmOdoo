@@ -18,7 +18,7 @@ class ProductTemplate(models.Model):
     )
     
     # Təsir edici ana maddə
-    active_ingredient = fields.Text(
+    active_ingredient = fields.Char(
         string='Təsir Edici Ana Maddə',
         help='Məhsulun təsir edici ana maddələri (kimyəvi tərkib)'
     )
@@ -28,16 +28,6 @@ class ProductTemplate(models.Model):
         string='Konsentrasiya',
         help='Ana maddənin konsentrasiyası (məs: 20%, 50ml/l)'
     )
-    
-    formulation = fields.Selection([
-        ('liquid', 'Maye'),
-        ('powder', 'Toz'),
-        ('granule', 'Qranul'),
-        ('gel', 'Gel'),
-        ('spray', 'Sprey'),
-        ('tablet', 'Tablet'),
-        ('other', 'Digər')
-    ], string='Formulyasiya', help='Məhsulun fiziki forması')
     
     registration_number = fields.Char(
         string='Qeydiyyat Nömrəsi',

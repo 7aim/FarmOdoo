@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Wizard Form View -->
+    <record id="view_farm_dashboard_wizard_form" model="ir.ui.view">
+        <field name="name">farm.dashboard.wizard.form</field>
+        <field name="model">farm.dashboard.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sahə Dashboard">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            📊 <field name="field_id" readonly="1" style="font-size: 24px;"/>
+                        </h1>
+                        <h3 style="color: #875A7B;">
+                            Dashboard Məlumatları
+                        </h3>
+                    </div>
+
+                    <!-- Filtr və düymələr -->
+                    <group>
+                        <group string="📅 Filtr">
+                            <field name="year" style="font-weight: bold;"/>
+                            <field name="month" style="font-weight: bold;"/>
+                        </group>
+                        <group string="⚡ Əməliyyatlar">
+                            <button name="action_refresh" string="🔄 Yenilə" type="object" class="btn-primary"/>
+                            <button name="action_print_report" string="🖨️ Hesabat" type="object" class="btn-info"/>
+                            <field name="calculation_date" readonly="1" string="📆 Son Yenilənmə"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Əsas Məlumatlar -->
+                        <page string="📊 Əsas Məlumatlar">
+                            <group>
+                                <group string="🏞️ Sahə Məlumatları">
+                                    <field name="area_hectare" widget="float" string="📐 Sahə Ölçüsü (Hektar)"/>
+                                    <field name="total_parcels" string="📋 Parsel Sayı"/>
+                                    <field name="total_rows" string="📏 Cərgə Sayı"/>
+                                    <field name="total_trees" string="🌳 Ağac Sayı"/>
+                                </group>
+                                <group string="💰 Ümumi Xərclər">
+                                    <field name="total_expenses" widget="monetary" 
+                                           style="font-size: 18px; font-weight: bold; color: #d73527;"/>
+                                    <field name="cost_per_tree" widget="monetary" 
+                                           style="font-size: 16px; font-weight: bold; color: #875A7B;"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Gübrə Məlumatları -->
+                        <page string="🌱 Gübrə">
+                            <group>
+                                <group string="🧪 Gübrə Xərcləri">
+                                    <field name="total_fertilizer_cost" widget="monetary" 
+                                           style="font-weight: bold; color: #28a745;"/>
+                                    <field name="fertilizer_per_tree" widget="monetary"/>
+                                    <field name="last_fertilizing_date" string="📅 Son Gübrələmə"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Su / Sulama -->
+                        <page string="💧 Su / Sulama">
+                            <group>
+                                <group string="💦 Su Xərcləri">
+                                    <field name="total_water_cost" widget="monetary" 
+                                           style="font-weight: bold; color: #17a2b8;"/>
+                                    <field name="water_per_tree" widget="monetary"/>
+                                    <field name="total_irrigation_count" string="🔢 Sulama Sayı"/>
+                                    <field name="last_irrigation_date" string="📅 Son Sulama"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- İşçi Xərcləri -->
+                        <page string="👷 İşçi Xərcləri">
+                            <group>
+                                <group string="👥 İşçi Məlumatları">
+                                    <field name="total_worker_cost" widget="monetary" 
+                                           style="font-weight: bold; color: #fd7e14;"/>
+                                    <field name="worker_cost_per_tree" widget="monetary"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Digər Xərclər -->
+                        <page string="🏭 Digər Xərclər">
+                            <group>
+                                <group string="🔧 Material">
+                                    <field name="total_material_cost" widget="monetary"/>
+                                    <field name="material_cost_per_tree" widget="monetary"/>
+                                </group>
+                                <group string="🚜 Traktor">
+                                    <field name="total_tractor_cost" widget="monetary"/>
+                                    <field name="tractor_cost_per_tree" widget="monetary"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="⛽ Diesel">
+                                    <field name="total_diesel_cost" widget="monetary"/>
+                                    <field name="diesel_cost_per_tree" widget="monetary"/>
+                                </group>
+                                <group string="🏨 Hotel">
+                                    <field name="total_hotel_cost" widget="monetary"/>
+                                    <field name="hotel_cost_per_tree" widget="monetary"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="🏢 Kommunal">
+                                    <field name="total_communal_cost" widget="monetary"/>
+                                    <field name="communal_cost_per_tree" widget="monetary"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Son Əməliyyatlar -->
+                        <page string="📋 Son Əməliyyatlar">
+                            <group>
+                                <group string="🔄 Sahə Əməliyyatları">
+                                    <field name="last_plowing_date" string="🚜 Son Şumlama"/>
+                                    <field name="last_treatment_date" string="💊 Son Müalicə"/>
+                                    <field name="last_pruning_date" string="✂️ Son Budama"/>
+                                    <field name="last_harvest_date" string="🍎 Son Məhsul Yığımı"/>
+                                </group>
+                                <group string="🦠 Xəstəliklər">
+                                    <field name="disease_count" string="⚠️ Aktiv Xəstəlik Sayı"/>
+                                    <field name="active_diseases" widget="text" 
+                                           string="📝 Aktiv Xəstəliklər"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Wizard Action -->
+    <record id="action_farm_dashboard_wizard" model="ir.actions.act_window">
+        <field name="name">Sahə Dashboard</field>
+        <field name="res_model">farm.dashboard.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_field_id': active_id}</field>
+    </record>
+
+</odoo>

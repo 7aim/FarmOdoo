@@ -36,6 +36,7 @@ access_farm_additional_expense,farm.additional.expense,model_farm_additional_exp
 access_farm_communal_expense,farm.communal.expense,model_farm_communal_expense,,1,1,1,1
 access_farm_diesel_expense,farm.diesel.expense,model_farm_diesel_expense,,1,1,1,1
 access_farm_tractor_expense,farm.tractor.expense,model_farm_tractor_expense,,1,1,1,1
+access_farm_tractor_income,farm.tractor.income,model_farm_tractor_income,,1,1,1,1
 access_farm_material_expense,farm.material.expense,model_farm_material_expense,,1,1,1,1
 access_farm_hotel_expense,farm.hotel.expense,model_farm_hotel_expense,,1,1,1,1
 access_farm_cash_flow,farm.cash.flow,model_farm_cash_flow,,1,1,1,1
@@ -45,3 +46,4 @@ access_farm_founder_debt,farm.founder.debt,model_farm_founder_debt,,1,1,1,1
 access_farm_founder_investment,farm.founder.investment,model_farm_founder_investment,,1,1,1,1
 access_farm_founder_expense,farm.founder.expense,model_farm_founder_expense,,1,1,1,1
 access_farm_expense_report,farm.expense.report,model_farm_expense_report,,1,0,0,0
+access_farm_dashboard,farm.dashboard,model_farm_dashboard,,1,1,1,1

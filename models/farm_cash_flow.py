@@ -155,7 +155,10 @@ class FarmCashFlow(models.Model):
         # Təsisçi investisiyaları
         founder_investments = sum(self.env['farm.founder.investment'].search([]).mapped('amount'))
         
-        return cash_income + founder_investments
+        # Traktor gəlirləri
+        tractor_income = sum(self.env['farm.tractor.income'].search([]).mapped('amount'))
+        
+        return cash_income + founder_investments + tractor_income
     
     def _get_total_expense(self):
         """Ümumi xərc hesabla"""
@@ -218,6 +221,7 @@ class FarmCashFlow(models.Model):
             'debt_income': 0,
             'other_income': 0,
             'founder_investments': 0,
+            'tractor_income': 0,
             'total_income': 0
         }
         
@@ -236,8 +240,11 @@ class FarmCashFlow(models.Model):
         # Təsisçi investisiyaları
         result['founder_investments'] = sum(self.env['farm.founder.investment'].search([]).mapped('amount'))
         
+        # Traktor gəlirləri
+        result['tractor_income'] = sum(self.env['farm.tractor.income'].search([]).mapped('amount'))
+        
         result['total_income'] = (result['subsidy_income'] + result['debt_income'] + result['other_income'] + 
-                                result['founder_investments'])
+                                result['founder_investments'] + result['tractor_income'])
         
         return result
 
@@ -250,6 +257,7 @@ class FarmCashBalance(models.TransientModel):
     debt_income = fields.Float('Borc Gəlirləri')
     other_income = fields.Float('Digər Gəlir')
     founder_investments_total = fields.Float('Təsisçi İnvestisiyaları')
+    tractor_income_total = fields.Float('Traktor Gəlirləri')
     total_income = fields.Float('Ümumi Mədaxil')
     
     # Xərc məlumatları
@@ -287,6 +295,7 @@ class FarmCashBalance(models.TransientModel):
             'debt_income': income_data['debt_income'],
             'other_income': income_data['other_income'],
             'founder_investments_total': income_data['founder_investments'],
+            'tractor_income_total': income_data['tractor_income'],
             'cash_expense_only': cash_expense_only,
             'founder_expenses_total': founder_expenses,
             'expense_report_total': expense_report_expenses,

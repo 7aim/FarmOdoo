@@ -12,8 +12,11 @@ from . import purchase_order
 from . import farm_communal_expense
 from . import farm_diesel_expense
 from . import farm_tractor_expense
+from . import farm_tractor_income
 from . import farm_material_expense
 from . import farm_hotel_expense
 from . import farm_cash_flow
 from . import farm_expense_report
 from . import product_template
+from . import farm_dashboard
+from . import farm_dashboard_wizard
