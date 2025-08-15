@@ -11,6 +11,11 @@ class FarmWorker(models.Model):
 
     name = fields.Char('İşçi Adı', required=True, tracking=True)
     employee_code = fields.Char('İşçi Kodu', required=True, tracking=True)
+    worker_type = fields.Selection([
+        ('skilled', 'Fəhlə'),
+        ('general', 'Ümumi İşçi')
+    ], string='İşçi Növü', default='general', required=True, tracking=True)
+    field_id = fields.Many2one('farm.field', string='Əsas İş Sahəsi', ondelete='set null', tracking=True)
     phone = fields.Char('Telefon', tracking=True)
     email = fields.Char('Email', tracking=True)
     address = fields.Text('Ünvan', tracking=True)

@@ -625,6 +625,7 @@ class FarmAdditionalExpense(models.Model):
         ('material', 'Material'),
         ('service', 'Xidmət'),
         ('maintenance', 'Təmir'),
+        ('skilled_worker', 'Fəhlə'),
         ('other', 'Digər')
     ], string='Xərc Növü', required=True, default='other')
     expense_date = fields.Date('Xərc Tarixi', default=fields.Date.today)

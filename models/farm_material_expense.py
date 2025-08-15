@@ -11,6 +11,7 @@ class FarmMaterialExpense(models.Model):
 
     name = fields.Char('Xərc Adı', required=True, default='Mal-Material Xərci')
     expense_date = fields.Date('Tarix', required=True, default=fields.Date.today)
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True, ondelete='cascade')
     amount = fields.Float('Məbləğ', required=True)
     note = fields.Text('Qeyd')
     

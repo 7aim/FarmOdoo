@@ -15,6 +15,7 @@
             <field name="arch" type="xml">
                 <list string="Kommunal Xərclər">
                     <field name="expense_date"/>
+                    <field name="field_id"/>
                     <field name="name"/>
                     <field name="communal_type"/>
                     <field name="amount" sum="Cəm"/>
@@ -31,6 +32,7 @@
                     <sheet>
                         <group>
                             <group>
+                                <field name="field_id"/>
                                 <field name="name"/>
                                 <field name="expense_date"/>
                             </group>

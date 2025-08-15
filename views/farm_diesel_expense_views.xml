@@ -15,6 +15,7 @@
             <field name="arch" type="xml">
                 <list string="Dizel Xərclər">
                     <field name="expense_date"/>
+                    <field name="field_id"/>
                     <field name="name"/>
                     <field name="fuel_station"/>
                     <field name="liters"/>
@@ -33,6 +34,7 @@
                     <sheet>
                         <group>
                             <group>
+                                <field name="field_id"/>
                                 <field name="name"/>
                                 <field name="expense_date"/>
                                 <field name="fuel_station"/>

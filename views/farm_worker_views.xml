@@ -22,6 +22,8 @@
             <list string="İşçilər">
                 <field name="employee_code"/>
                 <field name="name"/>
+                <field name="worker_type"/>
+                <field name="field_id"/>
                 <field name="phone"/>
                 <field name="salary"/>
                 <field name="total_operations"/>
@@ -56,6 +58,8 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
                             <field name="employee_code"/>
+                            <field name="worker_type"/>
+                            <field name="field_id"/>
                             <field name="phone"/>
                             <field name="email"/>
                             <field name="active"/>
