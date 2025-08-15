@@ -568,27 +568,7 @@
         </field>
     </record>
 
-    <!-- Proqnoz Action -->
-    <record id="farm_forecast_action" model="ir.actions.act_window">
-        <field name="name">Proqnozlaşdırma</field>
-        <field name="res_model">farm.forecast</field>
-        <field name="view_mode">list,form,pivot</field>
-    </record>
 
-    <!-- Proqnoz Pivot View -->
-    <record id="view_farm_forecast_pivot" model="ir.ui.view">
-        <field name="name">farm.forecast.pivot</field>
-        <field name="model">farm.forecast</field>
-        <field name="arch" type="xml">
-            <pivot string="Proqnoz Pivot">
-                <field name="forecast_year" type="row"/>
-                <field name="forecast_month" type="row"/>
-                <field name="field_id" type="row"/>
-                <field name="expected_quantity_kg" type="measure"/>
-                <field name="confidence_level" type="measure"/>
-            </pivot>
-        </field>
-    </record>
 
     <!-- Zərərçəkmiş Ağaclar Action -->
     <record id="farm_damaged_trees_action" model="ir.actions.act_window">
@@ -818,59 +798,6 @@
         </field>
     </record>
 
-    <!-- Proqnoz Views -->
-    <record id="farm_forecast_list_view" model="ir.ui.view">
-        <field name="name">farm.forecast.list</field>
-        <field name="model">farm.forecast</field>
-        <field name="arch" type="xml">
-            <list string="Proqnozlar">
-                <field name="name"/>
-                <field name="forecast_year"/>
-                <field name="forecast_month"/>
-                <field name="field_id"/>
-                <field name="parcel_ids" widget="many2many_tags"/>
-                <field name="row_ids" widget="many2many_tags"/>
-                <field name="tree_ids" widget="many2many_tags"/>
-                <field name="expected_quantity_kg"/>
-                <field name="climate_risk_factor"/>
-                <field name="confidence_level"/>
-                <field name="historical_data_based"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="farm_forecast_form_view" model="ir.ui.view">
-        <field name="name">farm.forecast.form</field>
-        <field name="model">farm.forecast</field>
-        <field name="arch" type="xml">
-            <form string="Proqnozlaşdırma">
-                <sheet>
-                    <group>
-                        <group string="Əsas Məlumatlar">
-                            <field name="name"/>
-                            <field name="forecast_year"/>
-                            <field name="forecast_month"/>
-                            <field name="field_id"/>
-                            <field name="parcel_ids" widget="many2many_tags"/>
-                            <field name="row_ids" widget="many2many_tags"/>
-                            <field name="tree_ids" widget="many2many_tags"/>
-                        </group>
-                        <group string="Proqnoz Məlumatları">
-                            <field name="expected_quantity_kg"/>
-                            <field name="climate_risk_factor"/>
-                            <field name="confidence_level"/>
-                            <field name="historical_data_based"/>
-                        </group>
-                    </group>
-                    <group string="Analiz və Qeydlər">
-                        <field name="notes" nolabel="1"/>
-                    </group>
-                </sheet>
-                <chatter/>
-            </form>
-        </field>
-    </record>
-
     <!-- Zərərçəkmiş Ağaclar Views -->
     <record id="farm_damaged_trees_list_view" model="ir.ui.view">
         <field name="name">farm.damaged.trees.list</field>
@@ -1038,19 +965,9 @@
                     <group>
                         <group string="Əsas Məlumatlar">
                             <field name="name"/>
+                            <field name="expense_date"/>
                             <field name="expense_type"/>
                             <field name="amount"/>
-                            <field name="expense_date"/>
-                        </group>
-                        <group string="Əlaqəli Əməliyyat">
-                            <field name="plowing_id"/>
-                            <field name="planting_id"/>
-                            <field name="irrigation_id"/>
-                            <field name="fertilizing_id"/>
-                            <field name="treatment_id"/>
-                            <field name="pruning_id"/>
-                            <field name="harvest_id"/>
-                            <field name="cold_storage_id"/>
                         </group>
                     </group>
                     <group string="Açıqlama">

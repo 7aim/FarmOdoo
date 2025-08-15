@@ -14,9 +14,9 @@
             <field name="model">farm.tractor.expense</field>
             <field name="arch" type="xml">
                 <list string="Traktor Xərclər">
+                    <field name="name"/>
                     <field name="expense_date"/>
                     <field name="field_id"/>
-                    <field name="name"/>
                     <field name="tractor_name"/>
                     <field name="expense_type"/>
                     <field name="amount" sum="Cəm"/>
@@ -31,19 +31,17 @@
             <field name="arch" type="xml">
                 <form string="Traktor Xərc">
                     <sheet>
-                        <group>
+                        <group string="Ümumi Məlumatlar">
                             <group>
-                                <field name="field_id"/>
                                 <field name="name"/>
                                 <field name="expense_date"/>
+                                <field name="field_id"/>
                                 <field name="tractor_name"/>
-                            </group>
-                            <group>
                                 <field name="expense_type"/>
                                 <field name="amount"/>
                             </group>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>

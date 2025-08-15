@@ -14,9 +14,9 @@
             <field name="model">farm.communal.expense</field>
             <field name="arch" type="xml">
                 <list string="Kommunal Xərclər">
+                    <field name="name"/>
                     <field name="expense_date"/>
                     <field name="field_id"/>
-                    <field name="name"/>
                     <field name="communal_type"/>
                     <field name="amount" sum="Cəm"/>
                 </list>
@@ -30,18 +30,16 @@
             <field name="arch" type="xml">
                 <form string="Kommunal Xərc">
                     <sheet>
-                        <group>
+                        <group string="Ümumi Məlumatlar">
                             <group>
-                                <field name="field_id"/>
                                 <field name="name"/>
                                 <field name="expense_date"/>
-                            </group>
-                            <group>
+                                <field name="field_id"/>
                                 <field name="communal_type"/>
                                 <field name="amount"/>
                             </group>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>

@@ -14,9 +14,9 @@
             <field name="model">farm.hotel.expense</field>
             <field name="arch" type="xml">
                 <list string="Otel Xərclər">
+                    <field name="name"/>
                     <field name="expense_date"/>
                     <field name="field_id"/>
-                    <field name="name"/>
                     <field name="hotel_name"/>
                     <field name="amount" sum="Cəm"/>
                 </list>
@@ -30,16 +30,16 @@
             <field name="arch" type="xml">
                 <form string="Otel Xərc">
                     <sheet>
-                        <group>
+                        <group string="Ümumi Məlumatlar">
                             <group>
-                                <field name="field_id"/>
                                 <field name="name"/>
                                 <field name="expense_date"/>
+                                <field name="field_id"/>
                                 <field name="hotel_name"/>
                                 <field name="amount"/>
                             </group>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>

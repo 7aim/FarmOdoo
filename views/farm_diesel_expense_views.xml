@@ -14,9 +14,9 @@
             <field name="model">farm.diesel.expense</field>
             <field name="arch" type="xml">
                 <list string="Dizel Xərclər">
+                    <field name="name"/>
                     <field name="expense_date"/>
                     <field name="field_id"/>
-                    <field name="name"/>
                     <field name="fuel_station"/>
                     <field name="liters"/>
                     <field name="price_per_liter"/>
@@ -32,20 +32,18 @@
             <field name="arch" type="xml">
                 <form string="Dizel Xərc">
                     <sheet>
-                        <group>
+                        <group string="Ümumi Məlumatlar">
                             <group>
-                                <field name="field_id"/>
                                 <field name="name"/>
                                 <field name="expense_date"/>
+                                <field name="field_id"/>
                                 <field name="fuel_station"/>
-                            </group>
-                            <group>
                                 <field name="liters"/>
                                 <field name="price_per_liter"/>
                                 <field name="amount"/>
                             </group>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>

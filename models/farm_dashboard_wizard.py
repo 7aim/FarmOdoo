@@ -386,3 +386,4 @@ class FarmDashboardWizard(models.TransientModel):
     def action_print_report(self):
         """Dashboard hesabatını çıxart"""
         return self.env.ref('farm_agriculture_v2.action_report_farm_dashboard').report_action(self)
+    
