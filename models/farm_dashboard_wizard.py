@@ -18,10 +18,11 @@ class FarmDashboardWizard(models.TransientModel):
     
     # Filtr parametrləri
     date_filter = fields.Selection([
-        ('month', 'Ay üzrə'),
+        ('all', 'Bütün Tarixlər'),
         ('year', 'İl üzrə'),
+        ('month', 'Ay üzrə'),
         ('custom', 'Özel Tarix')
-    ], string='📅 Filtr Növü', default='month', required=True)
+    ], string='📅 Filtr Növü', default='all', required=True)
     date_from = fields.Date('📅 Başlanğıc Tarix')
     date_to = fields.Date('📅 Bitmə Tarix')
     
@@ -113,7 +114,11 @@ class FarmDashboardWizard(models.TransientModel):
             return
             
         # Tarix filtrini müəyyən et
-        if self.date_filter == 'custom' and self.date_from and self.date_to:
+        if self.date_filter == 'all':
+            # Bütün tarixlər - məhdudiyyətsiz
+            date_from = fields.Date.from_string('1900-01-01')
+            date_to = fields.Date.from_string('2099-12-31')
+        elif self.date_filter == 'custom' and self.date_from and self.date_to:
             date_from = self.date_from
             date_to = self.date_to
         elif self.date_filter == 'year' or self.month == 'all':
@@ -371,6 +376,11 @@ class FarmDashboardWizard(models.TransientModel):
         })
         
         return dashboard_data
+
+    @api.onchange('date_filter', 'year', 'month', 'date_from', 'date_to')
+    def _onchange_date_filter(self):
+        """Tarix filtri dəyişəndə dashboard məlumatlarını yenilə"""
+        self._calculate_dashboard_data()
 
     def action_refresh(self):
         """Dashboard məlumatlarını yenilə"""

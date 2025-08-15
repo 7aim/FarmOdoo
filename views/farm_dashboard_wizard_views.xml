@@ -15,27 +15,23 @@
                             Dashboard Məlumatları
                         </h3>
                     </div>
-
-                    <!-- Filtr və düymələr -->
-                    <group>
-                        <group string="📅 Filtr">
-                            <field name="date_filter" widget="radio"/>
-                            <field name="year" style="font-weight: bold;"/>
-                            <field name="month" style="font-weight: bold;" 
-                                   invisible="date_filter != 'month'"/>
-                            <field name="date_from" 
-                                   invisible="date_filter != 'custom'"
-                                   required="date_filter == 'custom'"/>
-                            <field name="date_to" 
-                                   invisible="date_filter != 'custom'"
-                                   required="date_filter == 'custom'"/>
+                    <!-- Tarix Filtr Hissəsi -->
+                    <group string="📅 Tarix Filtri" col="4">
+                        <field name="date_filter" widget="selection" colspan="2"/>
+                        <field name="year" invisible="date_filter not in ['year', 'month']"/>
+                        <field name="month" invisible="date_filter != 'month'"/>
+                        <group name="name" string="Tarix Aralığı" invisible="date_filter != 'custom'">
+                            <field name="date_from" invisible="date_filter != 'custom'" 
+                                required="date_filter == 'custom'" colspan="2"/>
+                            <field name="date_to" invisible="date_filter != 'custom'" 
+                                required="date_filter == 'custom'" colspan="2"/>                         
                         </group>
-                        <group string="⚡ Əməliyyatlar">
+                    </group>
+                        <!--<group string="⚡ Əməliyyatlar">
                             <button name="action_refresh" string="🔄 Yenilə" type="object" class="btn-primary"/>
                             <button name="action_print_report" string="🖨️ Hesabat" type="object" class="btn-info"/>
                             <field name="calculation_date" readonly="1" string="📆 Son Yenilənmə"/>
-                        </group>
-                    </group>
+                        </group> -->
 
                     <notebook>
                         <!-- Əsas Məlumatlar -->
