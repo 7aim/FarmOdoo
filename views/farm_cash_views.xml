@@ -23,18 +23,14 @@
             <field name="arch" type="xml">
                 <form string="Kassa Hərəkatı">
                     <sheet>
-                        <group>
-                            <group>
-                                <field name="name"/>
-                                <field name="date"/>
-                                <field name="transaction_type"/>
-                            </group>
-                            <group>
-                                <field name="amount"/>
-                                <field name="reference"/>
-                            </group>
+                        <group string="Ümumi Məlumatlar">
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="transaction_type"/>
+                            <field name="amount"/>
+                            <field name="reference"/>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>
@@ -226,7 +222,6 @@
                     <field name="founder_id"/>
                     <field name="name"/>
                     <field name="amount" sum="Cəm"/>
-                    <field name="reference"/>
                 </list>
             </field>
         </record>
@@ -238,18 +233,13 @@
             <field name="arch" type="xml">
                 <form string="Təsisçi İnvestisiyası">
                     <sheet>
-                        <group>
-                            <group>
-                                <field name="founder_id"/>
-                                <field name="name"/>
-                                <field name="date"/>
-                            </group>
-                            <group>
-                                <field name="amount"/>
-                                <field name="reference"/>
-                            </group>
+                        <group string="Ümumi Məlumatlar">
+                            <field name="founder_id"/>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="amount"/>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>
@@ -275,7 +265,6 @@
                     <field name="name"/>
                     <field name="expense_type"/>
                     <field name="amount" sum="Cəm"/>
-                    <field name="reference"/>
                 </list>
             </field>
         </record>
@@ -287,19 +276,14 @@
             <field name="arch" type="xml">
                 <form string="Təsisçi Xərci">
                     <sheet>
-                        <group>
-                            <group>
-                                <field name="founder_id"/>
-                                <field name="name"/>
-                                <field name="date"/>
-                                <field name="expense_type"/>
-                            </group>
-                            <group>
-                                <field name="amount"/>
-                                <field name="reference"/>
-                            </group>
+                        <group string="Ümumi Məlumatlar">
+                            <field name="founder_id"/>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="expense_type"/>
+                            <field name="amount"/>
                         </group>
-                        <group>
+                        <group string="Əlavə Qeydlər">
                             <field name="note" placeholder="Əlavə qeydlər..."/>
                         </group>
                     </sheet>

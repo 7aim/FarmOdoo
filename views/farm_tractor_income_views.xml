@@ -40,7 +40,6 @@
                             <group string="Müştəri Məlumatları">
                                 <field name="tractor_name"/>
                                 <field name="customer_name"/>
-                                <field name="customer_phone"/>
                                 <field name="amount"/>
                             </group>
                         </group>

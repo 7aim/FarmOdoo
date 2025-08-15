@@ -286,6 +286,7 @@
                 <field name="irrigation_type"/>
                 <field name="operator_id"/>
                 <field name="water_liters" sum="Cəmi Su"/>
+                <field name="water_cost" sum="Cəmi Su Xərci"/>
                 <field name="irrigation_date"/>
                 <field name="total_worker_cost"/>
                 <field name="total_additional_cost"/>
@@ -311,7 +312,7 @@
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>
                             <field name="water_liters"/>
-                            <!--<field name="water_cost"/>-->
+                            <field name="water_cost"/>
                             <field name="water_source"/>
                             <field name="operator_id"/>
                             <field name="irrigation_date"/>

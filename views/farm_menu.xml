@@ -68,7 +68,7 @@
               action="action_farm_hotel_expense" sequence="10"/>
     <menuitem id="farm_diesel_expense_menu" name="Dizel" parent="farm_other_expenses_menu" 
               action="action_farm_diesel_expense" sequence="20"/>
-    <menuitem id="farm_tractor_expense_menu" name="Traktor Xərclər" parent="farm_other_expenses_menu" 
+    <menuitem id="farm_tractor_expense_menu" name="Traktor" parent="farm_other_expenses_menu" 
               action="action_farm_tractor_expense" sequence="30"/>
     <menuitem id="farm_communal_expense_menu" name="Kommunal" parent="farm_other_expenses_menu" 
               action="action_farm_communal_expense" sequence="40"/>
@@ -88,7 +88,7 @@
 
     <menuitem id="farm_purchase_orders_menu" name="Satınalma Sifarişləri" parent="farm_purchase_menu" 
               action="purchase.purchase_form_action" sequence="10"/>
-    <menuitem id="farm_vendors_menu" name="Təchizatçılar" parent="farm_purchase_menu" 
+    <menuitem id="farm_vendors_menu" name="Kontragentlər" parent="farm_purchase_menu" 
               action="base.action_partner_supplier_form" sequence="20"/>
 
     <!-- V.5. Kassa -->
