@@ -33,37 +33,46 @@ class FarmDashboardWizard(models.TransientModel):
     area_hectare = fields.Float('📐 Sahə Ölçüsü (Hektar)', readonly=True)
     
     # Ümumi xərclər
-    total_expenses = fields.Float('💰 Ümumi Xərclər (AZN)', readonly=True)
+    total_expenses = fields.Float('💰 Ümumi Xərclər', readonly=True)
     
     # Gübrə məlumatları
-    total_fertilizer_cost = fields.Float('🌱 Gübrə Xərci (AZN)', readonly=True)
+    total_fertilizer_cost = fields.Float('🌱 Gübrə Xərci', readonly=True)
     last_fertilizing_date = fields.Date('🗓️ Son Gübrələmə Tarixi', readonly=True)
     
     # Su / Sulama məlumatları
-    total_water_cost = fields.Float('💧 Su Xərci (AZN)', readonly=True)
+    total_water_cost = fields.Float('💧 Su Xərci', readonly=True)
     total_water_liters = fields.Float('💧 İstifadə Olunan Su', readonly=True)
     last_irrigation_date = fields.Date('🗓️ Son Sulama Tarixi', readonly=True)
     total_irrigation_count = fields.Integer('🔄 Sulama Sayı', readonly=True)
     
     # İşçi xərcləri (detallı)
-    total_worker_cost = fields.Float('👷 Ümumi İşçi Xərci (AZN)', readonly=True)
-    total_skilled_worker_cost = fields.Float('👨‍🔧 Fəhlə Xərci (AZN)', readonly=True)
-    total_general_worker_cost = fields.Float('👷‍♂️ İşçi Xərci (AZN)', readonly=True)
+    total_worker_cost = fields.Float('👷 Ümumi İşçi Xərci', readonly=True)
+    total_skilled_worker_cost = fields.Float('👨‍🔧 Fəhlə Xərci', readonly=True)
+    total_general_worker_cost = fields.Float('👷‍♂️ İşçi Xərci', readonly=True)
     
     # Material xərcləri
-    total_material_cost = fields.Float('🔧 Material Xərci (AZN)', readonly=True)
+    total_material_cost = fields.Float('🔧 Material Xərci', readonly=True)
     
     # Traktor xərcləri
-    total_tractor_cost = fields.Float('🚜 Traktor Xərci (AZN)', readonly=True)
+    total_tractor_cost = fields.Float('🚜 Traktor Xərci', readonly=True)
     
     # Diesel xərcləri
-    total_diesel_cost = fields.Float('⛽ Diesel Xərci (AZN)', readonly=True)
+    total_diesel_cost = fields.Float('⛽ Diesel Xərci', readonly=True)
     
     # Hotel xərcləri
-    total_hotel_cost = fields.Float('🏨 Hotel Xərci (AZN)', readonly=True)
+    total_hotel_cost = fields.Float('🏨 Hotel Xərci', readonly=True)
     
     # Kommunal xərclər
-    total_communal_cost = fields.Float('💡 Kommunal Xərc (AZN)', readonly=True)
+    total_communal_cost = fields.Float('💡 Kommunal Xərc', readonly=True)
+    
+    # Dərman xərci (məhsul olaraq)
+    total_treatment_cost = fields.Float('💊 Dərman Xərci', readonly=True)
+    
+    # Əməliyyat xərcləri (bütün əməliyyatlara sərf olunan)
+    total_operation_cost = fields.Float('🚜 Əməliyyat Xərcləri', readonly=True)
+    
+    # Digər xərclər (gübrə, su, dərman, material və s.)
+    total_other_expenses = fields.Float('🔧 Digər Xərclər', readonly=True)
     
     # Son əməliyyatlar (tam siyahı)
     last_plowing_date = fields.Date('🚜 Son Şumlama', readonly=True)
@@ -171,7 +180,8 @@ class FarmDashboardWizard(models.TransientModel):
             ('fertilizing_date', '<=', date_to)
         ])
         
-        total_fertilizer_cost = sum(fertilizing_records.mapped('total_cost'))
+        # Gübrə xərci = ümumi xərc - işçi xərci (yalnız gübrə məhsulunun qiyməti)
+        total_fertilizer_cost = sum(fertilizing_records.mapped('total_cost')) - sum(fertilizing_records.mapped('total_worker_cost'))
         dashboard_data.update({
             'total_fertilizer_cost': total_fertilizer_cost,
             'last_fertilizing_date': max(fertilizing_records.mapped('fertilizing_date')) if fertilizing_records else False,
@@ -185,7 +195,8 @@ class FarmDashboardWizard(models.TransientModel):
             ('irrigation_date', '<=', date_to)
         ])
         
-        total_water_cost = sum(irrigation_records.mapped('total_cost'))
+        # Su xərci = ümumi xərc - işçi xərci (yalnız su qiyməti)
+        total_water_cost = sum(irrigation_records.mapped('total_cost')) - sum(irrigation_records.mapped('total_worker_cost'))
         total_water_liters = sum(irrigation_records.mapped('water_liters')) if irrigation_records else 0
         dashboard_data.update({
             'total_water_cost': total_water_cost,
@@ -262,6 +273,9 @@ class FarmDashboardWizard(models.TransientModel):
         total_general_worker_cost += sum(treatment_records.mapped('total_worker_cost'))
         last_treatment = max(treatment_records.mapped('treatment_date')) if treatment_records else False
         
+        # Dərman xərci (treatment_records-dən işçi xərcini çıxaraq)
+        total_treatment_cost = sum(treatment_records.mapped('total_cost')) - sum(treatment_records.mapped('total_worker_cost'))
+        
         # Budama əməliyyatları
         pruning_records = self.env['farm.pruning'].search([
             ('field_id', '=', field_id),
@@ -287,6 +301,7 @@ class FarmDashboardWizard(models.TransientModel):
             'total_worker_cost': total_worker_cost,
             'total_skilled_worker_cost': total_skilled_worker_cost,
             'total_general_worker_cost': total_general_worker_cost,
+            'total_treatment_cost': total_treatment_cost,
             'last_plowing_date': last_plowing,
             'last_planting_date': last_planting,
             'last_treatment_date': last_treatment,
@@ -355,12 +370,22 @@ class FarmDashboardWizard(models.TransientModel):
         })
         
         # Ümumi xərclər hesablama
-        total_expenses = (total_fertilizer_cost + total_water_cost + total_worker_cost + 
+        total_expenses = (total_fertilizer_cost + total_water_cost + total_worker_cost + total_treatment_cost +
                          total_material_cost + total_tractor_cost + total_diesel_cost + 
                          total_hotel_cost + total_communal_cost)
         
+        # Əməliyyat xərcləri (işçi xərcləri = əməliyyat xərcləri)
+        total_operation_cost = total_worker_cost
+        
+        # Digər xərclər (gübrə, su, dərman, material və s.)
+        total_other_expenses = (total_fertilizer_cost + total_water_cost + total_treatment_cost + 
+                              total_material_cost + total_tractor_cost + total_diesel_cost + 
+                              total_hotel_cost + total_communal_cost)
+        
         dashboard_data.update({
             'total_expenses': total_expenses,
+            'total_operation_cost': total_operation_cost,
+            'total_other_expenses': total_other_expenses,
         })
         
         # Xəstəlik məlumatları
