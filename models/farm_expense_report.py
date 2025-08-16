@@ -19,6 +19,7 @@ class FarmExpenseReport(models.Model):
     quarter = fields.Char('Rüb', readonly=True)
     original_model = fields.Char('Orijinal Model', readonly=True)
     original_id = fields.Integer('Orijinal ID', readonly=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
@@ -36,7 +37,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM expense_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
                     'farm.communal.expense' AS original_model,
-                    id AS original_id
+                    id AS original_id,
+                    field_id
                 FROM farm_communal_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -54,7 +56,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM expense_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
                     'farm.diesel.expense' AS original_model,
-                    id AS original_id
+                    id AS original_id,
+                    field_id
                 FROM farm_diesel_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -72,7 +75,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM expense_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
                     'farm.tractor.expense' AS original_model,
-                    id AS original_id
+                    id AS original_id,
+                    field_id
                 FROM farm_tractor_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -90,7 +94,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM expense_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
                     'farm.material.expense' AS original_model,
-                    id AS original_id
+                    id AS original_id,
+                    field_id
                 FROM farm_material_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -108,7 +113,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM expense_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
                     'farm.hotel.expense' AS original_model,
-                    id AS original_id
+                    id AS original_id,
+                    field_id
                 FROM farm_hotel_expense
                 WHERE expense_date IS NOT NULL
                 
@@ -126,7 +132,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fwp.payment_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter,
                     'farm.worker.payment' AS original_model,
-                    fwp.id AS original_id
+                    fwp.id AS original_id,
+                    NULL AS field_id
                 FROM farm_worker_payment fwp
                 JOIN farm_worker fw ON fwp.worker_id = fw.id
                 WHERE fwp.payment_date IS NOT NULL 
@@ -146,7 +153,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fwp.payment_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter,
                     'farm.worker.payment' AS original_model,
-                    fwp.id AS original_id
+                    fwp.id AS original_id,
+                    NULL AS field_id
                 FROM farm_worker_payment fwp
                 JOIN farm_worker fw ON fwp.worker_id = fw.id
                 WHERE fwp.payment_date IS NOT NULL 
@@ -154,21 +162,38 @@ class FarmExpenseReport(models.Model):
                 
                 UNION ALL
                 
-                -- Əlavə Fəhlə Xərcləri (farm_additional_expense)
+                -- Əlavə Fəhlə Xərcləri (farm_additional_expense) - Sahə məlumatı əməliyyatlardan alınır
                 SELECT 
                     row_number() OVER () + 60000 AS id,
-                    name,
-                    expense_date AS date,
-                    amount,
+                    fae.name,
+                    fae.expense_date AS date,
+                    fae.amount,
                     'Fəhlə' AS expense_type,
-                    COALESCE(description, '') AS note,
-                    EXTRACT(year FROM expense_date)::text AS year,
-                    EXTRACT(month FROM expense_date)::text AS month,
-                    'Q' || EXTRACT(quarter FROM expense_date)::text AS quarter,
+                    COALESCE(fae.description, '') AS note,
+                    EXTRACT(year FROM fae.expense_date)::text AS year,
+                    EXTRACT(month FROM fae.expense_date)::text AS month,
+                    'Q' || EXTRACT(quarter FROM fae.expense_date)::text AS quarter,
                     'farm.additional.expense' AS original_model,
-                    id AS original_id
-                FROM farm_additional_expense
-                WHERE expense_date IS NOT NULL
+                    fae.id AS original_id,
+                    CASE 
+                        WHEN fae.plowing_id IS NOT NULL THEN fp.field_id
+                        WHEN fae.planting_id IS NOT NULL THEN fpl.field_id
+                        WHEN fae.irrigation_id IS NOT NULL THEN fi.field_id
+                        WHEN fae.fertilizing_id IS NOT NULL THEN ff.field_id
+                        WHEN fae.treatment_id IS NOT NULL THEN ft.field_id
+                        WHEN fae.pruning_id IS NOT NULL THEN fpr.field_id
+                        WHEN fae.harvest_id IS NOT NULL THEN fh.field_id
+                        ELSE NULL
+                    END AS field_id
+                FROM farm_additional_expense fae
+                LEFT JOIN farm_plowing fp ON fae.plowing_id = fp.id
+                LEFT JOIN farm_planting fpl ON fae.planting_id = fpl.id
+                LEFT JOIN farm_irrigation fi ON fae.irrigation_id = fi.id
+                LEFT JOIN farm_fertilizing ff ON fae.fertilizing_id = ff.id
+                LEFT JOIN farm_treatment ft ON fae.treatment_id = ft.id
+                LEFT JOIN farm_pruning fpr ON fae.pruning_id = fpr.id
+                LEFT JOIN farm_harvest fh ON fae.harvest_id = fh.id
+                WHERE fae.expense_date IS NOT NULL
                 
                 UNION ALL
                 
@@ -184,7 +209,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fp.operation_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fp.operation_date)::text AS quarter,
                     'farm.plowing' AS original_model,
-                    fp.id AS original_id
+                    fp.id AS original_id,
+                    fp.field_id
                 FROM farm_plowing_worker fpw
                 JOIN farm_plowing fp ON fpw.plowing_id = fp.id
                 JOIN farm_worker fw ON fpw.worker_id = fw.id
@@ -203,7 +229,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fpl.planting_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fpl.planting_date)::text AS quarter,
                     'farm.planting' AS original_model,
-                    fpl.id AS original_id
+                    fpl.id AS original_id,
+                    fpl.field_id
                 FROM farm_planting_worker fplw
                 JOIN farm_planting fpl ON fplw.planting_id = fpl.id
                 JOIN farm_worker fw ON fplw.worker_id = fw.id
@@ -222,7 +249,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fi.irrigation_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fi.irrigation_date)::text AS quarter,
                     'farm.irrigation' AS original_model,
-                    fi.id AS original_id
+                    fi.id AS original_id,
+                    fi.field_id
                 FROM farm_irrigation_worker fiw
                 JOIN farm_irrigation fi ON fiw.irrigation_id = fi.id
                 JOIN farm_worker fw ON fiw.worker_id = fw.id
@@ -241,7 +269,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM ff.fertilizing_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM ff.fertilizing_date)::text AS quarter,
                     'farm.fertilizing' AS original_model,
-                    ff.id AS original_id
+                    ff.id AS original_id,
+                    ff.field_id
                 FROM farm_fertilizing_worker ffw
                 JOIN farm_fertilizing ff ON ffw.fertilizing_id = ff.id
                 JOIN farm_worker fw ON ffw.worker_id = fw.id
@@ -260,7 +289,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM ft.treatment_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM ft.treatment_date)::text AS quarter,
                     'farm.treatment' AS original_model,
-                    ft.id AS original_id
+                    ft.id AS original_id,
+                    ft.field_id
                 FROM farm_treatment_worker ftw
                 JOIN farm_treatment ft ON ftw.treatment_id = ft.id
                 JOIN farm_worker fw ON ftw.worker_id = fw.id
@@ -279,7 +309,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fpr.pruning_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fpr.pruning_date)::text AS quarter,
                     'farm.pruning' AS original_model,
-                    fpr.id AS original_id
+                    fpr.id AS original_id,
+                    fpr.field_id
                 FROM farm_pruning_worker fprw
                 JOIN farm_pruning fpr ON fprw.pruning_id = fpr.id
                 JOIN farm_worker fw ON fprw.worker_id = fw.id
@@ -298,7 +329,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fh.harvest_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fh.harvest_date)::text AS quarter,
                     'farm.harvest' AS original_model,
-                    fh.id AS original_id
+                    fh.id AS original_id,
+                    fh.field_id
                 FROM farm_harvest_worker fhw
                 JOIN farm_harvest fh ON fhw.harvest_id = fh.id
                 JOIN farm_worker fw ON fhw.worker_id = fw.id
@@ -317,7 +349,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM fcs.storage_date)::text AS month,
                     'Q' || EXTRACT(quarter FROM fcs.storage_date)::text AS quarter,
                     'farm.cold.storage' AS original_model,
-                    fcs.id AS original_id
+                    fcs.id AS original_id,
+                    NULL AS field_id
                 FROM farm_cold_storage_worker fcsw
                 JOIN farm_cold_storage fcs ON fcsw.cold_storage_id = fcs.id
                 JOIN farm_worker fw ON fcsw.worker_id = fw.id
@@ -337,7 +370,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM po.date_order)::text AS month,
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
-                    po.id AS original_id
+                    po.id AS original_id,
+                    NULL AS field_id
                 FROM purchase_order po
                 JOIN purchase_order_line pol ON po.id = pol.order_id
                 JOIN product_product pp ON pol.product_id = pp.id
@@ -361,7 +395,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM po.date_order)::text AS month,
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
-                    po.id AS original_id
+                    po.id AS original_id,
+                    NULL AS field_id
                 FROM purchase_order po
                 JOIN purchase_order_line pol ON po.id = pol.order_id
                 JOIN product_product pp ON pol.product_id = pp.id
@@ -385,7 +420,8 @@ class FarmExpenseReport(models.Model):
                     EXTRACT(month FROM po.date_order)::text AS month,
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
-                    po.id AS original_id
+                    po.id AS original_id,
+                    NULL AS field_id
                 FROM purchase_order po
                 LEFT JOIN purchase_order_line pol ON po.id = pol.order_id
                 LEFT JOIN product_product pp ON pol.product_id = pp.id

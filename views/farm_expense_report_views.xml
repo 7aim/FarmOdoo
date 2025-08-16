@@ -9,6 +9,7 @@
                 <list string="Xərc Hesabatı">
                     <field name="date"/>
                     <field name="expense_type"/>
+                    <field name="field_id"/>
                     <field name="name"/>
                     <field name="amount" sum="Cəm"/>
                     <field name="note"/>
@@ -35,6 +36,7 @@
                             <group>
                                 <field name="name"/>
                                 <field name="expense_type"/>
+                                <field name="field_id"/>
                                 <field name="date"/>
                                 <field name="amount"/>
                             </group>
@@ -58,6 +60,7 @@
             <field name="model">farm.expense.report</field>
             <field name="arch" type="xml">
                 <pivot string="Xərc Təhlili" sample="1">
+                    <field name="field_id" type="row"/>
                     <field name="expense_type" type="row"/>
                     <field name="year" type="col"/>
                     <field name="amount" type="measure"/>
@@ -71,6 +74,7 @@
             <field name="model">farm.expense.report</field>
             <field name="arch" type="xml">
                 <graph string="Xərc Qrafiki" type="bar">
+                    <field name="field_id"/>
                     <field name="expense_type"/>
                     <field name="amount" type="measure"/>
                 </graph>
