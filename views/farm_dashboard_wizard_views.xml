@@ -43,7 +43,8 @@
                                 <group string="💰 Ümumi Gəlir və Xərclər">
                                     <field name="total_expenses" widget="monetary" 
                                            style="font-size: 18px; font-weight: bold; color: #d73527;"/>
-                                    <!--field name="calculation_date" readonly="1" string="📆 Son Hesablama"/-->
+                                    <field name="per_tree_expense" widget="monetary"  
+                                           style="font-size: 16px; font-weight: bold; color: #007bff;"/>
                                 </group>
                             </group>
                         </page>

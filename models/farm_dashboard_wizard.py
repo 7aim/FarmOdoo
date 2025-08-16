@@ -30,10 +30,11 @@ class FarmDashboardWizard(models.TransientModel):
     total_parcels = fields.Integer('📍 Parsel Sayı', readonly=True)
     total_rows = fields.Integer('📏 Cərgə Sayı', readonly=True)
     total_trees = fields.Integer('🌳 Ağac Sayı', readonly=True)
-    area_hectare = fields.Float('📐 Sahə Ölçüsü (Hektar)', readonly=True)
+    area_hectare = fields.Float('📐 Sahə Ölçüsü', readonly=True)
     
     # Ümumi xərclər
     total_expenses = fields.Float('💰 Ümumi Xərclər', readonly=True)
+    per_tree_expense = fields.Float('🌳 Ağac Başına Düşən Xərc', readonly=True)
     
     # Gübrə məlumatları
     total_fertilizer_cost = fields.Float('🌱 Gübrə Xərci', readonly=True)
@@ -41,7 +42,7 @@ class FarmDashboardWizard(models.TransientModel):
     
     # Su / Sulama məlumatları
     total_water_cost = fields.Float('💧 Su Xərci', readonly=True)
-    total_water_liters = fields.Float('💧 İstifadə Olunan Su', readonly=True)
+    total_water_liters = fields.Float('💧 İstifadə  Olunan Su', readonly=True)
     last_irrigation_date = fields.Date('🗓️ Son Sulama Tarixi', readonly=True)
     total_irrigation_count = fields.Integer('🔄 Sulama Sayı', readonly=True)
     
@@ -168,6 +169,8 @@ class FarmDashboardWizard(models.TransientModel):
             'total_rows': field.total_rows,
             'total_trees': field.total_trees,
             'calculation_date': fields.Datetime.now(),
+            'total_expenses': 0.0,
+            'per_tree_expense': 0.0,
         }
         
         # Ağac sayı 0 olarsa, hesablama etmə
@@ -373,19 +376,14 @@ class FarmDashboardWizard(models.TransientModel):
         total_expenses = (total_fertilizer_cost + total_water_cost + total_worker_cost + total_treatment_cost +
                          total_material_cost + total_tractor_cost + total_diesel_cost + 
                          total_hotel_cost + total_communal_cost)
-        
-        # Əməliyyat xərcləri (işçi xərcləri = əməliyyat xərcləri)
-        total_operation_cost = total_worker_cost
-        
-        # Digər xərclər (gübrə, su, dərman, material və s.)
-        total_other_expenses = (total_fertilizer_cost + total_water_cost + total_treatment_cost + 
-                              total_material_cost + total_tractor_cost + total_diesel_cost + 
-                              total_hotel_cost + total_communal_cost)
+        # Ağac başına düşən xərc
+        per_tree_expense = total_expenses / field.total_trees if field.total_trees else 0.0
         
         dashboard_data.update({
             'total_expenses': total_expenses,
-            'total_operation_cost': total_operation_cost,
-            'total_other_expenses': total_other_expenses,
+            'per_tree_expense': per_tree_expense,
+            'total_operation_cost': self.total_operation_cost,
+            'total_other_expenses': self.total_other_expenses,
         })
         
         # Xəstəlik məlumatları
@@ -421,4 +419,3 @@ class FarmDashboardWizard(models.TransientModel):
     def action_print_report(self):
         """Dashboard hesabatını çıxart"""
         return self.env.ref('farm_agriculture_v2.action_report_farm_dashboard').report_action(self)
-    
