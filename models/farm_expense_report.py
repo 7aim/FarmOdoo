@@ -371,7 +371,7 @@ class FarmExpenseReport(models.Model):
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
                     po.id AS original_id,
-                    NULL AS field_id
+                    po.farm_field_id AS field_id
                 FROM purchase_order po
                 JOIN purchase_order_line pol ON po.id = pol.order_id
                 JOIN product_product pp ON pol.product_id = pp.id
@@ -396,7 +396,7 @@ class FarmExpenseReport(models.Model):
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
                     po.id AS original_id,
-                    NULL AS field_id
+                    po.farm_field_id AS field_id
                 FROM purchase_order po
                 JOIN purchase_order_line pol ON po.id = pol.order_id
                 JOIN product_product pp ON pol.product_id = pp.id
@@ -421,7 +421,7 @@ class FarmExpenseReport(models.Model):
                     'Q' || EXTRACT(quarter FROM po.date_order)::text AS quarter,
                     'purchase.order' AS original_model,
                     po.id AS original_id,
-                    NULL AS field_id
+                    po.farm_field_id AS field_id
                 FROM purchase_order po
                 LEFT JOIN purchase_order_line pol ON po.id = pol.order_id
                 LEFT JOIN product_product pp ON pol.product_id = pp.id

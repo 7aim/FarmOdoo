@@ -9,7 +9,7 @@
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            📊 <field name="field_id" readonly="1" style="font-size: 24px;"/>
+                            🍃 <field name="field_id" readonly="1" style="font-size: 24px; font-weight: bold"/>
                         </h1>
                     </div>
                     
@@ -18,10 +18,12 @@
                         <field name="date_filter" widget="selection" colspan="2"/>
                         <field name="year" invisible="date_filter not in ['year', 'month']"/>
                         <field name="month" invisible="date_filter != 'month'"/>
-                        <field name="date_from" invisible="date_filter != 'custom'" 
-                               required="date_filter == 'custom'" colspan="1"/>
-                        <field name="date_to" invisible="date_filter != 'custom'" 
-                               required="date_filter == 'custom'" colspan="1"/>
+                        <group name="name" string="Tarix Aralığı" invisible="date_filter != 'custom'">
+                            <field name="date_from" invisible="date_filter != 'custom'" 
+                                required="date_filter == 'custom'" colspan="1"/>
+                            <field name="date_to" invisible="date_filter != 'custom'" 
+                                required="date_filter == 'custom'" colspan="1"/>
+                        </group>                     
                     </group>
                     
                     <!-- Yenilə düyməsi -->
@@ -35,10 +37,14 @@
                         <page string="📊 Əsas Məlumatlar">
                             <group>
                                 <group string="🏞️ Sahə Məlumatları">
-                                    <field name="area_hectare" widget="float"/>
-                                    <field name="total_parcels"/>
-                                    <field name="total_rows"/>
-                                    <field name="total_trees"/>
+                                    <field name="area_hectare" widget="float"
+                                           style="font-weight: bold;"/>
+                                    <field name="total_parcels"
+                                           style="font-weight: bold;"/>
+                                    <field name="total_rows"
+                                           style="font-weight: bold;"/>
+                                    <field name="total_trees"
+                                           style="font-weight: bold;"/>
                                 </group>
                                 <group string="💰 Ümumi Gəlir və Xərclər">
                                     <field name="total_expenses" widget="monetary" 
@@ -96,7 +102,7 @@
                                 <group string="🌱 Gübrə və Dərman Xərci">
                                     <field name="total_fertilizer_cost" widget="monetary" 
                                            string="🌱 Gübrə Xərci"
-                                           style="font-weight: bold; color: #28a745;"/>
+                                           style="font-weight: bold; color: #dc3545;"/>
                                     <field name="total_treatment_cost" widget="monetary" 
                                            string="💊 Dərman Xərci"
                                            style="font-weight: bold; color: #dc3545;"/>
@@ -104,13 +110,18 @@
                             </group>
                             <group>
                                 <group string="🔧 Material və Traktor">
-                                    <field name="total_material_cost" widget="monetary"/>
-                                    <field name="total_tractor_cost" widget="monetary"/>
+                                    <field name="total_material_cost" widget="monetary"
+                                           style="font-weight: bold; color: #dc3545;"/>
+                                    <field name="total_tractor_cost" widget="monetary"
+                                           style="font-weight: bold; color: #dc3545;"/>
                                 </group>
                                 <group string="⛽ Yanacaq və Digər">
-                                    <field name="total_diesel_cost" widget="monetary"/>
-                                    <field name="total_hotel_cost" widget="monetary"/>
-                                    <field name="total_communal_cost" widget="monetary"/>
+                                    <field name="total_diesel_cost" widget="monetary"
+                                           style="font-weight: bold; color: #dc3545;"/>
+                                    <field name="total_hotel_cost" widget="monetary"
+                                           style="font-weight: bold; color: #dc3545;"/>
+                                    <field name="total_communal_cost" widget="monetary"
+                                           style="font-weight: bold; color: #dc3545;"/>
                                 </group>
                             </group>
                         </page>
@@ -119,29 +130,45 @@
                         <page string="📋 Son Əməliyyatlar">
                             <group>
                                 <group string="📅 Son Tarixlər">
-                                    <field name="last_plowing_date" string="🚜 Son Şumlama"/>
-                                    <field name="last_planting_date" string="🌱 Son Əkin"/>
-                                    <field name="last_irrigation_date" string="💧 Son Sulama"/>
-                                    <field name="last_fertilizing_date" string="🌿 Son Gübrələmə"/>
-                                    <field name="last_treatment_date" string="💊 Son Müalicə"/>
-                                    <field name="last_pruning_date" string="✂️ Son Budama"/>
-                                    <field name="last_harvest_date" string="🍎 Son Yığım"/>
+                                    <field name="last_plowing_date" string="🚜 Son Şumlama"
+                                        style="font-weight: bold"/>
+                                    <field name="last_planting_date" string="🌱 Son Əkin"
+                                        style="font-weight: bold"/>
+                                    <field name="last_irrigation_date" string="💧 Son Sulama"
+                                        style="font-weight: bold"/>
+                                    <field name="last_fertilizing_date" string="🌿 Son Gübrələmə"
+                                        style="font-weight: bold"/>
+                                    <field name="last_treatment_date" string="💊 Son Müalicə"
+                                        style="font-weight: bold"/>
+                                    <field name="last_pruning_date" string="✂️ Son Budama"
+                                        style="font-weight: bold"/>
+                                    <field name="last_harvest_date" string="🍎 Son Yığım"
+                                        style="font-weight: bold"/>
                                 </group>
                                 <group string="📊 Bu Dövr Əməliyyat Sayları">
-                                    <field name="plowing_count" string="🚜 Şumlama"/>
-                                    <field name="planting_count" string="🌱 Əkin"/>
-                                    <field name="irrigation_count" string="💧 Sulama"/>
-                                    <field name="fertilizing_count" string="🌿 Gübrələmə"/>
-                                    <field name="treatment_count" string="💊 Müalicə"/>
-                                    <field name="pruning_count" string="✂️ Budama"/>
-                                    <field name="harvest_count" string="🍎 Yığım"/>
+                                    <field name="plowing_count" string="🚜 Şumlama"
+                                           style="font-weight: bold"/>
+                                    <field name="planting_count" string="🌱 Əkin"
+                                           style="font-weight: bold"/>
+                                    <field name="irrigation_count" string="💧 Sulama"
+                                           style="font-weight: bold"/>
+                                    <field name="fertilizing_count" string="🌿 Gübrələmə"
+                                           style="font-weight: bold"/>
+                                    <field name="treatment_count" string="💊 Müalicə"
+                                           style="font-weight: bold"/>
+                                    <field name="pruning_count" string="✂️ Budama"
+                                           style="font-weight: bold"/>
+                                    <field name="harvest_count" string="🍎 Yığım"
+                                           style="font-weight: bold"/>
                                 </group>
                             </group>
                             <group>
                                 <group string="🦠 Xəstəliklər">
-                                    <field name="disease_count" string="⚠️ Aktiv Xəstəlik Sayı"/>
+                                    <field name="disease_count" string="⚠️ Aktiv Xəstəlik Sayı"
+                                           style="font-weight: bold"/>
                                     <field name="active_diseases" widget="text" 
-                                           string="📝 Aktiv Xəstəliklər"/>
+                                           string="📝 Aktiv Xəstəliklər"
+                                           style="font-weight: bold"/>
                                 </group>
                             </group>
                         </page>

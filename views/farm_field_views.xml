@@ -45,13 +45,13 @@
                             <field name="active"/>
                         </group>
                     </group>
-                    <group>
+                    <!--group>
                         <group string="Statistikalar">
                             <field name="total_parcel" readonly="1"/>
                             <field name="total_rows" readonly="1"/>
                             <field name="total_trees" readonly="1"/>
                         </group>
-                    </group>
+                    </group-->
                     <notebook>
                         <page string="Parsellər">
                             <field name="parcel_ids" context="{'default_field_id': id}">

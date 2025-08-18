@@ -69,19 +69,22 @@
                     </header>-->
                     <sheet>
                         <div class="oe_title">
-                            <h3>Kassa Balansı</h3>
+                            <!--h3>Kassa Balansı</h3>-->
                             <h1>
                                 <field name="current_balance" readonly="1" 
                                        decoration-success="current_balance >= 0" 
-                                       decoration-danger="current_balance &lt; 0"/>
-                                <span> AZN</span>
+                                       decoration-danger="current_balance &lt; 0"
+                                       style="font-weight: bold;"/>
+                                <span> AZN </span>
                             </h1>
                         </div>
                         <group name="name" string="Gəlir və Xərclər">
                             <field name="total_income" string="📈 Ümumi Gəlir" readonly="1" 
-                                    class="oe_subtotal_footer_separator"/>
+                                    class="oe_subtotal_footer_separator"
+                                    style="font-weight: bold; color: #28a745;"/>
                             <field name="all_expenses_total" string="📉 Ümumi Xərc" readonly="1" 
-                                    class="oe_subtotal_footer_separator"/>                        
+                                    class="oe_subtotal_footer_separator"
+                                    style="font-weight: bold; color: #dc3545;"/>                        
                         </group>
 
                         <!-- Tarix Filtr Hissəsi -->
@@ -99,19 +102,26 @@
                         
                         <group>
                             <group string="💰 Gəlir Hissəsi">
-                                <field name="subsidy_income" string="💸 Subsidiya" readonly="1"/>
-                                <field name="debt_income" string="🏦 Borc" readonly="1"/>
-                                <field name="founder_investments_total" string="👥 Təsisçi İnvestisiyası" readonly="1"/>
-                                <field name="tractor_income_total" string="🚜 Traktor Gəliri" readonly="1"/>
-                                <field name="other_income" string="💼 Digər Mədaxil" readonly="1"/>
+                                <field name="other_income" string="💳 Kassa Mədaxili" readonly="1"
+                                style="font-weight: bold; color: #28a745;"/>
+                                <field name="founder_investments_total" string="👥 Təsisçi İnvestisiyası" readonly="1"
+                                style="font-weight: bold; color: #28a745;"/>
+                                <field name="subsidy_income" string="💸 Subsidiya" readonly="1"
+                                style="font-weight: bold; color: #28a745;"/>
+                                <field name="debt_income" string="🏦 Borc" readonly="1"
+                                style="font-weight: bold; color: #28a745;"/>
+                                <field name="tractor_income_total" string="🚜 Traktor Gəliri" readonly="1"
+                                style="font-weight: bold; color: #28a745;"/>
                                 <separator string=""/>
-
                             </group>
                         
                             <group string="💸 Xərc Hissəsi">
-                                <field name="cash_expense_only" string="💳 Kassa Məxarici" readonly="1"/>
-                                <field name="founder_expenses_total" string="👥 Təsisçi Məxarici" readonly="1"/>
-                                <field name="expense_report_total" string="🌱 Bağ Xərcləri" readonly="1"/>
+                                <field name="cash_expense_only" string="💳 Kassa Məxarici" readonly="1"
+                                style="font-weight: bold; color: #dc3545;"/>
+                                <field name="founder_expenses_total" string="👥 Təsisçi Məxarici" readonly="1"
+                                style="font-weight: bold; color: #dc3545;"/>
+                                <field name="expense_report_total" string="🌱 Bağ Xərcləri" readonly="1"
+                                style="font-weight: bold; color: #dc3545;"/>
                                 <separator string=""/>
                             </group>
                         </group>
