@@ -1,0 +1,80 @@
+/* Farm Agriculture Module Custom Styles */
+
+/* Main menu icon styling */
+.o_app[data-menu-xmlid="farm_agriculture_v2.farm_main_menu"] {
+    background-color: #4CAF50 !important;
+}
+
+.o_app[data-menu-xmlid="farm_agriculture_v2.farm_main_menu"] .o_app_icon {
+    background-image: url('/farm_agriculture_v2/static/description/icon.png') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.farm_dashboard_widget {
+    background: linear-gradient(135deg, #4CAF50, #8BC34A);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    color: white;
+}
+
+.farm_field_card {
+    background: #f8f9fa;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.farm_operation_badge {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.farm_expense_summary {
+    background: linear-gradient(45deg, #FF5722, #FF8A65);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 5px 0;
+}
+
+.farm_worker_card {
+    background: #E3F2FD;
+    border-left: 4px solid #2196F3;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+/* Dashboard specific styles */
+.o_dashboard_action {
+    background: #f5f5f5;
+}
+
+.farm_metric_card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.farm_metric_value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.farm_metric_label {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 5px;
+}

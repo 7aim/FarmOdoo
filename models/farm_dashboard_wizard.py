@@ -50,6 +50,7 @@ class FarmDashboardWizard(models.TransientModel):
     total_worker_cost = fields.Float('👷 Ümumi İşçi Xərci', readonly=True)
     total_skilled_worker_cost = fields.Float('👨‍🔧 Fəhlə Xərci', readonly=True)
     total_general_worker_cost = fields.Float('👷‍♂️ İşçi Xərci', readonly=True)
+    total_salary_cost = fields.Float('💰 Maaş Xərci', readonly=True)
     
     # Material xərcləri
     total_material_cost = fields.Float('🔧 Material Xərci', readonly=True)
@@ -68,6 +69,9 @@ class FarmDashboardWizard(models.TransientModel):
     
     # Dərman xərci (məhsul olaraq)
     total_treatment_cost = fields.Float('💊 Dərman Xərci', readonly=True)
+
+    # Digər xərclər (texnika, avadanlıq, material və s.)
+    total_additional_cost = fields.Float('🔧 Digər Xərclər', readonly=True)
     
     # Əməliyyat xərcləri (bütün əməliyyatlara sərf olunan)
     total_operation_cost = fields.Float('🚜 Əməliyyat Xərcləri', readonly=True)
@@ -279,6 +283,51 @@ class FarmDashboardWizard(models.TransientModel):
         # Dərman xərci (treatment_records-dən işçi xərcini çıxaraq)
         total_treatment_cost = sum(treatment_records.mapped('total_cost')) - sum(treatment_records.mapped('total_worker_cost'))
         
+        # Digər əlavə xərclər (skilled_worker xaricində bütün növlər)
+        total_additional_cost = 0
+        all_other_additional_expenses = self.env['farm.additional.expense'].search([
+            ('expense_date', '>=', date_from),
+            ('expense_date', '<=', date_to),
+            ('expense_type', '!=', 'skilled_worker')
+        ])
+        
+        # Digər əlavə xərclərini sahə üzrə filtrlə
+        for expense in all_other_additional_expenses:
+            # Hansı əməliyyata aid olduğunu yoxla
+            field_ids = []
+            if expense.plowing_id:
+                field_ids.append(expense.plowing_id.field_id.id)
+            elif expense.planting_id:
+                field_ids.append(expense.planting_id.field_id.id)
+            elif expense.irrigation_id:
+                field_ids.append(expense.irrigation_id.field_id.id)
+            elif expense.fertilizing_id:
+                field_ids.append(expense.fertilizing_id.field_id.id)
+            elif expense.treatment_id:
+                field_ids.append(expense.treatment_id.field_id.id)
+            elif expense.pruning_id:
+                field_ids.append(expense.pruning_id.field_id.id)
+            elif expense.harvest_id:
+                field_ids.append(expense.harvest_id.field_id.id)
+            
+            if field_id in field_ids:
+                total_additional_cost += expense.amount
+        
+        # Maaş ödənişlərini ayrı hesabla
+        total_salary_cost = 0
+        worker_payments = self.env['farm.worker.payment'].search([
+            ('payment_date', '>=', date_from),
+            ('payment_date', '<=', date_to)
+        ])
+        
+        for payment in worker_payments:
+            # İşçinin sahəsini yoxla
+            if payment.worker_id.field_id and payment.worker_id.field_id.id == field_id:
+                if payment.payment_type == 'daily':
+                    total_skilled_worker_cost += payment.amount  # Günlük ödənişlər fəhlə kateqoriyasında
+                else:
+                    total_salary_cost += payment.amount  # Maaş, avans, bonus ayrı hesablanır
+        
         # Budama əməliyyatları
         pruning_records = self.env['farm.pruning'].search([
             ('field_id', '=', field_id),
@@ -304,7 +353,9 @@ class FarmDashboardWizard(models.TransientModel):
             'total_worker_cost': total_worker_cost,
             'total_skilled_worker_cost': total_skilled_worker_cost,
             'total_general_worker_cost': total_general_worker_cost,
+            'total_salary_cost': total_salary_cost,
             'total_treatment_cost': total_treatment_cost,
+            'total_additional_cost': total_additional_cost,
             'last_plowing_date': last_plowing,
             'last_planting_date': last_planting,
             'last_treatment_date': last_treatment,
@@ -373,9 +424,9 @@ class FarmDashboardWizard(models.TransientModel):
         })
         
         # Ümumi xərclər hesablama
-        total_expenses = (total_fertilizer_cost + total_water_cost + total_worker_cost + total_treatment_cost +
-                         total_material_cost + total_tractor_cost + total_diesel_cost + 
-                         total_hotel_cost + total_communal_cost)
+        total_expenses = (total_fertilizer_cost + total_water_cost + total_worker_cost + total_salary_cost + 
+                         total_treatment_cost + total_material_cost + total_tractor_cost + total_diesel_cost + 
+                         total_hotel_cost + total_communal_cost + total_additional_cost)
         # Ağac başına düşən xərc
         per_tree_expense = total_expenses / field.total_trees if field.total_trees else 0.0
         

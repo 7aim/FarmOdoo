@@ -133,7 +133,7 @@ class FarmExpenseReport(models.Model):
                     'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter,
                     'farm.worker.payment' AS original_model,
                     fwp.id AS original_id,
-                    NULL AS field_id
+                    fw.field_id AS field_id
                 FROM farm_worker_payment fwp
                 JOIN farm_worker fw ON fwp.worker_id = fw.id
                 WHERE fwp.payment_date IS NOT NULL 
@@ -154,7 +154,7 @@ class FarmExpenseReport(models.Model):
                     'Q' || EXTRACT(quarter FROM fwp.payment_date)::text AS quarter,
                     'farm.worker.payment' AS original_model,
                     fwp.id AS original_id,
-                    NULL AS field_id
+                    fw.field_id AS field_id
                 FROM farm_worker_payment fwp
                 JOIN farm_worker fw ON fwp.worker_id = fw.id
                 WHERE fwp.payment_date IS NOT NULL 
@@ -162,7 +162,7 @@ class FarmExpenseReport(models.Model):
                 
                 UNION ALL
                 
-                -- Əlavə Fəhlə Xərcləri (farm_additional_expense) - Sahə məlumatı əməliyyatlardan alınır
+                -- Əlavə Fəhlə Xərcləri (farm_additional_expense - yalnız skilled_worker növü)
                 SELECT 
                     row_number() OVER () + 60000 AS id,
                     fae.name,
@@ -193,7 +193,42 @@ class FarmExpenseReport(models.Model):
                 LEFT JOIN farm_treatment ft ON fae.treatment_id = ft.id
                 LEFT JOIN farm_pruning fpr ON fae.pruning_id = fpr.id
                 LEFT JOIN farm_harvest fh ON fae.harvest_id = fh.id
-                WHERE fae.expense_date IS NOT NULL
+                WHERE fae.expense_date IS NOT NULL AND fae.expense_type = 'skilled_worker'
+                
+                UNION ALL
+                
+                -- Digər Digər Xərclər (farm_additional_expense - skilled_worker xaricində bütün növlər)
+                SELECT 
+                    row_number() OVER () + 61000 AS id,
+                    fae.name,
+                    fae.expense_date AS date,
+                    fae.amount,
+                    'Digər Xərclər' AS expense_type,
+                    COALESCE(fae.description, '') AS note,
+                    EXTRACT(year FROM fae.expense_date)::text AS year,
+                    EXTRACT(month FROM fae.expense_date)::text AS month,
+                    'Q' || EXTRACT(quarter FROM fae.expense_date)::text AS quarter,
+                    'farm.additional.expense' AS original_model,
+                    fae.id AS original_id,
+                    CASE 
+                        WHEN fae.plowing_id IS NOT NULL THEN fp.field_id
+                        WHEN fae.planting_id IS NOT NULL THEN fpl.field_id
+                        WHEN fae.irrigation_id IS NOT NULL THEN fi.field_id
+                        WHEN fae.fertilizing_id IS NOT NULL THEN ff.field_id
+                        WHEN fae.treatment_id IS NOT NULL THEN ft.field_id
+                        WHEN fae.pruning_id IS NOT NULL THEN fpr.field_id
+                        WHEN fae.harvest_id IS NOT NULL THEN fh.field_id
+                        ELSE NULL
+                    END AS field_id
+                FROM farm_additional_expense fae
+                LEFT JOIN farm_plowing fp ON fae.plowing_id = fp.id
+                LEFT JOIN farm_planting fpl ON fae.planting_id = fpl.id
+                LEFT JOIN farm_irrigation fi ON fae.irrigation_id = fi.id
+                LEFT JOIN farm_fertilizing ff ON fae.fertilizing_id = ff.id
+                LEFT JOIN farm_treatment ft ON fae.treatment_id = ft.id
+                LEFT JOIN farm_pruning fpr ON fae.pruning_id = fpr.id
+                LEFT JOIN farm_harvest fh ON fae.harvest_id = fh.id
+                WHERE fae.expense_date IS NOT NULL AND fae.expense_type != 'skilled_worker'
                 
                 UNION ALL
                 

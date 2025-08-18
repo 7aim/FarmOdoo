@@ -2,9 +2,25 @@
 
 {
     'name': 'Kənd Təsərrüfatı İdarəetmə Sistemi',
-    'version': '18.0.1.5.3',
+    'version': '18.0.1.5.4',
     'category': 'Agriculture',
+    'summary': 'Ferma sahələrinin, ağacların, əməliyyatların və xərclərin idarə edilməsi',
+    'description': """
+        Kənd Təsərrüfatı İdarəetmə Sistemi
+        
+        Bu modul aşağıdakı funksiyaları təmin edir:
+        * Ferma sahələrinin idarə edilməsi
+        * Ağac və parsel idarəetməsi  
+        * Əməliyyatların (şumlama, əkin, sulama, gübrələmə, budama, yığım) izlənilməsi
+        * İşçi və xərc idarəetməsi
+        * Detallı xərc hesabatları və analitikaları
+        * Satınalma və inventar idarəetməsi
+    """,
+    'author': 'Farm Management Team',
     'website': 'https://www.github.com/7aim',
+    'images': [
+        'static/description/icon.png',
+    ],
     'depends': ['base', 'stock', 'product','purchase'],
     'data': [
         'security/ir.model.access.csv',
@@ -35,6 +51,7 @@
         'views/farm_menu.xml',
         'views/purchase_order.xml',
     ],
+    'web_icon': 'farm_agriculture_v2,static/description/icon.png',
 
     'installable': True,
     'auto_install': False,

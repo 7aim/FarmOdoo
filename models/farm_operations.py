@@ -26,10 +26,10 @@ class FarmPlowing(models.Model):
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]", tracking=True)
     worker_line_ids = fields.One2many('farm.plowing.worker', 'plowing_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'plowing_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'plowing_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Ümumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -131,10 +131,10 @@ class FarmPlanting(models.Model):
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.planting.worker', 'planting_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'planting_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'planting_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Ümumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -238,10 +238,10 @@ class FarmIrrigation(models.Model):
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
     worker_line_ids = fields.One2many('farm.irrigation.worker', 'irrigation_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'irrigation_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'irrigation_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Ümumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -342,10 +342,10 @@ class FarmFertilizing(models.Model):
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.fertilizing.worker', 'fertilizing_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'fertilizing_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'fertilizing_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Umumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -445,10 +445,10 @@ class FarmTreatment(models.Model):
     # İşçi məlumatları
     worker_line_ids = fields.One2many('farm.treatment.worker', 'treatment_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'treatment_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'treatment_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Umumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -609,11 +609,11 @@ class FarmTreatmentLine(models.Model):
             }
 
 
-# Əlavə Xərclər Base Model
+# Digər Xərclər Base Model
 class FarmAdditionalExpense(models.Model):
-    """Əlavə Xərclər Base Model"""
+    """Digər Xərclər Base Model"""
     _name = 'farm.additional.expense'
-    _description = 'Əlavə Xərclər'
+    _description = 'Digər Xərclər'
 
     name = fields.Char('Xərc Adı', required=True)
     description = fields.Text('Açıqlama')
@@ -671,10 +671,10 @@ class FarmPruning(models.Model):
     # Alətlər və işçilər
     worker_line_ids = fields.One2many('farm.pruning.worker', 'pruning_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
-    
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'pruning_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'pruning_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Ümumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -771,9 +771,9 @@ class FarmHarvest(models.Model):
     worker_line_ids = fields.One2many('farm.harvest.worker', 'harvest_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'harvest_id', string='Əlavə Xərclər')
-    total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'harvest_id', string='Digər Xərclər')
+    total_additional_cost = fields.Float('Digər Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Ümumi xərc
     total_cost = fields.Float('Ümumi Xərc', compute='_compute_total_cost', store=True)
@@ -965,8 +965,8 @@ class FarmColdStorage(models.Model):
     worker_line_ids = fields.One2many('farm.cold.storage.worker', 'cold_storage_id', string='İşçi Sətirləri')
     total_worker_cost = fields.Float('İşçi Xərci', compute='_compute_total_worker_cost', store=True)
     
-    # Əlavə xərclər
-    additional_expense_ids = fields.One2many('farm.additional.expense', 'cold_storage_id', string='Əlavə Xərclər')
+    # Digər xərclər
+    additional_expense_ids = fields.One2many('farm.additional.expense', 'cold_storage_id', string='Digər Xərclər')
     total_additional_cost = fields.Float('Əlavə Xərc', compute='_compute_total_additional_cost', store=True)
 
     # Ümumi xərc

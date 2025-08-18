@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Əsas Farm Menyu -->
-    <menuitem id="farm_main_menu" name="Kənd Təsərrüfatı" sequence="1"/>
+    <menuitem id="farm_main_menu" name="Kənd Təsərrüfatı" sequence="1"
+              web_icon="farm_agriculture_v2,static/description/icon.png"/>
     
     <!-- I. Saheler Menyusu -->
     <menuitem id="farm_master_menu" name="Sahələr" parent="farm_main_menu" sequence="10"/>
