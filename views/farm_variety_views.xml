@@ -8,10 +8,9 @@
             <list string="Ağac Sortları">
                 <field name="code"/>
                 <field name="name"/>
+                <field name="fruit_species"/>
                 <field name="fruit_type"/>
                 <field name="variety_name"/>
-                <field name="maturity_period"/>
-                <field name="harvest_season"/>
                 <field name="tree_count"/>
             </list>
         </field>
@@ -28,6 +27,7 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name" placeholder="Nar sortu"/>
                             <field name="code" readonly="1"/>
+                            <field name="fruit_species"/>
                             <field name="fruit_type"/>
                             <field name="variety_name" placeholder="Red Delicious"/>
                         </group>

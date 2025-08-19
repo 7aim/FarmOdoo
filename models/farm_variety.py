@@ -6,35 +6,31 @@ class FarmVariety(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fruit_type, name'
 
-    name = fields.Char('Sort Adı', tracking=True)
+    name = fields.Char('Sort', tracking=True)
     code = fields.Char('Sort Kodu', copy=False, readonly=True)
-    
-    # Meyvə tipi
-    fruit_type = fields.Selection([
-        ('pomegranate', 'Nar'),
-        ('apple', 'Alma'),
-        ('pear', 'Armud'),
-        ('citrus', 'Sitrus'),
-        ('stone_fruit', 'Daşlı Meyvələr'),
-        ('other', 'Digər')
-    ], string='Meyvə Tipi', required=True, tracking=True)
 
-    # Sort növləri
-    variety_name = fields.Char('Sort Növü', tracking=True)
+    # Cins
+    fruit_species = fields.Char(string='Cins', required=True, tracking=True)
+
+    # Növ
+    fruit_type = fields.Char(string='Növ', required=True, tracking=True)
+
+    # Sort
+    variety_name = fields.Char('Sort (Azerbaycanca)', tracking=True)
 
     # Xüsusiyyətlər
     maturity_period = fields.Selection([
         ('early', 'Erkən'),
         ('medium', 'Orta'),
         ('late', 'Gec')
-    ], string='Yetişmə Dövrü', default='medium', tracking=True)
+    ], string='Yetişmə Dövrü', tracking=True)
 
     harvest_season = fields.Selection([
         ('spring', 'Yaz'),
         ('summer', 'Yay'),
         ('autumn', 'Payız'),
         ('winter', 'Qış')
-    ], string='Məhsul Mövsümü', default='autumn', tracking=True)
+    ], string='Məhsul Mövsümü', tracking=True)
 
     # Ağac məlumatları ilə əlaqə
     tree_ids = fields.One2many('farm.tree', 'variety_id', string='Ağaclar')
