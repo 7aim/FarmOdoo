@@ -10,6 +10,18 @@ class FarmField(models.Model):
     name = fields.Char('Sahə Adı', required=True, tracking=True)
     code = fields.Char('Sahə Kodu', copy=False, readonly=True)
     
+
+    field_image = fields.Binary('Foto', attachment=True)
+    
+    # Sahədəki bitkiler (Sortlar modelinə bağlı)
+    variety_ids = fields.Many2many(
+        'farm.variety', 
+        string='Bitki (Sort)', 
+        tracking=True,
+        help='Bu sahədə yetişdirilən bitki sortunu seçin'
+    )
+
+
     # Yer məlumatları
     district = fields.Selection([
         ('absheron', 'Abşeron'),('agadash', 'Ağdaş'),('agdam', 'Ağdam'),('agjabadi', 'Ağcabədi'),('agstafa', 'Ağstafa'),('agsu', 'Ağsu'),('astara', 'Astara'),('baku', 'Bakı'),
@@ -102,6 +114,31 @@ class FarmField(models.Model):
             'context': {
                 'default_field_id': self.id,
             }
+        }
+
+    def action_open_field_image(self):
+        """Sahənin görüntüsünü tam ekranda aç"""
+        self.ensure_one()
+        if not self.field_image:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Xəbərdarlıq',
+                    'message': 'Bu sahə üçün heç bir görüntü yoxdur',
+                    'type': 'warning',
+                }
+            }
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': f'{self.name} - Sahənin Görüntüsü',
+            'res_model': 'farm.field',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'view_id': self.env.ref('farm_agriculture_v2.view_farm_field_image_form').id,
+            'target': 'new',
+            'context': {'dialog_size': 'large'}
         }
 
     # SQL constraints üçün unikal kod təmin edilir

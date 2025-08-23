@@ -80,59 +80,58 @@
     <menuitem id="farm_damaged_trees_menu" name="Zərərçəkmiş Ağaclar" parent="farm_operations_gardening_menu" 
               action="farm_damaged_trees_action" sequence="80"/>
 
-    <!-- V. Ümumi Xərc Hesabatı -->
-    <menuitem id="farm_expense_report_menu" name="Xərc Hesabatı" parent="farm_main_menu" 
-              action="action_farm_expense_report" sequence="45"/>
+
 
     <!-- V. Satınalma -->
     <menuitem id="farm_purchase_menu" name="Satınalma" parent="farm_main_menu" sequence="50"/>
-
     <menuitem id="farm_purchase_orders_menu" name="Satınalma Sifarişləri" parent="farm_purchase_menu" 
               action="purchase.purchase_form_action" sequence="10"/>
     <menuitem id="farm_vendors_menu" name="Kontragentlər" parent="farm_purchase_menu" 
               action="base.action_partner_supplier_form" sequence="20"/>
 
-    <!-- V.5. Kassa -->
-    <menuitem id="farm_cash_menu" name="Kassa" parent="farm_main_menu" sequence="55"/>
-    
-    <menuitem id="farm_cash_main_menu" name="Kassa" parent="farm_cash_menu" sequence="5"/>
-    <menuitem id="farm_cash_flow_menu" name="Kassa Hərəkatı" parent="farm_cash_main_menu" 
-              action="action_farm_cash_flow" sequence="10"/>
-    <menuitem id="farm_cash_balance_menu" name="Kassa Balansı" parent="farm_cash_main_menu" 
-              action="action_farm_cash_balance" sequence="20"/>
-    <menuitem id="farm_tractor_income_menu" name="Traktor Gəlirləri" parent="farm_cash_main_menu" 
-              action="action_farm_tractor_income" sequence="30"/>
-
-    <!-- Təsisçi Alt Menyuları -->
-    <menuitem id="farm_founder_main_menu" name="Təsisçilər" parent="farm_cash_menu" sequence="30"/>
-    <menuitem id="farm_founder_menu" name="Təsisçi Siyahısı" parent="farm_founder_main_menu" 
-              action="action_farm_founder" sequence="10"/>
-    <menuitem id="farm_founder_investment_menu" name="Təsisçi İnvestisiyaları" parent="farm_founder_main_menu" 
-              action="action_farm_founder_investment" sequence="30"/>
-    <menuitem id="farm_founder_expense_menu" name="Təsisçi Xərcləri" parent="farm_founder_main_menu" 
-              action="action_farm_founder_expense" sequence="40"/>
-
     <!-- VI. Məhsullar -->
     <menuitem id="farm_products_menu" name="Məhsullar" parent="farm_main_menu" sequence="60"/>
-    
     <menuitem id="farm_product_list_menu" name="Məhsul Siyahısı" parent="farm_products_menu" 
               action="product.product_template_action" sequence="10"/>
     <menuitem id="farm_product_variants_menu" name="Məhsul Variantları" parent="farm_products_menu" 
               action="product.product_normal_action" sequence="20"/>
     <menuitem id="farm_product_categories_menu" name="Məhsul Kateqoriyaları" parent="farm_products_menu" 
               action="product.product_category_action_form" sequence="30"/>
+
+    <menuitem id="farm_finance_menu" name="Maliyyə" parent="farm_main_menu" sequence="70"/>
+    <!-- V.5. Kassa -->
+    <menuitem id="farm_cash_menu" name="Kassa" parent="farm_finance_menu" sequence="10"/>
+    <menuitem id="farm_cash_flow_menu" name="Kassa Hərəkatı" parent="farm_cash_menu" 
+              action="action_farm_cash_flow" sequence="10"/>
+    <menuitem id="farm_cash_balance_menu" name="Kassa Balansı" parent="farm_cash_menu" 
+              action="action_farm_cash_balance" sequence="20"/>
+    <menuitem id="farm_tractor_income_menu" name="Traktor Gəlirləri" parent="farm_cash_menu" 
+              action="action_farm_tractor_income" sequence="30"/>
+
+    <!-- V. Ümumi Xərc Hesabatı -->
+    <menuitem id="farm_report_menu" name="Hesabatlar" parent="farm_finance_menu" sequence="20"/>
+    <menuitem id="farm_expense_report_menu" name="Xərc Hesabatı" parent="farm_report_menu" 
+              action="action_farm_expense_report" sequence="45"/>
+
+    <!-- Təsisçi Alt Menyuları -->
+    <menuitem id="farm_founder_main_menu" name="Təsisçilər" parent="farm_finance_menu" sequence="30"/>
+    <menuitem id="farm_founder_menu" name="Təsisçi Siyahısı" parent="farm_founder_main_menu" 
+              action="action_farm_founder" sequence="10"/>
+    <menuitem id="farm_founder_investment_menu" name="Təsisçi İnvestisiyaları" parent="farm_founder_main_menu" 
+              action="action_farm_founder_investment" sequence="30"/>
+    <menuitem id="farm_founder_expense_menu" name="Təsisçi Xərcləri" parent="farm_founder_main_menu" 
+              action="action_farm_founder_expense" sequence="40"/>
     
     <!-- VIII. Konfiqurasiya -->
     <menuitem id="farm_config_menu" name="Konfiqurasiya" parent="farm_main_menu" sequence="90"/>
-    
     <menuitem id="farm_parcel_type_menu" name="Parsel tipləri" parent="farm_config_menu" 
               action="farm_parcel_type_action" sequence="10"/>
     <menuitem id="farm_disease_type_menu" name="Zərərli orqanizmlər" parent="farm_config_menu" 
               action="farm_disease_type_action" sequence="30"/>
-    <menuitem id="farm_pallet_menu" name="Paletlər" parent="farm_config_menu" 
-              action="farm_pallet_action" sequence="40"/>
-    <!--menuitem id="farm_cooler_menu" name="Soyuducular" parent="farm_config_menu" 
-              action="farm_cooler_action" sequence="20"/-->
     <menuitem id="farm_variety_menu" name="Sortlar" parent="farm_config_menu" 
               action="farm_variety_action" sequence="50"/>
+    <!--menuitem id="farm_pallet_menu" name="Paletlər" parent="farm_config_menu" 
+              action="farm_pallet_action" sequence="40"/-->
+    <!--menuitem id="farm_cooler_menu" name="Soyuducular" parent="farm_config_menu" 
+              action="farm_cooler_action" sequence="20"/-->
 </odoo>

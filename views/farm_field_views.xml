@@ -28,6 +28,10 @@
             <form string="Sahə">
                 <header>
                     <button name="action_view_dashboard" string="📊 Dashboard" type="object" class="btn-primary"/>
+                    <button name="action_open_field_image" 
+                                string="📷 Sahə" 
+                                type="object" 
+                                class="btn-primary"/>
                     <field name="status" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -35,8 +39,12 @@
                         <group string="Əsas Məlumatlar">
                             <field name="name" placeholder='Nar bağı'/>
                             <field name="code" readonly="1"/>
+                            <field name="variety_ids" widget="many2many_tags"/>
                             <field name="area_hectare"/>
                             <field name="soil_type"/>
+                        </group>
+                        <group string="Sahənin Görüntüsü">
+                            <field name="field_image" widget="image" class="oe_avatar"/>
                         </group>
                         <group string="Yer Məlumatları">
                             <field name="district" placeholder='Naxçıvan'/>
@@ -71,6 +79,25 @@
                     </group>
                 </sheet>
                 <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Şəkil dialog görünüşü -->
+    <record id="view_farm_field_image_form" model="ir.ui.view">
+        <field name="name">farm.field.image.form</field>
+        <field name="model">farm.field</field>
+        <field name="arch" type="xml">
+            <form string="Sahənin Görüntüsü">
+                <sheet>
+                    <div class="text-center">
+                        <h3><field name="name" readonly="1"/></h3>
+                        <field name="field_image" 
+                            widget="image" 
+                            options="{'size': [800, 600], 'preview_image': 'field_image'}"
+                            style="max-width: 100%; height: auto;"/>
+                    </div>
+                </sheet>
             </form>
         </field>
     </record>
