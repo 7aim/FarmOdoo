@@ -23,6 +23,7 @@
                         <field name="area_id"/>
                         <field name="note"/>
                         <field name="image" widget="image" class="oe_avatar"/>
+                        <field name="image" string="Şəkil önizləməsi" widget="image"/>
                     </group>
                 </sheet>
             </form>
