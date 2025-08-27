@@ -1,0 +1,39 @@
+<odoo>
+    <record id="view_farm_resource_list" model="ir.ui.view">
+        <field name="name">farm.resource.list</field>
+        <field name="model">farm.resource</field>
+        <field name="arch" type="xml">
+            <list string="Farm Resources">
+                <field name="name"/>
+                <field name="image"/>
+                <field name="note"/>
+                <field name="area_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_farm_resource_form" model="ir.ui.view">
+        <field name="name">farm.resource.form</field>
+        <field name="model">farm.resource</field>
+        <field name="arch" type="xml">
+            <form string="Farm Resource">
+                <sheet>
+                    <group string="Əlavə Vəsait">
+                        <field name="name"/>
+                        <field name="area_id"/>
+                        <field name="note"/>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_farm_resource" model="ir.actions.act_window">
+        <field name="name">Farm Resources</field>
+        <field name="res_model">farm.resource</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="farm_resources_menu" name="Farm Resources" parent="farm_main_menu" action="action_farm_resource" sequence="100"/>
+</odoo>

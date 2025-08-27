@@ -46,6 +46,8 @@
         'views/farm_tractor_expense_views.xml',
         'views/farm_tractor_income_views.xml',
         'views/farm_material_expense_views.xml',
+        "views/farm_resource_views.xml",
+        'views/farm_document_views.xml',
         'views/farm_hotel_expense_views.xml',
         'views/farm_dashboard_wizard_views.xml',
         'views/product_template_views.xml',

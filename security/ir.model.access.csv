@@ -46,3 +46,5 @@ access_farm_founder_investment,farm.founder.investment,model_farm_founder_invest
 access_farm_founder_expense,farm.founder.expense,model_farm_founder_expense,,1,1,1,1
 access_farm_expense_report,farm.expense.report,model_farm_expense_report,,1,1,1,1
 access_farm_dashboard_wizard,farm.dashboard.wizard,model_farm_dashboard_wizard,,1,1,1,1
+access_farm_resource_user,Access Farm Resource User,model_farm_resource,,1,1,1,1
+access_farm_resource_manager,Access Farm Resource Manager,model_farm_resource,,1,1,1,1

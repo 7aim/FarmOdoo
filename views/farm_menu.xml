@@ -75,6 +75,11 @@
     <menuitem id="farm_vendors_menu" name="🙋🏻‍♂️ Kontragentlər" parent="farm_main_menu" 
               action="base.action_partner_supplier_form" sequence="50"/>
 
+    <menuitem id="farm_resources_menu" name="🧰 Əlavə Vəsait" parent="farm_main_menu" 
+              action="action_farm_resource" sequence="51"/>
+    <menuitem id="farm_documents_menu" name="📝 Sənədlər" parent="farm_main_menu" 
+              action="action_farm_document" sequence="52"/>
+
     <!-- VI. Məhsullar -->
     <menuitem id="farm_products_menu" name="📦 Məhsullar" parent="farm_main_menu" sequence="37"/>
     <menuitem id="farm_operations_products_menu" name="Məhsullar" 
