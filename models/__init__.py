@@ -8,6 +8,7 @@ from . import farm_pallet
 from . import farm_cooler
 from . import farm_operations
 from . import farm_worker
+from . import farm_meter
 from . import purchase_order
 from . import farm_communal_expense
 from . import farm_diesel_expense

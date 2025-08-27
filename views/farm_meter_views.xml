@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sayğac list View -->
+    <record id="farm_meter_list_view" model="ir.ui.view">
+        <field name="name">farm.meter.list</field>
+        <field name="model">farm.meter</field>
+        <field name="arch" type="xml">
+            <list string="Sayğaclar">
+                <field name="name"/>
+                <field name="serial_number"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Sayğac Form View -->
+    <record id="farm_meter_form_view" model="ir.ui.view">
+        <field name="name">farm.meter.form</field>
+        <field name="model">farm.meter</field>
+        <field name="arch" type="xml">
+            <form string="Sayğac">
+                <sheet>
+                    <group>
+                        <group string="Əsas Məlumatlar">
+                            <field name="name" placeholder="Sayğac Adı"/>
+                            <field name="serial_number"/>
+                            <field name="capacity_liters"/>
+                            <field name="installation_date"/>
+                            <field name="location"/>
+                        </group>
+                    </group>
+                    <group string="Açıqlama">
+                        <field name="description" placeholder="Sayğac haqqında qeydlər..." nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Sayğac Action -->
+    <record id="farm_meter_action" model="ir.actions.act_window">
+        <field name="name">Sayğaclar</field>
+        <field name="res_model">farm.meter</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu item -->
+
+</odoo>

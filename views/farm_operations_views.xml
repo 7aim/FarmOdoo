@@ -285,6 +285,7 @@
                 <field name="tree_ids" widget="many2many_tags"/>
                 <field name="irrigation_type"/>
                 <field name="operator_id"/>
+                <field name="meter_id"/>
                 <field name="water_liters" sum="Cəmi Su"/>
                 <field name="water_cost" sum="Cəmi Su Xərci"/>
                 <field name="irrigation_date"/>
@@ -308,6 +309,7 @@
                             <field name="parcel_ids" widget="many2many_tags"/>
                             <field name="row_ids" widget="many2many_tags"/>
                             <field name="tree_ids" widget="many2many_tags"/>
+                            <field name="meter_id"/>
                         </group>
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>

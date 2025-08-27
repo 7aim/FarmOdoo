@@ -17,15 +17,11 @@ class FarmMaterialExpense(models.Model):
     
     # Material məlumatları
     material_type = fields.Selection([
-        ('tools', 'Alətlər'),
+        ('ting', 'Ting'),
         ('equipment', 'Avadanlıq'),
         ('supplies', 'Təchizat'),
-        ('chemicals', 'Kimyəvi Maddələr'),
-        ('seeds', 'Toxum'),
-        ('fertilizer', 'Gübrə'),
-        ('packaging', 'Qablaşdırma'),
         ('other', 'Digər')
-    ], string='Material Növü', default='tools')
+    ], string='Material Növü', default='ting')
 
     supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Təchizatçı')]", tracking=True)
     quantity = fields.Float('Miqdar')

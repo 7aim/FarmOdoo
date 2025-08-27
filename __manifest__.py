@@ -39,6 +39,7 @@
         'views/farm_worker_views.xml',
         'views/farm_expense_views.xml',
         'views/farm_cash_views.xml',
+        'views/farm_meter_views.xml',
         'views/farm_expense_report_views.xml',
         'views/farm_communal_expense_views.xml',
         'views/farm_diesel_expense_views.xml',

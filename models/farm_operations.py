@@ -221,6 +221,7 @@ class FarmIrrigation(models.Model):
     parcel_ids = fields.Many2many('farm.parcel', string='Parsellər', domain="[('field_id', '=', field_id)]", tracking=True)
     row_ids = fields.Many2many('farm.row', string='Cərgələr', tracking=True)
     tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
+    meter_id = fields.Many2one('farm.meter', string='Sayğac')
 
     # Sulama tipi
     irrigation_type = fields.Selection([
