@@ -16,7 +16,7 @@ class FarmField(models.Model):
     # Sahədəki bitkiler (Sortlar modelinə bağlı)
     variety_ids = fields.Many2many(
         'farm.variety', 
-        string='Bitki (Sort)', 
+        string='Bitkilər', 
         tracking=True,
         help='Bu sahədə yetişdirilən bitki sortunu seçin'
     )

@@ -2,12 +2,12 @@ from odoo import models, fields, api
 
 class FarmVariety(models.Model):
     _name = 'farm.variety'
-    _description = 'Ağac Sortları'
+    _description = 'Bitgilər'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fruit_type, name'
 
-    name = fields.Char('Sort', tracking=True)
-    code = fields.Char('Sort Kodu', copy=False, readonly=True)
+    name = fields.Char('Bitgi Adı', tracking=True)
+    code = fields.Char('Bitgi Kodu', copy=False, readonly=True)
 
     # Cins
     fruit_species = fields.Char(string='Cins', required=True, tracking=True)
@@ -15,8 +15,11 @@ class FarmVariety(models.Model):
     # Növ
     fruit_type = fields.Char(string='Növ', required=True, tracking=True)
 
+    name_az = fields.Char('Bitgi Adı (Azerbaycanca)', tracking=True)
     # Sort
-    variety_name = fields.Char('Sort (Azerbaycanca)', tracking=True)
+    variety_name = fields.Char('Sort', tracking=True)
+
+    calagalti = fields.Char('Çalagalti', tracking=True)
 
     # Xüsusiyyətlər
     maturity_period = fields.Selection([
@@ -62,5 +65,5 @@ class FarmVariety(models.Model):
         return super().create(vals_list)
 
     _sql_constraints = [
-        ('code_unique', 'unique(code)', 'Sort kodu unikal olmalıdır!'),
+        ('code_unique', 'unique(code)', 'Bitgi kodu unikal olmalıdır!'),
     ]

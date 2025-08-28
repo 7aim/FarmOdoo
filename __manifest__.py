@@ -51,8 +51,8 @@
         'views/farm_hotel_expense_views.xml',
         'views/farm_dashboard_wizard_views.xml',
         'views/product_template_views.xml',
-        'views/farm_menu.xml',
         'views/purchase_order.xml',
+        'views/farm_menu.xml',
     ],
     'web_icon': 'farm_agriculture_v2,static/description/icon.png',
 

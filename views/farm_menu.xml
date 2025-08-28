@@ -72,14 +72,6 @@
     <menuitem id="farm_purchase_orders_menu" name="🏷️ Satınalma" parent="farm_main_menu" 
               action="purchase.purchase_form_action" sequence="40"/>
 
-    <menuitem id="farm_vendors_menu" name="🙋🏻‍♂️ Kontragentlər" parent="farm_main_menu" 
-              action="base.action_partner_supplier_form" sequence="50"/>
-
-    <menuitem id="farm_resources_menu" name="🧰 Əlavə Vəsait" parent="farm_main_menu" 
-              action="action_farm_resource" sequence="51"/>
-    <menuitem id="farm_documents_menu" name="📝 Sənədlər" parent="farm_main_menu" 
-              action="action_farm_document" sequence="52"/>
-
     <!-- VI. Məhsullar -->
     <menuitem id="farm_products_menu" name="📦 Məhsullar" parent="farm_main_menu" sequence="37"/>
     <menuitem id="farm_operations_products_menu" name="Məhsullar" 
@@ -123,7 +115,7 @@
               action="farm_parcel_type_action" sequence="10"/>
     <menuitem id="farm_disease_type_menu" name="Zərərli orqanizmlər" parent="farm_operations_config_menu" 
               action="farm_disease_type_action" sequence="30"/>
-    <menuitem id="farm_variety_menu" name="Sortlar" parent="farm_operations_config_menu" 
+    <menuitem id="farm_variety_menu" name="Bitgilər" parent="farm_operations_config_menu" 
               action="farm_variety_action" sequence="50"/>
     <menuitem id="farm_meter_menu" name="Sayğaclar"  parent="farm_operations_config_menu" 
               action="farm_meter_action" sequence="60"/>
@@ -131,6 +123,12 @@
               action="farm_pallet_action" sequence="40"/-->
     <!--menuitem id="farm_cooler_menu" name="Soyuducular" parent="farm_config_menu" 
               action="farm_cooler_action" sequence="20"/-->
+    <menuitem id="farm_vendors_menu" name="🙋🏻‍♂️ Kontragentlər" parent="farm_config_menu" 
+              action="base.action_partner_supplier_form" sequence="50"/>
+    <menuitem id="farm_resources_menu" name="🧰 Əlavə Vəsait" parent="farm_config_menu" 
+              action="action_farm_resource" sequence="51"/>
+    <menuitem id="farm_documents_menu" name="📝 Sənədlər" parent="farm_config_menu" 
+              action="action_farm_document" sequence="52"/>
 </odoo>
 
     <!-- 
