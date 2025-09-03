@@ -57,8 +57,8 @@
               parent="farm_other_expenses_menu" sequence="5"/>
     <menuitem id="farm_hotel_expense_menu" name="Otel" parent="farm_operations_expenses_menu" 
               action="action_farm_hotel_expense" sequence="10"/>
-    <menuitem id="farm_diesel_expense_menu" name="Dizel" parent="farm_operations_expenses_menu" 
-              action="action_farm_diesel_expense" sequence="20"/>
+    <!--<menuitem id="farm_diesel_expense_menu" name="Dizel" parent="farm_operations_expenses_menu" 
+              action="action_farm_diesel_expense" sequence="20"/>-->
     <menuitem id="farm_tractor_expense_menu" name="Traktor" parent="farm_operations_expenses_menu" 
               action="action_farm_tractor_expense" sequence="30"/>
     <menuitem id="farm_communal_expense_menu" name="Kommunal" parent="farm_operations_expenses_menu" 
