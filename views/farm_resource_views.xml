@@ -36,4 +36,41 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <record id="view_farm_tech_list" model="ir.ui.view">
+        <field name="name">farm.tech.list</field>
+        <field name="model">farm.tech</field>
+        <field name="arch" type="xml">
+            <list string="Farm Resources">
+                <field name="name"/>
+                <field name="image"/>
+                <field name="note"/>
+                <field name="area_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_farm_tech_form" model="ir.ui.view">
+        <field name="name">farm.tech.form</field>
+        <field name="model">farm.tech</field>
+        <field name="arch" type="xml">
+            <form string="Farm Resource">
+                <sheet>
+                    <group string="Əlavə Vəsait">
+                        <field name="name"/>
+                        <field name="area_id"/>
+                        <field name="note"/>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <field name="image" string="Şəkil önizləməsi" widget="image"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_farm_tech" model="ir.actions.act_window">
+        <field name="name">Farm Tech</field>
+        <field name="res_model">farm.tech</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
 </odoo>

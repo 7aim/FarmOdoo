@@ -114,7 +114,7 @@ class FarmPlanting(models.Model):
     tree_ids = fields.Many2many('farm.tree', string='Ağaclar', tracking=True)
     
     # Ağac məlumatları
-    variety_id = fields.Many2one('farm.variety', string='Sort (Ağac)', required=True, ondelete='cascade', tracking=True)
+    variety_id = fields.Many2one('farm.variety', string='Bitki Növü (Ağac)', required=True, ondelete='cascade', tracking=True)
     tree_count = fields.Integer('Ağac sayı', required=True, default=1, tracking=True)
 
     # Fidan məlumatları

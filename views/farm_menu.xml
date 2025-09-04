@@ -125,10 +125,12 @@
               action="farm_cooler_action" sequence="20"/-->
     <menuitem id="farm_vendors_menu" name="🙋🏻‍♂️ Kontragentlər" parent="farm_config_menu" 
               action="base.action_partner_supplier_form" sequence="50"/>
-    <menuitem id="farm_resources_menu" name="🧰 Əlavə Vəsait" parent="farm_config_menu" 
-              action="action_farm_resource" sequence="51"/>
+    <menuitem id="farm_resources_menu" name="🚜 Texnikalar" parent="farm_config_menu" 
+              action="action_farm_tech" sequence="51"/>
+    <menuitem id="farm_tech_menu" name="🧰 Əlavə Vəsait" parent="farm_config_menu" 
+              action="action_farm_resource" sequence="52"/>
     <menuitem id="farm_documents_menu" name="📝 Sənədlər" parent="farm_config_menu" 
-              action="action_farm_document" sequence="52"/>
+              action="action_farm_document" sequence="53"/>
 </odoo>
 
     <!-- 

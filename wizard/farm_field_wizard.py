@@ -21,7 +21,7 @@ class FarmFieldWizard(models.TransientModel):
     
     # Ağac məlumatları
     create_trees = fields.Boolean('Ağaclar da yaradılsın', default=True)
-    variety_id = fields.Many2one('farm.variety', string='Sort', help='Bütün ağaclar üçün sort (Ağac yaradılacaqsa məcburidir)')
+    variety_id = fields.Many2one('farm.variety', string='Bitgi Növü', help='Bütün ağaclar üçün bitki növü (Ağac yaradılacaqsa məcburidir)')
     trees_per_row = fields.Integer('Hər Cərgədə Ağac Sayı', default=25, required=True)
     
     # Digər məlumatlar

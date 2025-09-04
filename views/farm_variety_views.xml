@@ -32,7 +32,7 @@
                             <field name="name_az" placeholder="Nar sortu (Azerbaycanca)"/>
                             <field name="fruit_species"/>
                             <field name="fruit_type"/>
-                            <field name="variety_name" placeholder="Red Delicious"/>
+                            <field name="variety_name" placeholder="Red Delicious" widget="many2many_tags"/>
                             <field name="calagalti" placeholder="Çalagalti"/>
                         </group>
                         <group string="Mövsümi Məlumatlar">

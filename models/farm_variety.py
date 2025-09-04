@@ -1,5 +1,12 @@
 from odoo import models, fields, api
 
+class FarmSort(models.Model):
+    _name = 'farm.sort'
+    _description = 'Bitgi Sortları'
+    
+    name = fields.Char('Sort Adı', required=True)
+    description = fields.Text('Təsvir')
+
 class FarmVariety(models.Model):
     _name = 'farm.variety'
     _description = 'Bitgilər'
@@ -17,7 +24,7 @@ class FarmVariety(models.Model):
 
     name_az = fields.Char('Bitgi Adı (Azerbaycanca)', tracking=True)
     # Sort
-    variety_name = fields.Char('Sort', tracking=True)
+    variety_name = fields.Many2many('farm.sort', string='Sortlar', tracking=True)
 
     calagalti = fields.Char('Çalagalti', tracking=True)
 
