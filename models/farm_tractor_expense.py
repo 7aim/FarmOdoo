@@ -16,7 +16,7 @@ class FarmTractorExpense(models.Model):
     note = fields.Text('Qeyd')
     
     # Traktor məlumatları
-    tractor_name = fields.Many2one('farm.tech', string='Texnika')
+    tractor_name = fields.Char('Traktor Adı')
     expense_type = fields.Selection([
         ('fuel', 'Yanacaq'),
         ('repair', 'Təmir'),
