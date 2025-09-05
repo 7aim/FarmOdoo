@@ -5,7 +5,7 @@
         <field name="name">farm.variety.list</field>
         <field name="model">farm.variety</field>
         <field name="arch" type="xml">
-            <list string="Bitgilər">
+            <list string="Bitkilər">
                 <field name="code"/>
                 <field name="name"/>
                 <field name="name_az"/>
@@ -63,7 +63,7 @@
 
     <!-- Sort Action -->
     <record id="farm_variety_action" model="ir.actions.act_window">
-        <field name="name">Bitgilər</field>
+        <field name="name">Bitkilər</field>
         <field name="res_model">farm.variety</field>
         <field name="view_mode">list,form</field>
     </record>

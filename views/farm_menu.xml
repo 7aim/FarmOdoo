@@ -115,7 +115,7 @@
               action="farm_parcel_type_action" sequence="10"/>
     <menuitem id="farm_disease_type_menu" name="Zərərli orqanizmlər" parent="farm_operations_config_menu" 
               action="farm_disease_type_action" sequence="30"/>
-    <menuitem id="farm_variety_menu" name="Bitgilər" parent="farm_operations_config_menu" 
+    <menuitem id="farm_variety_menu" name="Bitkilər" parent="farm_operations_config_menu" 
               action="farm_variety_action" sequence="50"/>
     <menuitem id="farm_meter_menu" name="Sayğaclar"  parent="farm_operations_config_menu" 
               action="farm_meter_action" sequence="60"/>

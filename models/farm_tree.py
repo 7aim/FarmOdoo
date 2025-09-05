@@ -17,7 +17,7 @@ class FarmTree(models.Model):
     field_id = fields.Many2one(related='row_id.field_id', string='Sahə', store=True, readonly=True)
     
     # Ağac məlumatları
-    variety_id = fields.Many2one('farm.variety', string='Bitgi Növü', required=True, tracking=True)
+    variety_id = fields.Many2one('farm.variety', string='Bitki Növü', required=True, tracking=True)
 
     # Tarixi məlumatlar
     planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today, tracking=True)

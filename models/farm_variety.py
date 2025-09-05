@@ -2,19 +2,19 @@ from odoo import models, fields, api
 
 class FarmSort(models.Model):
     _name = 'farm.sort'
-    _description = 'Bitgi Sortları'
+    _description = 'Bitki Sortları'
     
     name = fields.Char('Sort Adı', required=True)
     description = fields.Text('Təsvir')
 
 class FarmVariety(models.Model):
     _name = 'farm.variety'
-    _description = 'Bitgilər'
+    _description = 'Bitkilər'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'fruit_type, name'
 
-    name = fields.Char('Bitgi Adı', tracking=True)
-    code = fields.Char('Bitgi Kodu', copy=False, readonly=True)
+    name = fields.Char('Bitki Adı', tracking=True)
+    code = fields.Char('Bitki Kodu', copy=False, readonly=True)
 
     # Cins
     fruit_species = fields.Char(string='Cins', required=True, tracking=True)
@@ -22,7 +22,7 @@ class FarmVariety(models.Model):
     # Növ
     fruit_type = fields.Char(string='Növ', required=True, tracking=True)
 
-    name_az = fields.Char('Bitgi Adı (Azerbaycanca)', tracking=True)
+    name_az = fields.Char('Bitki Adı (Azerbaycanca)', tracking=True)
     # Sort
     variety_name = fields.Many2many('farm.sort', string='Sortlar', tracking=True)
 
@@ -72,5 +72,5 @@ class FarmVariety(models.Model):
         return super().create(vals_list)
 
     _sql_constraints = [
-        ('code_unique', 'unique(code)', 'Bitgi kodu unikal olmalıdır!'),
+        ('code_unique', 'unique(code)', 'Bitki kodu unikal olmalıdır!'),
     ]
