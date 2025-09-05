@@ -18,6 +18,8 @@ class FarmTree(models.Model):
     
     # Ağac məlumatları
     variety_id = fields.Many2one('farm.variety', string='Bitki Növü', required=True, tracking=True)
+    sort_id = fields.Many2one('farm.sort', string='Bitki Sortu', tracking=True)
+    rootstock = fields.Char(string='Calaqaltı', tracking=True)
 
     # Tarixi məlumatlar
     planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today, tracking=True)
@@ -36,6 +38,18 @@ class FarmTree(models.Model):
     
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
+
+    @api.onchange('variety_id')
+    def _onchange_variety_id(self):
+        """Bitki növü dəyişdikdə sortu sıfırla"""
+        self.sort_id = False
+
+    @api.onchange('variety_id', 'sort_id')
+    def _filter_sorts(self):
+        """Yalnız seçilmiş bitki növünə aid olan sortları göstər"""
+        if self.variety_id:
+            return {'domain': {'sort_id': [('id', 'in', self.variety_id.variety_name.ids)]}}
+        return {'domain': {'sort_id': []}}
 
     def name_get(self):
         """Override name_get for custom display name"""
