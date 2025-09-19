@@ -59,48 +59,39 @@ class FarmRow(models.Model):
             else:
                 record.max_trees = 30  # Default dəyər
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            # Parcel ID context-dən götür
-            if not vals.get('parcel_id') and self._context.get('default_parcel_id'):
-                vals['parcel_id'] = self._context.get('default_parcel_id')
+@api.model_create_multi
+def create(self, vals_list):
+    for vals in vals_list:
+        # Parcel ID context-dən götür
+        if not vals.get('parcel_id') and self._context.get('default_parcel_id'):
+            vals['parcel_id'] = self._context.get('default_parcel_id')
+        
+        if vals.get('parcel_id'):
+            parcel = self.env['farm.parcel'].browse(vals['parcel_id'])
             
-            if vals.get('parcel_id'):
-                parcel = self.env['farm.parcel'].browse(vals['parcel_id'])
-                
-                # max_trees artıq compute field olduğundan burada təyin edilməsinə ehtiyac yoxdur
-                
-                if not parcel.code:
-                    raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
-                
-                # Cərgə kodunu generasiya et - bütün sahədə ardıcıl
-                if not vals.get('code'):
-                    # Bütün sahədəki son cərgəni tap
-                    last_row = self.search([
-                        ('field_id', '=', parcel.field_id.id),
-                        ('code', 'like', f'{parcel.field_id.code}-%')
-                    ], order='code desc', limit=1)
-                    
-                    if last_row and last_row.code:
-                        try:
-                            # Kodu parse et: S1-P1-C5 -> 5
-                            parts = last_row.code.split('-')
-                            if len(parts) >= 3 and parts[2].startswith('C'):
-                                number = int(parts[2][1:]) + 1
-                            else:
-                                number = 1
-                        except (ValueError, IndexError):
-                            number = 1
-                    else:
-                        number = 1
-                    
-                    vals['code'] = f'{parcel.code}-C{number}'
+            if not parcel.code:
+                raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
             
-            # Default ad ver
-            if not vals.get('name') and vals.get('code'):
-                vals['name'] = vals['code']
-        return super().create(vals_list)
+            # Cərgə kodunu generasiya et
+            if not vals.get('code'):
+                # Bu parseldəki bütün cərgələri tap
+                existing_rows = self.search([('parcel_id', '=', parcel.id)])
+                existing_codes = existing_rows.mapped('code')
+                
+                # Bu parsel üçün növbəti nömrəni tap
+                counter = 1
+                while True:
+                    new_code = f'{parcel.code}-C{counter}'
+                    if new_code not in existing_codes:
+                        vals['code'] = new_code
+                        break
+                    counter += 1
+        
+        # Default ad ver
+        if not vals.get('name') and vals.get('code'):
+            vals['name'] = vals['code']
+    
+    return super().create(vals_list)
 
     @api.constrains('max_trees', 'length_meter', 'tree_spacing')
     def _check_row_values(self):
