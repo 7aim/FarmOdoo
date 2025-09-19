@@ -59,39 +59,39 @@ class FarmRow(models.Model):
             else:
                 record.max_trees = 30  # Default dəyər
 
-@api.model_create_multi
-def create(self, vals_list):
-    for vals in vals_list:
-        # Parcel ID context-dən götür
-        if not vals.get('parcel_id') and self._context.get('default_parcel_id'):
-            vals['parcel_id'] = self._context.get('default_parcel_id')
-        
-        if vals.get('parcel_id'):
-            parcel = self.env['farm.parcel'].browse(vals['parcel_id'])
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            # Parcel ID context-dən götür
+            if not vals.get('parcel_id') and self._context.get('default_parcel_id'):
+                vals['parcel_id'] = self._context.get('default_parcel_id')
             
-            if not parcel.code:
-                raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
-            
-            # Cərgə kodunu generasiya et
-            if not vals.get('code'):
-                # Bu parseldəki bütün cərgələri tap
-                existing_rows = self.search([('parcel_id', '=', parcel.id)])
-                existing_codes = existing_rows.mapped('code')
+            if vals.get('parcel_id'):
+                parcel = self.env['farm.parcel'].browse(vals['parcel_id'])
                 
-                # Bu parsel üçün növbəti nömrəni tap
-                counter = 1
-                while True:
-                    new_code = f'{parcel.code}-C{counter}'
-                    if new_code not in existing_codes:
-                        vals['code'] = new_code
-                        break
-                    counter += 1
+                if not parcel.code:
+                    raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
+                
+                # Cərgə kodunu generasiya et
+                if not vals.get('code'):
+                    # Bu parseldəki bütün cərgələri tap
+                    existing_rows = self.search([('parcel_id', '=', parcel.id)])
+                    existing_codes = existing_rows.mapped('code')
+                    
+                    # Bu parsel üçün növbəti nömrəni tap
+                    counter = 1
+                    while True:
+                        new_code = f'{parcel.code}-C{counter}'
+                        if new_code not in existing_codes:
+                            vals['code'] = new_code
+                            break
+                        counter += 1
+            
+            # Default ad ver
+            if not vals.get('name') and vals.get('code'):
+                vals['name'] = vals['code']
         
-        # Default ad ver
-        if not vals.get('name') and vals.get('code'):
-            vals['name'] = vals['code']
-    
-    return super().create(vals_list)
+        return super().create(vals_list)
 
     @api.constrains('max_trees', 'length_meter', 'tree_spacing')
     def _check_row_values(self):
