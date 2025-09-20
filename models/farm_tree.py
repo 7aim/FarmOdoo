@@ -23,7 +23,7 @@ class FarmTree(models.Model):
 
     # Tarixi məlumatlar
     planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today, tracking=True)
-    season_count = fields.Integer('Mövsüm Sayı (il)', compute='_compute_season_count', store=True, tracking=True)
+    season_count = fields.Integer('Mövsüm Sayı (il)', store=True, tracking=True)
     
     # Status
     status = fields.Selection([
@@ -114,16 +114,16 @@ class FarmTree(models.Model):
                 vals['name'] = vals['tree_id']
         return super().create(vals_list)
 
-    @api.depends('planting_date')
-    def _compute_season_count(self):
-        from datetime import date
-        for record in self:
-            if record.planting_date:
-                current_year = date.today().year
-                planting_year = record.planting_date.year
-                record.season_count = max(0, current_year - planting_year)
-            else:
-                record.season_count = 0
+    # @api.depends('planting_date')
+    # def _compute_season_count(self):
+    #     from datetime import date
+    #     for record in self:
+    #         if record.planting_date:
+    #             current_year = date.today().year
+    #             planting_year = record.planting_date.year
+    #             record.season_count = max(0, current_year - planting_year)
+    #         else:
+    #             record.season_count = 0
 
     # SQL constraints üçün unikal ağac ID təmin edilir
     _sql_constraints = [
