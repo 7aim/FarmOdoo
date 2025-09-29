@@ -234,6 +234,11 @@ class FarmIrrigation(models.Model):
     water_liters = fields.Float('Su Miqdarı', required=True, default=1000.0, tracking=True)
     water_source = fields.Char('Su Mənbəyi', tracking=True)
     water_cost = fields.Float('Su Məsrəfi', tracking=True)
+    
+    # Sayğac məlumatları
+    meter_start = fields.Float('Sayğac Başlanğıc (m³)', tracking=True, help='Sulama başlamazdan əvvəl sayğac göstəricisi')
+    meter_end = fields.Float('Sayğac Bitiş (m³)', tracking=True, help='Sulama bitdikdən sonra sayğac göstəricisi')
+    water_consumed = fields.Float('İstehlak olunan su (m³)', compute='_compute_water_consumed', store=True, tracking=True)
 
     # İşçi məlumatları
     operator_id = fields.Many2one('res.partner', string='Operator', domain="[('category_id.name', '=', 'Operator')]")
@@ -250,6 +255,14 @@ class FarmIrrigation(models.Model):
     notes = fields.Text('Qeydlər')
     #active = fields.Boolean('Aktiv', default=True)
 
+    @api.depends('meter_start', 'meter_end')
+    def _compute_water_consumed(self):
+        for record in self:
+            if record.meter_start and record.meter_end and record.meter_end >= record.meter_start:
+                record.water_consumed = record.meter_end - record.meter_start
+            else:
+                record.water_consumed = 0.0
+
     @api.depends('worker_line_ids.amount')
     def _compute_total_worker_cost(self):
         for record in self:
@@ -265,11 +278,17 @@ class FarmIrrigation(models.Model):
         for record in self:
             record.total_cost = record.total_worker_cost + record.total_additional_cost
 
-    @api.constrains('water_liters')
+    @api.constrains('water_liters', 'meter_start', 'meter_end')
     def _check_positive_values(self):
         for record in self:
             if record.water_liters <= 0:
                 raise ValidationError('Su miqdarı müsbət olmalıdır!')
+            if record.meter_start < 0:
+                raise ValidationError('Sayğac başlanğıc dəyəri müsbət olmalıdır!')
+            if record.meter_end < 0:
+                raise ValidationError('Sayğac bitiş dəyəri müsbət olmalıdır!')
+            if record.meter_start and record.meter_end and record.meter_end < record.meter_start:
+                raise ValidationError('Sayğac bitiş dəyəri başlanğıc dəyərindən kiçik ola bilməz!')
 
     @api.depends('field_id', 'parcel_ids', 'irrigation_date')
     def _compute_name(self):

@@ -23,6 +23,10 @@ class FarmMaterialExpense(models.Model):
         ('other', 'Digər')
     ], string='Material Növü', default='ting')
 
+    # Ting üçün ağac və sort məlumatları
+    variety_id = fields.Many2one('farm.variety', string='Bitki Növü', store=True)
+    sort_id = fields.Many2one('farm.sort', string='Bitki Sortu', store=True)
+
     supplier = fields.Many2one('res.partner', string='Təchizatçı', domain="[('category_id.name', '=', 'Təchizatçı')]", tracking=True)
     quantity = fields.Float('Miqdar')
     unit_price = fields.Float('Vahid Qiymət')

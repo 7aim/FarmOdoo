@@ -39,6 +39,8 @@
                                 <field name="expense_date"/>
                                 <field name="field_id"/>
                                 <field name="material_type"/>
+                                <field name="variety_id" invisible="material_type != 'ting'"/>
+                                <field name="sort_id" invisible="material_type != 'ting'"/>
                                 <field name="supplier"/>
                                 <field name="quantity"/>
                                 <field name="unit_price"/>

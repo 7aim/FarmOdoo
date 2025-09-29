@@ -60,6 +60,7 @@
                 <field name="field_id" type="row"/>
                 <field name="total_cost" type="measure"/>
                 <field name="water_liters" type="measure"/>
+                <field name="water_consumed" type="measure"/>
             </pivot>
         </field>
     </record>
@@ -286,6 +287,9 @@
                 <field name="irrigation_type"/>
                 <field name="operator_id"/>
                 <field name="meter_id"/>
+                <field name="meter_start"/>
+                <field name="meter_end"/>
+                <field name="water_consumed" sum="Cəmi İstehlak (m³)"/>
                 <field name="water_liters" sum="Cəmi Su"/>
                 <field name="water_cost" sum="Cəmi Su Xərci"/>
                 <field name="irrigation_date"/>
@@ -318,6 +322,11 @@
                             <field name="water_source"/>
                             <field name="operator_id"/>
                             <field name="irrigation_date"/>
+                        </group>
+                        <group string="Sayğac Məlumatları">
+                            <field name="meter_start"/>
+                            <field name="meter_end"/>
+                            <field name="water_consumed" readonly="1"/>
                         </group>
                     </group>
                     <notebook>

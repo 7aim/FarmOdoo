@@ -26,6 +26,9 @@ class FarmTractorExpense(models.Model):
         ('other', 'Digər')
     ], string='Xərc Növü', default='fuel')
     
+    # Motosaat məlumatları
+    motor_hour = fields.Float('Motosaat', help='Yağ dəyişdirmə zamanı motosaat göstəricisi')
+    
     # Hesabat üçün
     year = fields.Integer('İl', compute='_compute_date_fields', store=True)
     month = fields.Integer('Ay', compute='_compute_date_fields', store=True)

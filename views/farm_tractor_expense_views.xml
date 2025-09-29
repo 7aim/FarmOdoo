@@ -19,6 +19,7 @@
                     <field name="field_id"/>
                     <field name="tractor_name"/>
                     <field name="expense_type"/>
+                    <field name="motor_hour"/>
                     <field name="amount" sum="Cəm"/>
                 </list>
             </field>
@@ -38,6 +39,7 @@
                                 <field name="field_id"/>
                                 <field name="tractor_name"/>
                                 <field name="expense_type"/>
+                                <field name="motor_hour" invisible="expense_type != 'oil_change'" required="expense_type == 'oil_change'"/>
                                 <field name="amount"/>
                             </group>
                         </group>
