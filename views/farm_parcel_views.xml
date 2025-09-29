@@ -40,6 +40,14 @@
                     </group>
                     <notebook>
                         <page string="Cərgələr">
+                            <div class="oe_button_box" style="margin-bottom: 10px;">
+                                <button name="%(action_farm_row_wizard)d" 
+                                        string="Cərgə Əlavə Et" 
+                                        type="action" 
+                                        class="btn-primary"
+                                        context="{'default_parcel_id': id}"
+                                        icon="fa-seedling"/>
+                            </div>
                             <field name="row_ids" context="{'default_parcel_id': id}">
                                 <list>
                                     <field name="code"/>

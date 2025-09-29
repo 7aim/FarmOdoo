@@ -27,6 +27,8 @@
         'data/farm_data.xml',
         #'data/founder_demo_data.xml',
         'views/farm_field_wizard_views.xml',
+        'views/farm_row_wizard_views.xml',
+        'views/farm_tree_wizard_views.xml',
         'views/farm_field_views.xml',
         'views/farm_parcel_views.xml',
         'views/farm_row_views.xml',

@@ -41,6 +41,14 @@
                     </group>
                     <notebook>
                         <page string="Ağaclar">
+                            <div class="oe_button_box" style="margin-bottom: 10px;">
+                                <button name="%(action_farm_tree_wizard)d" 
+                                        string="Ağac Əlavə Et" 
+                                        type="action" 
+                                        class="btn-primary"
+                                        context="{'default_row_id': id}"
+                                        icon="fa-tree"/>
+                            </div>
                             <field name="tree_ids" context="{'default_row_id': id}">
                                 <list>
                                     <field name="tree_id"/>

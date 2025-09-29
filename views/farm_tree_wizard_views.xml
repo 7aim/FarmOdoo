@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree Wizard Form View -->
+    <record id="view_farm_tree_wizard_form" model="ir.ui.view">
+        <field name="name">farm.tree.wizard.form</field>
+        <field name="model">farm.tree.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Ağac Yaratma Sihirbazı">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <i class="fa fa-tree" style="color: #228B22;"/>
+                            <span> Ağac Yaratma Sihirbazı</span>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group>
+                            <field name="row_id" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="parcel_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="field_id" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <separator string="Yaratma Üsulu"/>
+                    <group>
+                        <field name="creation_method" widget="radio"/>
+                    </group>
+                    
+                    <!-- Tək Ağac -->
+                    <group string="Tək Ağac Məlumatları" invisible="creation_method != 'single'">
+                        <field name="single_name" placeholder="Məsələn: Ağac1 və ya A1" required="creation_method == 'single'"/>
+                    </group>
+                    
+                    <!-- Çoxlu Ağac -->
+                    <group string="Çoxlu Ağac Məlumatları" invisible="creation_method != 'multiple'">
+                        <group>
+                            <field name="name_prefix" placeholder="Məsələn: A (A1, A2, A3) və ya boş (avtomatik)"/>
+                            <field name="start_number"/>
+                        </group>
+                        <group>
+                            <field name="count"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Aralıq -->
+                    <group string="Aralıq Ağac Məlumatları" invisible="creation_method != 'range'">
+                        <group>
+                            <field name="range_prefix" placeholder="Məsələn: A"/>
+                            <field name="range_start"/>
+                        </group>
+                        <group>
+                            <field name="range_end"/>
+                        </group>
+                    </group>
+                    
+                    <separator string="Ağac Məlumatları"/>
+                    <group>
+                        <group>
+                            <field name="variety_id" options="{'no_create': True}"/>
+                            <field name="sort_id" options="{'no_create': True}"/>
+                            <field name="rootstock"/>
+                        </group>
+                        <group>
+                            <field name="planting_date"/>
+                            <field name="status"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_trees" string="Ağacları Yarat" type="object" class="btn-primary"/>
+                    <button string="Ləğv et" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Tree Wizard -->
+    <record id="action_farm_tree_wizard" model="ir.actions.act_window">
+        <field name="name">Ağac Yaratma Sihirbazı</field>
+        <field name="res_model">farm.tree.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_farm_tree_wizard_form"/>
+    </record>
+</odoo>

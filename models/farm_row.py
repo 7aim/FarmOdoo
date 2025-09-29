@@ -6,10 +6,11 @@ class FarmRow(models.Model):
     _name = 'farm.row'
     _description = 'Cərgə'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'code'
+    _order = 'sequence desc'
 
     name = fields.Char('Cərgə Adı', tracking=True)
     code = fields.Char('Cərgə Kodu', copy=False, readonly=True)
+    sequence = fields.Integer('Sıra', default=1, help='Cərgələrin sıralanması üçün')
     row_variety = fields.Many2one('farm.variety', string='Cərgə Bitki Növü', ondelete='cascade', tracking=True)
 
     # Parsel əlaqəsi
@@ -59,6 +60,20 @@ class FarmRow(models.Model):
             else:
                 record.max_trees = 30  # Default dəyər
 
+    @api.constrains('name', 'parcel_id')
+    def _check_unique_name_in_field(self):
+        """Eyni sahədə cərgə adları unikal olmalıdır"""
+        for record in self:
+            if record.name and record.parcel_id and record.parcel_id.field_id:
+                field_id = record.parcel_id.field_id.id
+                existing_row = self.search([
+                    ('name', '=', record.name),
+                    ('parcel_id.field_id', '=', field_id),
+                    ('id', '!=', record.id)
+                ])
+                if existing_row:
+                    raise ValidationError(f'Bu sahədə "{record.name}" adlı cərgə artıq mövcuddur! Fərqli ad seçin.')
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -72,20 +87,22 @@ class FarmRow(models.Model):
                 if not parcel.code:
                     raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
                 
+                # Sıra nömrəsini təyin et
+                if not vals.get('sequence'):
+                    # Adından rəqəm çıxar
+                    if vals.get('name'):
+                        import re
+                        match = re.search(r'\d+', vals['name'])
+                        if match:
+                            vals['sequence'] = int(match.group())
+                        else:
+                            # Eger adında rəqəm yoxdursa, son sıra + 1
+                            last_row = self.search([('parcel_id', '=', parcel.id)], order='sequence desc', limit=1)
+                            vals['sequence'] = (last_row.sequence if last_row else 0) + 1
+                
                 # Cərgə kodunu generasiya et
                 if not vals.get('code'):
-                    # Bu parseldəki bütün cərgələri tap
-                    existing_rows = self.search([('parcel_id', '=', parcel.id)])
-                    existing_codes = existing_rows.mapped('code')
-                    
-                    # Bu parsel üçün növbəti nömrəni tap
-                    counter = 1
-                    while True:
-                        new_code = f'{parcel.code}-C{counter}'
-                        if new_code not in existing_codes:
-                            vals['code'] = new_code
-                            break
-                        counter += 1
+                    vals['code'] = f'{parcel.code}-C{vals.get("sequence", 1)}'
             
             # Default ad ver
             if not vals.get('name') and vals.get('code'):
@@ -103,7 +120,7 @@ class FarmRow(models.Model):
             if record.tree_spacing <= 0:
                 raise ValidationError('Ağaclar arası məsafə müsbət olmalıdır!')
 
-    # SQL constraints üçün unikal kod təmin edilir  
+    # SQL constraints üçün unikal kod və sahədə unikal ad təmin edilir  
     _sql_constraints = [
         ('code_unique', 'unique(code)', 'Cərgə kodu unikal olmalıdır!'),
     ]

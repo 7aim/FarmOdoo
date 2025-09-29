@@ -18,6 +18,10 @@
               action="farm_tree_action" sequence="40"/>
     <menuitem id="menu_farm_field_wizard" name="Avto Sahə" parent="farm_operations_field_menu"
               action="action_farm_field_wizard" sequence="50"/>
+    <menuitem id="menu_farm_row_wizard" name="Cərgə Sihirbazı" parent="farm_operations_field_menu"
+              action="action_farm_row_wizard" sequence="60"/>
+    <menuitem id="menu_farm_tree_wizard" name="Ağac Sihirbazı" parent="farm_operations_field_menu"
+              action="action_farm_tree_wizard" sequence="70"/>
 
     <!-- II. Operativ Formlar Menyusu -->
     <menuitem id="farm_operations_menu" name="🎯 Əməliyyatlar" parent="farm_main_menu" sequence="20"/>

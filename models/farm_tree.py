@@ -6,10 +6,11 @@ class FarmTree(models.Model):
     _name = 'farm.tree'
     _description = 'Ağac'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'tree_id'
+    _order = 'sequence desc'
 
     name = fields.Char('Ağac Adı', tracking=True)
     tree_id = fields.Char('Ağac kodu', copy=False, readonly=True)
+    sequence = fields.Integer('Sıra', default=1, help='Ağacların sıralanması üçün')
 
     # Cərgə əlaqəsi
     row_id = fields.Many2one('farm.row', string='Cərgə', required=True, ondelete='cascade')
@@ -38,6 +39,20 @@ class FarmTree(models.Model):
     
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
+
+    @api.constrains('name', 'row_id')
+    def _check_unique_name_in_field(self):
+        """Eyni sahədə ağac adları unikal olmalıdır"""
+        for record in self:
+            if record.name and record.row_id and record.row_id.parcel_id and record.row_id.parcel_id.field_id:
+                field_id = record.row_id.parcel_id.field_id.id
+                existing_tree = self.search([
+                    ('name', '=', record.name),
+                    ('row_id.parcel_id.field_id', '=', field_id),
+                    ('id', '!=', record.id)
+                ])
+                if existing_tree:
+                    raise ValidationError(f'Bu sahədə "{record.name}" adlı ağac artıq mövcuddur! Fərqli ad seçin.')
 
     @api.onchange('variety_id')
     def _onchange_variety_id(self):
@@ -79,20 +94,22 @@ class FarmTree(models.Model):
                 if not row.code:
                     raise ValidationError('Cərgə kodu olmayan bir cərgədə ağac yarada bilməzsiniz!')
                 
+                # Sıra nömrəsini təyin et
+                if not vals.get('sequence'):
+                    # Adından rəqəm çıxar
+                    if vals.get('name'):
+                        import re
+                        match = re.search(r'\d+', vals['name'])
+                        if match:
+                            vals['sequence'] = int(match.group())
+                        else:
+                            # Eger adında rəqəm yoxdursa, son sıra + 1
+                            last_tree = self.search([('row_id', '=', row.id)], order='sequence desc', limit=1)
+                            vals['sequence'] = (last_tree.sequence if last_tree else 0) + 1
+                
                 # Ağac kodunu generasiya et
                 if not vals.get('tree_id'):
-                    # Bu cərgədəki bütün ağacları tap
-                    existing_trees = self.search([('row_id', '=', row.id)])
-                    existing_codes = existing_trees.mapped('tree_id')
-                    
-                    # Bu cərgə üçün növbəti nömrəni tap
-                    counter = 1
-                    while True:
-                        new_code = f'{row.code}-A{counter}'
-                        if new_code not in existing_codes:
-                            vals['tree_id'] = new_code
-                            break
-                        counter += 1
+                    vals['tree_id'] = f'{row.code}-A{vals.get("sequence", 1)}'
             
             # Default ad ver
             if not vals.get('name') and vals.get('tree_id'):
