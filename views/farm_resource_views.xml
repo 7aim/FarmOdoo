@@ -5,6 +5,7 @@
         <field name="arch" type="xml">
             <list string="Farm Resources">
                 <field name="name"/>
+                <field name="asset_type"/>
                 <field name="image"/>
                 <field name="note"/>
                 <field name="area_id"/>
@@ -20,13 +21,38 @@
                 <sheet>
                     <group string="Əlavə Vəsait">
                         <field name="name"/>
+                        <field name="asset_type"/>
                         <field name="area_id"/>
                         <field name="note"/>
                         <field name="image" widget="image" class="oe_avatar"/>
-                        <field name="image" string="Şəkil önizləməsi" widget="image"/>
+                        <!--field name="image" string="Şəkil önizləməsi" widget="image"/>-->
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <!-- Farm Resource Search View -->
+    <record id="view_farm_resource_search" model="ir.ui.view">
+        <field name="name">farm.resource.search</field>
+        <field name="model">farm.resource</field>
+        <field name="arch" type="xml">
+            <search string="Vəsait Axtarış">
+                <field name="name"/>
+                <field name="asset_type"/>
+                <field name="area_id"/>
+                <separator/>
+                <filter name="machinery" string="Texnikalar" domain="[('asset_type', '=', 'machinery')]"/>
+                <filter name="irrigation" string="Suvarma Avadanlıqları" domain="[('asset_type', '=', 'irrigation_equipment')]"/>
+                <filter name="buildings" string="Bina və Tikililər" domain="[('asset_type', '=', 'buildings')]"/>
+                <filter name="movable" string="Daşınar Əmlaklar" domain="[('asset_type', '=', 'movable_property')]"/>
+                <filter name="plants" string="Çoxillik Bitkilər" domain="[('asset_type', '=', 'perennial_plants')]"/>
+                <separator/>
+                <group expand="0" string="Qruplaşdırma">
+                    <filter name="group_by_type" string="Vəsait Növü" context="{'group_by': 'asset_type'}"/>
+                    <filter name="group_by_area" string="Sahə" context="{'group_by': 'area_id'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
