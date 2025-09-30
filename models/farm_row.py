@@ -13,9 +13,10 @@ class FarmRow(models.Model):
     sequence = fields.Integer('Sıra', default=1, help='Cərgələrin sıralanması üçün')
     row_variety = fields.Many2one('farm.variety', string='Cərgə Bitki Növü', ondelete='cascade', tracking=True)
 
-    # Parsel əlaqəsi
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade')
-    field_id = fields.Many2one(related='parcel_id.field_id', string='Sahə', store=True, readonly=True)
+    # Sahə və Parsel əlaqəsi
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade', 
+                               domain="[('field_id', '=', field_id)]")
     
     # Statistikalar
     tree_count = fields.Integer('Ağac Sayı', compute='_compute_tree_count')
@@ -30,6 +31,15 @@ class FarmRow(models.Model):
     
     # Status
     description = fields.Text('Açıqlama')
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        """Sahə dəyişəndə parseli sıfırla və domain filtrləri"""
+        if self.field_id:
+            self.parcel_id = False
+            return {'domain': {'parcel_id': [('field_id', '=', self.field_id.id)]}}
+        else:
+            return {'domain': {'parcel_id': []}}
 
     def name_get(self):
         """Override name_get for custom display name"""

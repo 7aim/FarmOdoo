@@ -7,9 +7,9 @@ class FarmTreeWizard(models.TransientModel):
     _description = 'Ağac Yaratma Sihirbazı'
 
     # Əsas məlumatlar
-    row_id = fields.Many2one('farm.row', string='Cərgə', required=True)
-    parcel_id = fields.Many2one(related='row_id.parcel_id', string='Parsel', readonly=True)
-    field_id = fields.Many2one(related='row_id.field_id', string='Sahə', readonly=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, domain="[('field_id', '=', field_id)]")
+    row_id = fields.Many2one('farm.row', string='Cərgə', required=True, domain="[('parcel_id', '=', parcel_id)]")
     
     # Ağac yaratma üsulu
     creation_method = fields.Selection([
@@ -43,6 +43,25 @@ class FarmTreeWizard(models.TransientModel):
         ('removed', 'Silinmiş')
     ], string='Status', default='healthy', required=True)
     description = fields.Text('Açıqlama')
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        """Sahə dəyişəndə parsel və cərgəni sıfırla"""
+        if self.field_id:
+            self.parcel_id = False
+            self.row_id = False
+            return {'domain': {'parcel_id': [('field_id', '=', self.field_id.id)]}}
+        else:
+            return {'domain': {'parcel_id': [], 'row_id': []}}
+
+    @api.onchange('parcel_id')
+    def _onchange_parcel_id(self):
+        """Parsel dəyişəndə cərgəni sıfırla"""
+        if self.parcel_id:
+            self.row_id = False
+            return {'domain': {'row_id': [('parcel_id', '=', self.parcel_id.id)]}}
+        else:
+            return {'domain': {'row_id': []}}
 
     @api.onchange('creation_method')
     def _onchange_creation_method(self):

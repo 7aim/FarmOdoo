@@ -32,14 +32,14 @@
                 </header>
                 <sheet>
                     <group>
-                        <group string="Əsas Məlumatlar">
-                            <field name="name"/>
-                            <field name="tree_id"/>
-                            <field name="field_id" readonly="1"/>
-                            <field name="parcel_id" readonly="1"/>
-                            <field name="row_id"/>
+                        <group string="Yer Seçimi">
+                            <field name="field_id"/>
+                            <field name="parcel_id" domain="[('field_id', '=', field_id)]"/>
+                            <field name="row_id" domain="[('parcel_id', '=', parcel_id)]"/>
                         </group>
                         <group string="Ağac Məlumatları">
+                            <field name="name"/>
+                            <field name="tree_id"/>
                             <field name="variety_id"/>
                             <field name="sort_id"/>
                             <field name="rootstock"/>

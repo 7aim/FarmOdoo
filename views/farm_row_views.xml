@@ -25,13 +25,13 @@
             <form string="Cərgə">
                 <sheet>
                     <group>
-                        <group string="Əsas Məlumatlar">
+                        <group string="Yer Seçimi">
+                            <field name="field_id"/>
+                            <field name="parcel_id" domain="[('field_id', '=', field_id)]"/>
+                        </group>
+                        <group string="Cərgə Məlumatları">
                             <field name="name" placeholder="Nar cərgəsi"/>
                             <field name="code" readonly="1"/>
-                            <field name="field_id" readonly="1"/>
-                            <field name="parcel_id"/>
-                        </group>
-                        <group string="Ağac Məlumatları">
                             <field name="row_variety"/>
                             <field name="length_meter"/>
                             <field name="tree_spacing"/>

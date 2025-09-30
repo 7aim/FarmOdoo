@@ -7,8 +7,8 @@ class FarmRowWizard(models.TransientModel):
     _description = 'Cərgə Yaratma Sihirbazı'
 
     # Əsas məlumatlar
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True)
-    field_id = fields.Many2one(related='parcel_id.field_id', string='Sahə', readonly=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, domain="[('field_id', '=', field_id)]")
     
     # Cərgə yaratma üsulu
     creation_method = fields.Selection([
@@ -40,6 +40,15 @@ class FarmRowWizard(models.TransientModel):
     create_trees = fields.Boolean('Ağaclar da yaradılsın', default=False)
     trees_per_row = fields.Integer('Hər Cərgədə Ağac Sayı', default=25)
     tree_variety_id = fields.Many2one('farm.variety', string='Ağac Bitki Növü')
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        """Sahə dəyişəndə parseli sıfırla"""
+        if self.field_id:
+            self.parcel_id = False
+            return {'domain': {'parcel_id': [('field_id', '=', self.field_id.id)]}}
+        else:
+            return {'domain': {'parcel_id': []}}
 
     @api.onchange('creation_method')
     def _onchange_creation_method(self):

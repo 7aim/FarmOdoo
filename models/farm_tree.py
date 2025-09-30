@@ -12,10 +12,12 @@ class FarmTree(models.Model):
     tree_id = fields.Char('Ağac kodu', copy=False, readonly=True)
     sequence = fields.Integer('Sıra', default=1, help='Ağacların sıralanması üçün')
 
-    # Cərgə əlaqəsi
-    row_id = fields.Many2one('farm.row', string='Cərgə', required=True, ondelete='cascade')
-    parcel_id = fields.Many2one(related='row_id.parcel_id', string='Parsel', store=True, readonly=True)
-    field_id = fields.Many2one(related='row_id.field_id', string='Sahə', store=True, readonly=True)
+    # Sahə, Parsel və Cərgə əlaqəsi
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True, tracking=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, tracking=True,
+                               domain="[('field_id', '=', field_id)]")
+    row_id = fields.Many2one('farm.row', string='Cərgə', required=True, ondelete='cascade',
+                            domain="[('parcel_id', '=', parcel_id)]")
     
     # Ağac məlumatları
     variety_id = fields.Many2one('farm.variety', string='Bitki Növü', required=True, tracking=True)
@@ -39,6 +41,28 @@ class FarmTree(models.Model):
     
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
+
+    @api.onchange('field_id')
+    def _onchange_field_id(self):
+        """Sahə dəyişdirildikdə parseli sıfırla və domain tətbiq et"""
+        if self.field_id:
+            self.parcel_id = False
+            self.row_id = False
+            return {'domain': {'parcel_id': [('field_id', '=', self.field_id.id)]}}
+        else:
+            self.parcel_id = False
+            self.row_id = False
+            return {'domain': {'parcel_id': []}}
+
+    @api.onchange('parcel_id')
+    def _onchange_parcel_id(self):
+        """Parsel dəyişdirildikdə cərgəni sıfırla və domain tətbiq et"""
+        if self.parcel_id:
+            self.row_id = False
+            return {'domain': {'row_id': [('parcel_id', '=', self.parcel_id.id)]}}
+        else:
+            self.row_id = False
+            return {'domain': {'row_id': []}}
 
     @api.constrains('name', 'row_id')
     def _check_unique_name_in_field(self):
