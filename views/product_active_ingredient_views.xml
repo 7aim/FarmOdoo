@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ana Maddə Tree View -->
+    <record id="product_active_ingredient_list_view" model="ir.ui.view">
+        <field name="name">product.active.ingredient.list</field>
+        <field name="model">product.active.ingredient</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="chemical_formula"/>
+                <field name="product_count"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Ana Maddə Form View -->
+    <record id="product_active_ingredient_form_view" model="ir.ui.view">
+        <field name="name">product.active.ingredient.form</field>
+        <field name="model">product.active.ingredient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_products" type="object" 
+                                class="oe_stat_button" icon="fa-cube">
+                            <field name="product_count" widget="statinfo" 
+                                   string="Məhsullar"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="chemical_formula"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Ana Maddə Action -->
+    <record id="product_active_ingredient_action" model="ir.actions.act_window">
+        <field name="name">Təsir Edici Ana Maddələr</field>
+        <field name="res_model">product.active.ingredient</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

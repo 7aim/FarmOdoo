@@ -76,6 +76,9 @@ class FarmRow(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        # Parsel əsaslı kod sayğacı
+        parcel_code_counters = {}
+        
         for vals in vals_list:
             # Parcel ID context-dən götür
             if not vals.get('parcel_id') and self._context.get('default_parcel_id'):
@@ -87,9 +90,9 @@ class FarmRow(models.Model):
                 if not parcel.code:
                     raise ValidationError('Parsel kodu olmayan bir parseldə cərgə yarada bilməzsiniz!')
                 
-                # Sıra nömrəsini təyin et
+                # Sıra nömrəsini təyin et (addan müstəqil)
                 if not vals.get('sequence'):
-                    # Adından rəqəm çıxar
+                    # Adından rəqəm çıxar display üçün
                     if vals.get('name'):
                         import re
                         match = re.search(r'\d+', vals['name'])
@@ -100,9 +103,18 @@ class FarmRow(models.Model):
                             last_row = self.search([('parcel_id', '=', parcel.id)], order='sequence desc', limit=1)
                             vals['sequence'] = (last_row.sequence if last_row else 0) + 1
                 
-                # Cərgə kodunu generasiya et
+                # Cərgə kodunu generasiya et (sadə artan nömrə 1,2,3...)
                 if not vals.get('code'):
-                    vals['code'] = f'{parcel.code}-C{vals.get("sequence", 1)}'
+                    # Batch yaradılarkən eyni parsel üçün sayğacı artır
+                    if parcel.id not in parcel_code_counters:
+                        # İlk dəfə bu parsel üçün mövcud sayı tap
+                        existing_count = self.search_count([('parcel_id', '=', parcel.id)])
+                        parcel_code_counters[parcel.id] = existing_count
+                    
+                    # Sayğacı artır və kod generasiya et
+                    parcel_code_counters[parcel.id] += 1
+                    row_number = parcel_code_counters[parcel.id]
+                    vals['code'] = f'{parcel.code}-C{row_number}'
             
             # Default ad ver
             if not vals.get('name') and vals.get('code'):

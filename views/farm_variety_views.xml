@@ -12,7 +12,7 @@
                 <field name="fruit_species"/>
                 <field name="fruit_type"/>
                 <field name="variety_name"/>
-                <field name="calagalti"/>
+                <field name="rootstock"/>
                 <field name="tree_count"/>
             </list>
         </field>
@@ -33,7 +33,7 @@
                             <field name="fruit_species"/>
                             <field name="fruit_type"/>
                             <field name="variety_name" placeholder="Red Delicious" widget="many2many_tags"/>
-                            <field name="calagalti" placeholder="Çalagalti"/>
+                            <field name="rootstock" placeholder="Çalaqaltı"/>
                         </group>
                         <group string="Mövsümi Məlumatlar">
                             <field name="maturity_period"/>

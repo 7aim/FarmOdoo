@@ -7,6 +7,7 @@ access_farm_parcel,farm.parcel,model_farm_parcel,,1,1,1,1
 access_farm_row,farm.row,model_farm_row,,1,1,1,1
 access_farm_tree,farm.tree,model_farm_tree,,1,1,1,1
 access_farm_variety,farm.variety,model_farm_variety,,1,1,1,1
+access_farm_rootstock,farm.rootstock,model_farm_rootstock,,1,1,1,1
 access_farm_disease_type,farm.disease.type,model_farm_disease_type,,1,1,1,1
 access_farm_disease_record,farm.disease.record,model_farm_disease_record,,1,1,1,1
 access_farm_parcel_type,farm.parcel.type,model_farm_parcel_type,,1,1,1,1
@@ -48,7 +49,9 @@ access_farm_founder_investment,farm.founder.investment,model_farm_founder_invest
 access_farm_founder_expense,farm.founder.expense,model_farm_founder_expense,,1,1,1,1
 access_farm_expense_report,farm.expense.report,model_farm_expense_report,,1,1,1,1
 access_farm_dashboard_wizard,farm.dashboard.wizard,model_farm_dashboard_wizard,,1,1,1,1
+access_farm_meter,farm.meter,model_farm_meter,,1,1,1,1
 access_farm_resource_user,Access Farm Resource User,model_farm_resource,,1,1,1,1
 access_farm_tech_user,Access Farm Tech User,model_farm_tech,,1,1,1,1
 access_farm_document_user,Access Farm Document User,model_farm_document,,1,1,1,1
 access_farm_sort_user,farm.sort.user,model_farm_sort,base.group_user,1,1,1,1
+access_product_active_ingredient,product.active.ingredient,model_product_active_ingredient,,1,1,1,1

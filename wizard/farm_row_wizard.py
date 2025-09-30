@@ -107,15 +107,8 @@ class FarmRowWizard(models.TransientModel):
             if not self.single_name:
                 raise ValidationError('Cərgə adı daxil edilməlidir!')
             names_to_check = [self.single_name]
-            # Addan rəqəm çıxar sequence üçün
-            import re
-            sequence = 1
-            match = re.search(r'\d+', self.single_name)
-            if match:
-                sequence = int(match.group())
             rows_to_create = [{
                 'name': self.single_name,
-                'sequence': sequence,
                 'parcel_id': self.parcel_id.id,
                 'length_meter': self.length_meter,
                 'tree_spacing': self.tree_spacing,
@@ -132,7 +125,6 @@ class FarmRowWizard(models.TransientModel):
                 names_to_check.append(name)
                 rows_to_create.append({
                     'name': name,
-                    'sequence': sequence,
                     'parcel_id': self.parcel_id.id,
                     'length_meter': self.length_meter,
                     'tree_spacing': self.tree_spacing,
@@ -148,7 +140,6 @@ class FarmRowWizard(models.TransientModel):
                 names_to_check.append(name)
                 rows_to_create.append({
                     'name': name,
-                    'sequence': i,
                     'parcel_id': self.parcel_id.id,
                     'length_meter': self.length_meter,
                     'tree_spacing': self.tree_spacing,

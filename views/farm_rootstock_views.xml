@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Çalaqaltı Tree View -->
+    <record id="farm_rootstock_list_view" model="ir.ui.view">
+        <field name="name">farm.rootstock.list</field>
+        <field name="model">farm.rootstock</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Çalaqaltı Form View -->
+    <record id="farm_rootstock_form_view" model="ir.ui.view">
+        <field name="name">farm.rootstock.form</field>
+        <field name="model">farm.rootstock</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Çalaqaltı Action -->
+    <record id="farm_rootstock_action" model="ir.actions.act_window">
+        <field name="name">Çalaqaltılar</field>
+        <field name="res_model">farm.rootstock</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

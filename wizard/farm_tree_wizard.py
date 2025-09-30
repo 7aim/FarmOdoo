@@ -115,15 +115,8 @@ class FarmTreeWizard(models.TransientModel):
             if not self.single_name:
                 raise ValidationError('Ağac adı daxil edilməlidir!')
             names_to_check = [self.single_name]
-            # Addan rəqəm çıxar sequence üçün
-            import re
-            sequence = 1
-            match = re.search(r'\d+', self.single_name)
-            if match:
-                sequence = int(match.group())
             trees_to_create = [{
                 'name': self.single_name,
-                'sequence': sequence,
                 'row_id': self.row_id.id,
                 'variety_id': self.variety_id.id,
                 'sort_id': self.sort_id.id if self.sort_id else False,
@@ -134,14 +127,12 @@ class FarmTreeWizard(models.TransientModel):
             }]
             
         elif self.creation_method == 'multiple':
-            import re
             for i in range(self.count):
                 sequence = self.start_number + i
                 name = self._generate_tree_name(self.name_prefix, sequence)
                 names_to_check.append(name)
                 trees_to_create.append({
                     'name': name,
-                    'sequence': sequence,
                     'row_id': self.row_id.id,
                     'variety_id': self.variety_id.id,
                     'sort_id': self.sort_id.id if self.sort_id else False,
@@ -157,7 +148,6 @@ class FarmTreeWizard(models.TransientModel):
                 names_to_check.append(name)
                 trees_to_create.append({
                     'name': name,
-                    'sequence': i,
                     'row_id': self.row_id.id,
                     'variety_id': self.variety_id.id,
                     'sort_id': self.sort_id.id if self.sort_id else False,

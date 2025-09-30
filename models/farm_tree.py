@@ -20,7 +20,7 @@ class FarmTree(models.Model):
     # Ağac məlumatları
     variety_id = fields.Many2one('farm.variety', string='Bitki Növü', required=True, tracking=True)
     sort_id = fields.Many2one('farm.sort', string='Bitki Sortu', tracking=True)
-    rootstock = fields.Char(string='Calaqaltı', tracking=True)
+    rootstock = fields.Many2one('farm.rootstock', string='Çalaqaltı', tracking=True)
 
     # Tarixi məlumatlar
     planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today, tracking=True)
@@ -83,6 +83,9 @@ class FarmTree(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        # Cərgə əsaslı kod sayğacı
+        row_code_counters = {}
+        
         for vals in vals_list:
             # Row ID context-dən götür
             if not vals.get('row_id') and self._context.get('default_row_id'):
@@ -94,9 +97,9 @@ class FarmTree(models.Model):
                 if not row.code:
                     raise ValidationError('Cərgə kodu olmayan bir cərgədə ağac yarada bilməzsiniz!')
                 
-                # Sıra nömrəsini təyin et
+                # Sıra nömrəsini təyin et (addan müstəqil)
                 if not vals.get('sequence'):
-                    # Adından rəqəm çıxar
+                    # Adından rəqəm çıxar display üçün
                     if vals.get('name'):
                         import re
                         match = re.search(r'\d+', vals['name'])
@@ -107,9 +110,18 @@ class FarmTree(models.Model):
                             last_tree = self.search([('row_id', '=', row.id)], order='sequence desc', limit=1)
                             vals['sequence'] = (last_tree.sequence if last_tree else 0) + 1
                 
-                # Ağac kodunu generasiya et
+                # Ağac kodunu generasiya et (sadə artan nömrə 1,2,3...)
                 if not vals.get('tree_id'):
-                    vals['tree_id'] = f'{row.code}-A{vals.get("sequence", 1)}'
+                    # Batch yaradılarkən eyni cərgə üçün sayğacı artır
+                    if row.id not in row_code_counters:
+                        # İlk dəfə bu cərgə üçün mövcud sayı tap
+                        existing_count = self.search_count([('row_id', '=', row.id)])
+                        row_code_counters[row.id] = existing_count
+                    
+                    # Sayğacı artır və kod generasiya et
+                    row_code_counters[row.id] += 1
+                    tree_number = row_code_counters[row.id]
+                    vals['tree_id'] = f'{row.code}-A{tree_number}'
             
             # Default ad ver
             if not vals.get('name') and vals.get('tree_id'):

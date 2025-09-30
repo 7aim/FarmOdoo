@@ -1,6 +1,35 @@
 from odoo import models, fields, api
 
 
+class ProductActiveIngredient(models.Model):
+    _name = 'product.active.ingredient'
+    _description = 'Təsir Edici Ana Maddələr'
+    
+    name = fields.Char('Ana Maddə Adı', required=True)
+    chemical_formula = fields.Char('Kimyəvi Formula')
+    description = fields.Text('Təsvir')
+    
+    # Əlaqəli məhsullar
+    product_ids = fields.One2many('product.template', 'active_ingredient_id', string='Məhsullar')
+    product_count = fields.Integer('Məhsul Sayı', compute='_compute_product_count')
+    
+    @api.depends('product_ids')
+    def _compute_product_count(self):
+        for record in self:
+            record.product_count = len(record.product_ids)
+    
+    def action_view_products(self):
+        """Ana maddə ilə əlaqəli məhsulları göstər"""
+        return {
+            'name': f'{self.name} - Məhsullar',
+            'type': 'ir.actions.act_window',
+            'res_model': 'product.template',
+            'view_mode': 'tree,form',
+            'domain': [('active_ingredient_id', '=', self.id)],
+            'target': 'current',
+        }
+
+
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
     
@@ -12,15 +41,21 @@ class ProductTemplate(models.Model):
     )
     
     # İstehsalçı firma
-    manufacturer_company = fields.Char(
+    manufacturer_company = fields.Many2one(
+        'res.partner',
         string='İstehsalçı Firma',
         help='Məhsulu istehsal edən firma/şirkət'
     )
     
     # Təsir edici ana maddə
-    active_ingredient = fields.Char(
+    active_ingredient_id = fields.Many2one(
+        'product.active.ingredient',
         string='Təsir Edici Ana Maddə',
-        help='Məhsulun təsir edici ana maddələri (kimyəvi tərkib)'
+        help='Məhsulun təsir edici ana maddəsi'
+    )
+    active_ingredient = fields.Char(
+        string='Təsir Edici Ana Maddə (Köhnə)',
+        help='Köhnə məlumat - yeni Ana Maddə əlaqəsini istifadə edin'
     )
     
     # Əlavə məlumat sahələri (ixtiyari)

@@ -313,7 +313,6 @@
                             <field name="parcel_ids" widget="many2many_tags"/>
                             <field name="row_ids" widget="many2many_tags"/>
                             <field name="tree_ids" widget="many2many_tags"/>
-                            <field name="meter_id"/>
                         </group>
                         <group string="Sulama Məlumatları">
                             <field name="irrigation_type"/>
@@ -324,6 +323,7 @@
                             <field name="irrigation_date"/>
                         </group>
                         <group string="Sayğac Məlumatları">
+                            <field name="meter_id"/>
                             <field name="meter_start"/>
                             <field name="meter_end"/>
                             <field name="water_consumed" readonly="1"/>
