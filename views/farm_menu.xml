@@ -108,8 +108,17 @@
               action="action_farm_founder" sequence="10"/>
     <menuitem id="farm_founder_investment_menu" name="Təsisçi İnvestisiyaları" parent="farm_founder_main_menu" 
               action="action_farm_founder_investment" sequence="30"/>
-    <menuitem id="farm_founder_expense_menu" name="Təsisçi Xərcləri" parent="farm_founder_main_menu" 
+    <menuitem id="farm_founder_expense_menu" name="Təsisçi Ödəmələri" parent="farm_founder_main_menu" 
               action="action_farm_founder_expense" sequence="40"/>
+    
+    <!-- Kontaktlar Alt Menyuları -->
+    <menuitem id="farm_contacts_menu" name="Kontaktlar" parent="farm_finance_menu" sequence="40"/>
+    <menuitem id="farm_creditors_menu" name="Kreditorlar" parent="farm_contacts_menu" 
+              action="action_creditors" sequence="10"/>
+    <menuitem id="farm_debitors_menu" name="Debitorlar" parent="farm_contacts_menu" 
+              action="action_debitors" sequence="20"/>
+    <menuitem id="farm_all_contacts_menu" name="Bütün Kontaktlar" parent="farm_contacts_menu" 
+              action="base.action_partner_form" sequence="30"/>
     
     <!-- VIII. Konfiqurasiya -->
     <menuitem id="farm_config_menu" name="⚙️ Konfiqurasiya" parent="farm_main_menu" sequence="90"/>

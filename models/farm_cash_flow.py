@@ -16,7 +16,7 @@ class FarmFounder(models.Model):
     
     # One2many əlaqələr
     investment_records = fields.One2many('farm.founder.investment', 'founder_id', string='İnvestisiya Qeydləri')
-    expense_records = fields.One2many('farm.founder.expense', 'founder_id', string='Xərc Qeydləri')
+    expense_records = fields.One2many('farm.founder.expense', 'founder_id', string='Ödəmə Qeydləri')
     
     # Hesablanmış sahələr
     current_expense = fields.Float('Cari Xərc', compute='_compute_current_amounts', store=True)
@@ -58,7 +58,7 @@ class FarmFounderInvestment(models.Model):
 
 class FarmFounderExpense(models.Model):
     _name = 'farm.founder.expense'
-    _description = 'Təsisçi Xərcləri'
+    _description = 'Təsisçi Ödəmələri'
     _order = 'date desc'
 
     name = fields.Char('Açıqlama', required=True)
@@ -66,12 +66,18 @@ class FarmFounderExpense(models.Model):
     amount = fields.Float('Məbləğ', required=True)
     date = fields.Date('Tarix', default=fields.Date.context_today, required=True)
     expense_type = fields.Selection([
-        ('personal', 'Şəxsi Xərc'),
-        ('business', 'İş Xərci'),
-        ('farm_material', 'Təsərrüfat Materialı'),
-        ('equipment', 'Avadanlıq'),
+        ('treatment', 'Dərmanlama'),
+        ('fertilizing', 'Gübrələmə'),
+        ('water', 'Su'),
+        ('electricity', 'Elektrik'),
+        ('gas', 'Qaz'),
+        ('fuel', 'Yanacaq'),
+        ('materials', 'Mal material'),
+        ('fixed_assets', 'Əsas vəsaitlər'),
+        ('low_value_items', 'Azqiymətlilər'),
+        ('founder_payments', 'Təsisçi ödəmələri'),
         ('other', 'Digər')
-    ], string='Xərc Növü', default='personal')
+    ], string='Xərc Növü', default='founder_payments', required=True)
     note = fields.Text('Qeyd')
     reference = fields.Char('Əsas')
     

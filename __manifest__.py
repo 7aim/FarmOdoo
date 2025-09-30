@@ -55,6 +55,7 @@
         'views/farm_dashboard_wizard_views.xml',
         'views/product_template_views.xml',
         'views/product_active_ingredient_views.xml',
+        'views/res_partner_views.xml',
         'views/purchase_order.xml',
         'views/farm_menu.xml',
     ],

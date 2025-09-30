@@ -21,6 +21,7 @@
                                 <field name="active_ingredient" readonly="1"/>
                                 <field name="concentration"/>
                                 <field name="expiry_months"/>
+                                <field name="is_universal" string="Universal Məhsul (All)"/>
                             </group>
                         </group>
                         <group string="Saxlama Şəraiti">
@@ -45,6 +46,7 @@
                 <xpath expr="//search" position="inside">
                     <separator/>
                     <filter name="with_manufacturer" string="İstehsalçısı Olan" domain="[('manufacturer_company', '!=', False)]"/>
+                    <filter name="universal_products" string="Universal Məhsullar (All)" domain="[('is_universal', '=', True)]"/>
                 </xpath>
             </field>
         </record>

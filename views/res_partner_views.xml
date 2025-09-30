@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Partner Form View Extension -->
+    <record id="res_partner_form_view_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Maliyyə kateqoriyasını əsas məlumatlar qrupuna əlavə et -->
+            <xpath expr="//group[@name='purchase']" position="after">
+                <group string="Maliyyə Məlumatları" name="financial_info">
+                    <field name="financial_category"/>
+                    <field name="credit_limit" invisible="financial_category not in ['debitor', 'both']"/>
+                </group>
+            </xpath>
+            
+            <!-- Ödəniş şərtlərini notebook-a əlavə et -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Maliyyə Şərtləri" name="financial_terms" 
+                      invisible="financial_category == 'other'">
+                    <group>
+                        <group string="Kreditor Məlumatları" 
+                               invisible="financial_category not in ['creditor', 'both']">
+                            <field name="is_supplier" readonly="1"/>
+                            <field name="is_contractor" readonly="1"/>
+                        </group>
+                        <group string="Debitor Məlumatları" 
+                               invisible="financial_category not in ['debitor', 'both']">
+                            <field name="is_customer" readonly="1"/>
+                            <field name="is_client" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Ödəniş Şərtləri">
+                        <field name="payment_terms" placeholder="Ödəniş şərtləri və müddətlərini qeyd edin..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner Search View Extension -->
+    <record id="res_partner_search_view_inherit" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <!-- Maliyyə kateqoriyası üçün axtarış sahəsi əlavə et -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="financial_category"/>
+            </xpath>
+            
+            <!-- Maliyyə kateqoriyası üçün filtrlər əlavə et -->
+            <xpath expr="//filter[@name='supplier']" position="after">
+                <separator/>
+                <filter name="creditors" string="Kreditorlar" 
+                        domain="[('financial_category', 'in', ['creditor', 'both'])]"/>
+                <filter name="debitors" string="Debitorlar" 
+                        domain="[('financial_category', 'in', ['debitor', 'both'])]"/>
+                <filter name="suppliers_only" string="Təchizatçılar" 
+                        domain="[('financial_category', '=', 'creditor'), ('is_supplier', '=', True)]"/>
+                <filter name="contractors_only" string="Podratçılar" 
+                        domain="[('financial_category', '=', 'creditor'), ('is_contractor', '=', True)]"/>
+                <filter name="customers_only" string="Müştərilər" 
+                        domain="[('financial_category', '=', 'debitor'), ('is_customer', '=', True)]"/>
+                <filter name="clients_only" string="Sifarişçilər" 
+                        domain="[('financial_category', '=', 'debitor'), ('is_client', '=', True)]"/>
+            </xpath>
+            
+            <!-- Qruplaşdırma üçün maliyyə kateqoriyası əlavə et -->
+            <xpath expr="//group" position="inside">
+                <filter name="group_by_financial_category" string="Maliyyə Kateqoriyası" 
+                        context="{'group_by': 'financial_category'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Kreditorlar üçün ayrıca action -->
+    <record id="action_creditors" model="ir.actions.act_window">
+        <field name="name">Kreditorlar</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('financial_category', 'in', ['creditor', 'both'])]</field>
+        <field name="context">{'default_financial_category': 'creditor', 'default_is_company': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Yeni kreditor əlavə edin!
+            </p>
+            <p>
+                Bu bölmədə podratçılar və mal satanlar kimi kreditorları idarə edə bilərsiniz.
+            </p>
+        </field>
+    </record>
+
+    <!-- Debitorlar üçün ayrıca action -->
+    <record id="action_debitors" model="ir.actions.act_window">
+        <field name="name">Debitorlar</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('financial_category', 'in', ['debitor', 'both'])]</field>
+        <field name="context">{'default_financial_category': 'debitor'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Yeni debitor əlavə edin!
+            </p>
+            <p>
+                Bu bölmədə alıcılar və sifarişçilər kimi debitorları idarə edə bilərsiniz.
+            </p>
+        </field>
+    </record>
+</odoo>

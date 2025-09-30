@@ -80,6 +80,13 @@ class ProductTemplate(models.Model):
         help='Məhsulun saxlanma şərtləri (temperatur, rütubət və s.)'
     )
     
+    # Universal məhsul (həm gübrə həm pestisid)
+    is_universal = fields.Boolean(
+        string='Universal Məhsul (All)',
+        default=False,
+        help='Bu seçim aktiv olanda məhsul həm gübrələmədə həm də dərmanlamada görünəcək'
+    )
+    
     def name_get(self):
         """Məhsul adında istehsalçı məlumatını göstər"""
         result = []
