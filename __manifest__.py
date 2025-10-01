@@ -53,6 +53,7 @@
         'views/farm_document_views.xml',
         'views/farm_hotel_expense_views.xml',
         'views/farm_dashboard_wizard_views.xml',
+        'views/farm_future_expense_views.xml',
         'views/product_template_views.xml',
         'views/product_active_ingredient_views.xml',
         'views/res_partner_views.xml',

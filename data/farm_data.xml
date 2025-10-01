@@ -33,5 +33,13 @@
             <field name="padding">4</field>
             <field name="company_id" eval="False"/>
         </record>
+
+        <record id="seq_farm_future_expense" model="ir.sequence">
+            <field name="name">Gələcək Xərc Ardıcıllığı</field>
+            <field name="code">farm.future.expense</field>
+            <field name="prefix">GX</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>

@@ -55,3 +55,5 @@ access_farm_tech_user,Access Farm Tech User,model_farm_tech,,1,1,1,1
 access_farm_document_user,Access Farm Document User,model_farm_document,,1,1,1,1
 access_farm_sort_user,farm.sort.user,model_farm_sort,base.group_user,1,1,1,1
 access_product_active_ingredient,product.active.ingredient,model_product_active_ingredient,,1,1,1,1
+access_farm_future_expense,farm.future.expense,model_farm_future_expense,,1,1,1,1
+access_farm_future_expense_line,farm.future.expense.line,model_farm_future_expense_line,,1,1,1,1

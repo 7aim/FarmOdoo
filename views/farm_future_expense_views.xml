@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Gələcək Dövrün Xərci Action -->
+    <record id="action_farm_future_expense" model="ir.actions.act_window">
+        <field name="name">Gələcək Dövrün Xərci</field>
+        <field name="res_model">farm.future.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Yeni lizinq/taksit müqaviləsi əlavə edin!
+            </p>
+            <p>
+                Bu bölmədə texnikaların lizinq və taksit ödənişlərini idarə edə bilərsiniz.
+            </p>
+        </field>
+    </record>
+
+    <!-- Gələcək Dövrün Xərci List View -->
+    <record id="farm_future_expense_list_view" model="ir.ui.view">
+        <field name="name">farm.future.expense.list</field>
+        <field name="model">farm.future.expense</field>
+        <field name="arch" type="xml">
+            <list string="Gələcək Dövrün Xərci" default_order="contract_date desc">
+                <field name="contract_number"/>
+                <field name="name"/>
+                <field name="asset_name"/>
+                <field name="total_price" sum="Cəmi"/>
+                <field name="original_debt" sum="Əsas Borc"/>
+                <field name="remaining_debt" sum="Qalan Borc"/>
+                <field name="monthly_payment"/>
+                <field name="paid_installments"/>
+                <field name="remaining_installments"/>
+                <field name="status" widget="badge" 
+                       decoration-success="status == 'completed'"
+                       decoration-info="status == 'active'"
+                       decoration-danger="status == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Gələcək Dövrün Xərci Form View -->
+    <record id="farm_future_expense_form_view" model="ir.ui.view">
+        <field name="name">farm.future.expense.form</field>
+        <field name="model">farm.future.expense</field>
+        <field name="arch" type="xml">
+            <form string="Gələcək Dövrün Xərci">
+                <header>
+                    <button name="generate_payment_schedule" string="Ödəniş Cədvəli Yarat" type="object" 
+                            class="btn-primary" invisible="payment_line_ids"/>
+                    <button name="action_complete" string="Tamamlandı" type="object" 
+                            class="btn-success" invisible="status != 'active'"
+                            confirm="Bu müqaviləni tamamlanmış kimi qeyd etmək istədiyinizdən əminsiniz?"/>
+                    <button name="action_cancel" string="Ləğv Et" type="object" 
+                            class="btn-danger" invisible="status != 'active'"
+                            confirm="Bu müqaviləni ləğv etmək istədiyinizdən əminsiniz?"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="contract_number" readonly="1" placeholder="Müqavilə nömrəsi..."/>
+                        </h1>
+                        <field name="name" placeholder="Müqavilə adı..."/>
+                    </div>
+                    
+                    <group>
+                        <group string="Vəsait Məlumatları">
+                            <field name="asset_id"/>
+                            <field name="asset_name" readonly="1"/>
+                            <field name="asset_type" readonly="1"/>
+                            <field name="supplier_id"/>
+                            <field name="bank_id"/>
+                        </group>
+                        <group string="Tarixlər">
+                            <field name="contract_date"/>
+                            <field name="first_payment_date"/>
+                            <field name="last_payment_date" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Maliyyə Məlumatları">
+                            <field name="total_price"/>
+                            <field name="initial_payment"/>
+                            <field name="subsidy_amount"/>
+                            <field name="original_debt" readonly="1"/>
+                            <field name="remaining_debt" readonly="1"/>
+                            <field name="interest_rate"/>
+                            <field name="total_interest" readonly="1"/>
+                        </group>
+                        <group string="Taksit Məlumatları">
+                            <field name="installment_months"/>
+                            <field name="monthly_payment" readonly="1"/>
+                            <field name="annual_payment" readonly="1"/>
+                            <field name="paid_installments" readonly="1"/>
+                            <field name="remaining_installments" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Ödəniş Cədvəli">
+                            <field name="payment_line_ids">
+                                <list string="Ödəniş Cədvəli" editable="bottom">
+                                    <field name="installment_number"/>
+                                    <field name="payment_date"/>
+                                    <field name="amount" sum="Cəmi"/>
+                                    <field name="is_paid" widget="boolean_toggle"/>
+                                    <!--field name="payment_date_actual" readonly="1"/>-->
+                                    <!--<field name="remaining_amount" readonly="1"/>-->
+                                    <field name="notes"/>
+                                    <button name="action_mark_paid" string="Ödə" type="object" 
+                                            icon="fa-check" invisible="is_paid"/>
+                                    <button name="action_mark_unpaid" string="Ləğv Et" type="object" 
+                                            icon="fa-times" invisible="not is_paid"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Hesabat və Statistika">
+                            <group>
+                                <group string="Ödəniş Statistikası">
+                                    <field name="paid_amount" readonly="1"/>
+                                    <field name="remaining_amount" readonly="1"/>
+                                </group>
+                                <group string="Taksit Statusu">
+                                    <field name="paid_installments" readonly="1"/>
+                                    <field name="remaining_installments" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Qeydlər">
+                            <field name="notes" placeholder="Müqavilə ilə bağlı əlavə qeydlər..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Gələcək Dövrün Xərci Search View -->
+    <record id="farm_future_expense_search_view" model="ir.ui.view">
+        <field name="name">farm.future.expense.search</field>
+        <field name="model">farm.future.expense</field>
+        <field name="arch" type="xml">
+            <search string="Gələcək Xərc Axtarış">
+                <field name="name"/>
+                <field name="contract_number"/>
+                <field name="asset_name"/>
+                <field name="supplier_id"/>
+                <separator/>
+                <filter name="active" string="Aktiv" domain="[('status', '=', 'active')]"/>
+                <filter name="completed" string="Tamamlanmış" domain="[('status', '=', 'completed')]"/>
+                <filter name="cancelled" string="Ləğv edilmiş" domain="[('status', '=', 'cancelled')]"/>
+                <separator/>
+                <!--
+                <filter name="has_remaining" string="Borclu" domain="[('remaining_installments', '>', 0)]"/>
+                <filter name="fully_paid" string="Tam Ödənilmiş" domain="[('remaining_installments', '=', 0)]"/>
+                -->
+                <separator/>
+                <group expand="0" string="Qruplaşdırma">
+                    <filter name="group_by_asset" string="Vəsait" context="{'group_by': 'asset_id'}"/>
+                    <filter name="group_by_supplier" string="Təchizatçı" context="{'group_by': 'supplier_id'}"/>
+                    <filter name="group_by_status" string="Status" context="{'group_by': 'status'}"/>
+                    <filter name="group_by_month" string="Ay" context="{'group_by': 'contract_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
