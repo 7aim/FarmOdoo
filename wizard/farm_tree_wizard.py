@@ -137,6 +137,8 @@ class FarmTreeWizard(models.TransientModel):
             trees_to_create = [{
                 'name': self.single_name,
                 'row_id': self.row_id.id,
+                'parcel_id': self.row_id.parcel_id.id,
+                'field_id': self.row_id.field_id.id,
                 'variety_id': self.variety_id.id,
                 'sort_id': self.sort_id.id if self.sort_id else False,
                 'rootstock': self.rootstock,
@@ -153,6 +155,8 @@ class FarmTreeWizard(models.TransientModel):
                 trees_to_create.append({
                     'name': name,
                     'row_id': self.row_id.id,
+                    'parcel_id': self.row_id.parcel_id.id,
+                    'field_id': self.row_id.field_id.id,
                     'variety_id': self.variety_id.id,
                     'sort_id': self.sort_id.id if self.sort_id else False,
                     'rootstock': self.rootstock,
@@ -168,6 +172,8 @@ class FarmTreeWizard(models.TransientModel):
                 trees_to_create.append({
                     'name': name,
                     'row_id': self.row_id.id,
+                    'parcel_id': self.row_id.parcel_id.id,
+                    'field_id': self.row_id.field_id.id,
                     'variety_id': self.variety_id.id,
                     'sort_id': self.sort_id.id if self.sort_id else False,
                     'rootstock': self.rootstock,

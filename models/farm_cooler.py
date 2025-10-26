@@ -8,15 +8,15 @@ class FarmCooler(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'cooler_code'
 
-    name = fields.Char('Soyuducu Adı', tracking=True)
+    name = fields.Char('Soyuducu Adı')
     cooler_code = fields.Char('Soyuducu Kodu', copy=False, readonly=True)
     
     # Tutum məlumatları
-    capacity_kg = fields.Float('Tutum (kq)', default=5.0, tracking=True)
+    capacity_kg = fields.Float('Tutum (kq)', default=5.0)
 
     # Temperatura nəzarət
-    target_temperature = fields.Float('Hədəf Temperatura (°C)', default=4.0, tracking=True)
-    current_temperature = fields.Float('Hazırkı Temperatura (°C)', tracking=True)
+    target_temperature = fields.Float('Hədəf Temperatura (°C)', default=4.0)
+    current_temperature = fields.Float('Hazırkı Temperatura (°C)')
 
     # Status
     status = fields.Selection([

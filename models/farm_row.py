@@ -8,13 +8,13 @@ class FarmRow(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence desc'
 
-    name = fields.Char('Cərgə Adı', tracking=True)
+    name = fields.Char('Cərgə Adı')
     code = fields.Char('Cərgə Kodu', copy=False, readonly=True)
     sequence = fields.Integer('Sıra', default=1, help='Cərgələrin sıralanması üçün')
-    row_variety = fields.Many2one('farm.variety', string='Cərgə Bitki Növü', ondelete='cascade', tracking=True)
+    row_variety = fields.Many2one('farm.variety', string='Cərgə Bitki Növü', ondelete='cascade')
 
     # Sahə və Parsel əlaqəsi
-    field_id = fields.Many2one('farm.field', string='Sahə', required=True, tracking=True)
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True)
     parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, ondelete='cascade', 
                                domain="[('field_id', '=', field_id)]")
     
@@ -22,9 +22,9 @@ class FarmRow(models.Model):
     tree_count = fields.Integer('Ağac Sayı', compute='_compute_tree_count')
     
     # Fiziki məlumatlar
-    length_meter = fields.Float('Uzunluq (m)', default=100.0, tracking=True)
-    tree_spacing = fields.Float('Məsafə (m)', default=3.0, tracking=True)
-    max_trees = fields.Integer('Maksimum Ağac Sayı', tracking=True, help='Bu cərgədə maksimum neçə ağac ola bilər', compute='_compute_default_max_trees', store=True, readonly=False)
+    length_meter = fields.Float('Uzunluq (m)', default=100.0)
+    tree_spacing = fields.Float('Məsafə (m)', default=3.0)
+    max_trees = fields.Integer('Maksimum Ağac Sayı', help='Bu cərgədə maksimum neçə ağac ola bilər', compute='_compute_default_max_trees', store=True, readonly=False)
 
     # Əlaqəli sahələr
     tree_ids = fields.One2many('farm.tree', 'row_id', string='Ağaclar')

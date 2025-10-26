@@ -7,7 +7,7 @@ class FarmField(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'code'
 
-    name = fields.Char('Sahə Adı', required=True, tracking=True)
+    name = fields.Char('Sahə Adı', required=True)
     code = fields.Char('Sahə Kodu', copy=False, readonly=True)
     
 
@@ -29,7 +29,7 @@ class FarmField(models.Model):
         ('imtishad', 'İmişli'),('ismayilli', 'İsmayıllı'),('jabrayil', 'Cəbrayıl'),('jalilabad', 'Cəlilabad'),('julfa', 'Culfa'),('kalbajar', 'Kəlbəcər'),('kangarli', 'Kəngərli'),('kurdamir', 'Kürdəmir'),('lacin', 'Laçın'),('lerik', 'Lerik'),('lankaran', 'Lənkəran'),('naftalan', 'Naftalan'),('neftchala', 'Neftçala'),('oguz', 'Oğuz'),('ordubad', 'Ordubad'),('qabala', 'Qəbələ'),('qakh', 'Qax'),
         ('qazakh', 'Qazax'),('qobustan', 'Qobustan'),('quba', 'Quba'),('qusar', 'Qusar'),('saatli', 'Saatlı'),('sabirabad', 'Sabirabad'),('shaki', 'Şəki'),('shamakhi', 'Şamaxı'),('shamkir', 'Şəmkir'),('sharur', 'Şərur'),('shatakh', 'Şahbuz'),('shirvan', 'Şirvan'),('shusha', 'Şuşa'),('siazan', 'Siyəzən'),('sumgait', 'Sumqayıt'),('terter', 'Tərtər'),('tovuz', 'Tovuz'),
         ('ughuz', 'Uğuz'),('ujaar', 'Ucar'),('yardimli', 'Yardımlı'),('yevlakh', 'Yevlax'),('zagatala', 'Zaqatala'),('zardab', 'Zərdab'),('nakhchivan', 'Naxçıvan'),('khizi', 'Xızı'),('khachmaz', 'Xaçmaz'),('khojali', 'Xocalı'),('khojavend', 'Xocavənd'),('gazakh', 'Qazax'),('salyan', 'Salyan'),('other', 'Digər')
-    ], string='Rayonlar', required=True, default='baku', tracking=True)
+    ], string='Rayonlar', required=True, default='baku')
 
     village = fields.Char('Kənd')
 
@@ -39,14 +39,14 @@ class FarmField(models.Model):
     )
 
     # Sahənin ölçüsü və məlumatları
-    area_hectare = fields.Float('Sahənin Ölçüsü (Hektar)', default=40.0, tracking=True)
+    area_hectare = fields.Float('Sahənin Ölçüsü (Hektar)', default=40.0)
     soil_type = fields.Selection([
         ('clay', 'Gil'),
         ('sandy', 'Qumlu'),
         ('loamy', 'Gillicə'),
         ('mixed', 'Qarışıq'),
         ('other', 'Digər')
-    ], string='Torpaq Tipi', default='mixed', tracking=True)
+    ], string='Torpaq Tipi', default='mixed')
 
     # Status
     status = fields.Selection([

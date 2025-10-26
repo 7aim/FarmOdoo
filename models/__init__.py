@@ -24,3 +24,4 @@ from . import farm_expense_report
 from . import product_template
 from . import res_partner
 from . import farm_dashboard_wizard
+from . import farm_equipment

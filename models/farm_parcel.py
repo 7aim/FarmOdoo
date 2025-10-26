@@ -7,18 +7,18 @@ class FarmParcel(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'code'
 
-    name = fields.Char('Parsel Adı', tracking=True)
+    name = fields.Char('Parsel Adı')
     code = fields.Char('Parsel Kodu', copy=False, readonly=True)
     
     # Sahə əlaqəsi
     field_id = fields.Many2one('farm.field', string='Sahə', required=True, ondelete='cascade')
     
     # Parsel məlumatları
-    parcel_type_id = fields.Many2one('farm.parcel.type', string='Parsel Tipi', tracking=True)
-    area_hectare = fields.Float('Parselin Ölçüsü (ha)', default=20.0, tracking=True)
-    soil_depth = fields.Float('Torpaq Dərinliyi (cm)', default=30.0, tracking=True)
-    irrigation_available = fields.Boolean('Suvarma İmkanı', default=False, tracking=True)
-    max_trees_per_row = fields.Integer('Cərgədə Maksimum Ağac Sayı', required=True, tracking=True, help='Bu parseldə bir cərgədə maksimum nə qədər ağac ola bilər')
+    parcel_type_id = fields.Many2one('farm.parcel.type', string='Parsel Tipi')
+    area_hectare = fields.Float('Parselin Ölçüsü (ha)', default=20.0)
+    soil_depth = fields.Float('Torpaq Dərinliyi (cm)', default=30.0)
+    irrigation_available = fields.Boolean('Suvarma İmkanı', default=False)
+    max_trees_per_row = fields.Integer('Cərgədə Maksimum Ağac Sayı', required=True, help='Bu parseldə bir cərgədə maksimum nə qədər ağac ola bilər')
 
     # Əlaqəli sahələr
     row_ids = fields.One2many('farm.row', 'parcel_id', string='Cərgələr')
@@ -116,7 +116,7 @@ class FarmParcelType(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'code'
 
-    name = fields.Char('Tip Adı', required=True, tracking=True)
+    name = fields.Char('Tip Adı', required=True)
     code = fields.Char('Tip Kodu', copy=False, readonly=True)
     fruit_category = fields.Selection([
         ('citrus', 'Sitrus'),
@@ -126,7 +126,7 @@ class FarmParcelType(models.Model):
         ('mixed', 'Qarışıq'),
         ('empty', 'Boş'),
         ('other', 'Digər')
-    ], string='Meyvə Kateqoriyası', default='mixed', tracking=True)
+    ], string='Meyvə Kateqoriyası', default='mixed')
 
     @api.model_create_multi
     def create(self, vals_list):

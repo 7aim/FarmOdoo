@@ -5,10 +5,10 @@ class FarmMeter(models.Model):
     _description = 'Sayğac'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='Sayğac adı', required=True, tracking=True)
-    serial_number = fields.Char(string='Seriya nömrəsi', tracking=True)
-    capacity_liters = fields.Float(string='Tutum (litr)', tracking=True)
+    name = fields.Char(string='Sayğac adı', required=True)
+    serial_number = fields.Char(string='Seriya nömrəsi')
+    capacity_liters = fields.Float(string='Tutum (litr)')
     
-    installation_date = fields.Date(string='Quraşdırılma tarixi', tracking=True)
-    location = fields.Char(string='Yerləşdiyi yer', tracking=True)
+    installation_date = fields.Date(string='Quraşdırılma tarixi')
+    location = fields.Char(string='Yerləşdiyi yer')
     description = fields.Text(string='Açıqlama')

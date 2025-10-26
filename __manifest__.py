@@ -4,6 +4,7 @@
     'name': 'Kənd Təsərrüfatı İdarəetmə Sistemi',
     'version': '18.0.1.5.4',
     'category': 'Agriculture',
+    'license': 'LGPL-3',
     'summary': 'Ferma sahələrinin, ağacların, əməliyyatların və xərclərin idarə edilməsi',
     'description': """
         Kənd Təsərrüfatı İdarəetmə Sistemi
@@ -58,6 +59,7 @@
         'views/product_active_ingredient_views.xml',
         'views/res_partner_views.xml',
         'views/purchase_order.xml',
+        'views/farm_equipment_views.xml',
         'views/farm_menu.xml',
     ],
     'web_icon': 'farm_agriculture_v2,static/description/icon.png',

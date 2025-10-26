@@ -73,8 +73,8 @@ class FarmDiseaseRecord(models.Model):
     field_id = fields.Many2one(related='tree_id.field_id', string='Sahə', store=True, readonly=True)
     
     # Xəstəlik məlumatları
-    disease_type_id = fields.Many2one('farm.disease.type', string='Zərərverici', required=True, tracking=True)
-    detection_date = fields.Datetime('Təyin Tarixi', required=True, default=fields.Datetime.now, tracking=True)
+    disease_type_id = fields.Many2one('farm.disease.type', string='Zərərverici', required=True)
+    detection_date = fields.Datetime('Təyin Tarixi', required=True, default=fields.Datetime.now)
 
     # Zərər səviyyəsi
     damage_level = fields.Selection([
@@ -82,7 +82,7 @@ class FarmDiseaseRecord(models.Model):
         ('medium', 'Orta'),
         ('high', 'Yüksək'),
         ('critical', 'Kritik')
-    ], string='Zərər Səviyyəsi', default='low', tracking=True)
+    ], string='Zərər Səviyyəsi', default='low')
 
     # Status
     status = fields.Selection([
@@ -91,7 +91,7 @@ class FarmDiseaseRecord(models.Model):
         ('under_treatment', 'Müalicə davam edir'),
         ('recovered', 'Sağaldı'),
         ('chronic', 'Xroniki')
-    ], string='Status', default='detected', required=True, tracking=True)
+    ], string='Status', default='detected', required=True)
 
     description = fields.Text('Qeydlər')
 

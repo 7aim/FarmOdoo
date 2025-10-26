@@ -151,6 +151,7 @@
               action="action_farm_document" sequence="53"/>
     <menuitem id="product_active_ingredient_menu" name="🧪 Ana Maddələr" parent="farm_config_menu" 
               action="product_active_ingredient_action" sequence="54"/>
+
 </odoo>
 
     <!--menuitem id="farm_pallet_menu" name="Paletlər" parent="farm_config_menu" 

@@ -118,6 +118,7 @@ class FarmRowWizard(models.TransientModel):
             names_to_check = [self.single_name]
             rows_to_create = [{
                 'name': self.single_name,
+                'field_id': self.field_id.id,
                 'parcel_id': self.parcel_id.id,
                 'length_meter': self.length_meter,
                 'tree_spacing': self.tree_spacing,
@@ -134,6 +135,7 @@ class FarmRowWizard(models.TransientModel):
                 names_to_check.append(name)
                 rows_to_create.append({
                     'name': name,
+                    'field_id': self.field_id.id,
                     'parcel_id': self.parcel_id.id,
                     'length_meter': self.length_meter,
                     'tree_spacing': self.tree_spacing,
@@ -149,6 +151,7 @@ class FarmRowWizard(models.TransientModel):
                 names_to_check.append(name)
                 rows_to_create.append({
                     'name': name,
+                    'field_id': self.field_id.id,
                     'parcel_id': self.parcel_id.id,
                     'length_meter': self.length_meter,
                     'tree_spacing': self.tree_spacing,
@@ -170,6 +173,8 @@ class FarmRowWizard(models.TransientModel):
                     tree_name = f"{row.name}-A{tree_num}"
                     self.env['farm.tree'].create({
                         'row_id': row.id,
+                        'parcel_id': row.parcel_id.id,
+                        'field_id': row.field_id.id,
                         'name': tree_name,
                         'variety_id': self.tree_variety_id.id,
                         'status': 'healthy',

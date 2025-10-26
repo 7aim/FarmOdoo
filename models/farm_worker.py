@@ -9,17 +9,17 @@ class FarmWorker(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
 
-    name = fields.Char('İşçi Adı', required=True, tracking=True)
-    employee_code = fields.Char('İşçi Kodu', required=True, tracking=True)
-    field_id = fields.Many2one('farm.field', string='Əsas İş Sahəsi', ondelete='set null', tracking=True)
-    phone = fields.Char('Telefon', tracking=True)
-    email = fields.Char('Email', tracking=True)
-    address = fields.Text('Ünvan', tracking=True)
+    name = fields.Char('İşçi Adı', required=True)
+    employee_code = fields.Char('İşçi Kodu', required=True)
+    field_id = fields.Many2one('farm.field', string='Əsas İş Sahəsi', ondelete='set null')
+    phone = fields.Char('Telefon')
+    email = fields.Char('Email')
+    address = fields.Text('Ünvan')
 
     # Status və məlumatlar
     active = fields.Boolean('Aktiv', default=True)
-    hire_date = fields.Date('İşə Başlama Tarixi', default=fields.Date.today, tracking=True)
-    salary = fields.Float('Maaş', required=True, tracking=True)
+    hire_date = fields.Date('İşə Başlama Tarixi', default=fields.Date.today)
+    salary = fields.Float('Maaş', required=True)
 
     # Hesablanmış sahələr
     total_operations = fields.Integer('Ümumi Əməliyyat Sayı', compute='_compute_statistics', store=True)
@@ -97,16 +97,16 @@ class FarmWorkerPayment(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'payment_date desc'
 
-    worker_id = fields.Many2one('farm.worker', string='İşçi', required=True, ondelete='cascade', tracking=True)
-    payment_date = fields.Date('Ödəniş Tarixi', required=True, default=fields.Date.today, tracking=True)
-    amount = fields.Float('Məbləğ', required=True, tracking=True)
+    worker_id = fields.Many2one('farm.worker', string='İşçi', required=True, ondelete='cascade')
+    payment_date = fields.Date('Ödəniş Tarixi', required=True, default=fields.Date.today)
+    amount = fields.Float('Məbləğ', required=True)
     payment_type = fields.Selection([
         ('salary', 'Maaş'),
         ('daily', 'Günlük'),
         ('bonus', 'Bonus'),
         ('advance', 'Avans'),
         ('other', 'Digər')
-    ], string='Ödəniş Növü', required=True, default='salary', tracking=True)
+    ], string='Ödəniş Növü', required=True, default='salary')
     description = fields.Text('Açıqlama')
     reference = fields.Char('İstinad')
 

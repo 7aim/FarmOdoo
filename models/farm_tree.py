@@ -8,25 +8,25 @@ class FarmTree(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence desc'
 
-    name = fields.Char('Ağac Adı', tracking=True)
+    name = fields.Char('Ağac Adı')
     tree_id = fields.Char('Ağac kodu', copy=False, readonly=True)
     sequence = fields.Integer('Sıra', default=1, help='Ağacların sıralanması üçün')
 
     # Sahə, Parsel və Cərgə əlaqəsi
-    field_id = fields.Many2one('farm.field', string='Sahə', required=True, tracking=True)
-    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True, tracking=True,
+    field_id = fields.Many2one('farm.field', string='Sahə', required=True)
+    parcel_id = fields.Many2one('farm.parcel', string='Parsel', required=True,
                                domain="[('field_id', '=', field_id)]")
     row_id = fields.Many2one('farm.row', string='Cərgə', required=True, ondelete='cascade',
                             domain="[('parcel_id', '=', parcel_id)]")
     
     # Ağac məlumatları
-    variety_id = fields.Many2one('farm.variety', string='Bitki Növü', required=True, tracking=True)
-    sort_id = fields.Many2one('farm.sort', string='Bitki Sortu', tracking=True)
-    rootstock = fields.Many2one('farm.rootstock', string='Çalaqaltı', tracking=True)
+    variety_id = fields.Many2one('farm.variety', string='Bitki Növü', required=True)
+    sort_id = fields.Many2one('farm.sort', string='Bitki Sortu')
+    rootstock = fields.Many2one('farm.rootstock', string='Çalaqaltı')
 
     # Tarixi məlumatlar
-    planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today, tracking=True)
-    season_count = fields.Integer('Mövsüm Sayı (il)', store=True, tracking=True)
+    planting_date = fields.Date('Əkin Tarixi' , default=fields.Date.today)
+    season_count = fields.Integer('Mövsüm Sayı (il)', store=True)
     
     # Status
     status = fields.Selection([

@@ -8,7 +8,7 @@ class FarmPallet(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'pallet_code'
 
-    name = fields.Char('Palet Adı', tracking=True)
+    name = fields.Char('Palet Adı')
     pallet_code = fields.Char('Palet Kodu', copy=False, readonly=True)
     
     # Palet tipi
@@ -18,11 +18,11 @@ class FarmPallet(models.Model):
         ('metal', 'Metal'),
         ('cardboard', 'Karton'),
         ('other', 'Digər')
-    ], string='Palet Tipi', default='wood', tracking=True)
+    ], string='Palet Tipi', default='wood')
 
     # Həcm məlumatları
-    capacity_kg = fields.Float('Həcm (kq)', default=5.0, tracking=True)
-    capacity_liter = fields.Float('Həcm (litr)', default=0.0, tracking=True)
+    capacity_kg = fields.Float('Həcm (kq)', default=5.0)
+    capacity_liter = fields.Float('Həcm (litr)', default=0.0)
 
     # Status məlumatları
     availability_status = fields.Selection([
@@ -31,7 +31,7 @@ class FarmPallet(models.Model):
         ('reserved', 'Rezerv'),
         ('maintenance', 'Təmir'),
         ('damaged', 'Zədəli')
-    ], string='Mövcudluq', default='empty', tracking=True)
+    ], string='Mövcudluq', default='empty')
 
     # Saxlanma yeri
     storage_area = fields.Selection([
@@ -40,14 +40,14 @@ class FarmPallet(models.Model):
         ('cooler', 'Soyuducuda'),
         ('transport', 'Nəqldə'),
         ('other', 'Digər')
-    ], string='Saxlanma Sahəsi', default='warehouse', tracking=True)
+    ], string='Saxlanma Sahəsi', default='warehouse')
 
     # Soyuducu əlaqəsi
     cooler_id = fields.Many2one('farm.cooler', string='Soyuducu')
     
     # Tarixi məlumatlar
-    purchase_date = fields.Date('Alınma Tarixi', default=fields.Date.today, tracking=True)
-    last_maintenance_date = fields.Date('Son Təmir Tarixi', tracking=True)
+    purchase_date = fields.Date('Alınma Tarixi', default=fields.Date.today)
+    last_maintenance_date = fields.Date('Son Təmir Tarixi')
 
     # Əlavə məlumatlar
     description = fields.Text('Açıqlama')
@@ -57,7 +57,7 @@ class FarmPallet(models.Model):
         ('fair', 'Orta'),
         ('poor', 'Pis'),
         ('damaged', 'Zədəli')
-    ], string='Vəziyyət', default='good', tracking=True)
+    ], string='Vəziyyət', default='good')
 
     def name_get(self):
         """Override name_get for custom display name"""
