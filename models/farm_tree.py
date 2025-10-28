@@ -65,18 +65,17 @@ class FarmTree(models.Model):
             return {'domain': {'row_id': []}}
 
     @api.constrains('name', 'row_id')
-    def _check_unique_name_in_field(self):
-        """Eyni sahədə ağac adları unikal olmalıdır"""
+    def _check_unique_name_in_row(self):
+        """Eyni cərgədə ağac adları unikal olmalıdır"""
         for record in self:
-            if record.name and record.row_id and record.row_id.parcel_id and record.row_id.parcel_id.field_id:
-                field_id = record.row_id.parcel_id.field_id.id
+            if record.name and record.row_id:
                 existing_tree = self.search([
                     ('name', '=', record.name),
-                    ('row_id.parcel_id.field_id', '=', field_id),
+                    ('row_id', '=', record.row_id.id),
                     ('id', '!=', record.id)
                 ])
                 if existing_tree:
-                    raise ValidationError(f'Bu sahədə "{record.name}" adlı ağac artıq mövcuddur! Fərqli ad seçin.')
+                    raise ValidationError(f'Bu cərgədə "{record.name}" adlı ağac artıq mövcuddur! Fərqli ad seçin.')
 
     @api.onchange('variety_id')
     def _onchange_variety_id(self):
@@ -134,22 +133,22 @@ class FarmTree(models.Model):
                             last_tree = self.search([('row_id', '=', row.id)], order='sequence desc', limit=1)
                             vals['sequence'] = (last_tree.sequence if last_tree else 0) + 1
                 
-                # Ağac kodunu generasiya et (sadə artan nömrə 1,2,3...)
-                if not vals.get('tree_id'):
+                # Ağac adını generasiya et (hər cərgədə 1-dən başlayaraq)
+                if not vals.get('name'):
                     # Batch yaradılarkən eyni cərgə üçün sayğacı artır
                     if row.id not in row_code_counters:
                         # İlk dəfə bu cərgə üçün mövcud sayı tap
                         existing_count = self.search_count([('row_id', '=', row.id)])
                         row_code_counters[row.id] = existing_count
                     
-                    # Sayğacı artır və kod generasiya et
+                    # Sayğacı artır və ad generasiya et
                     row_code_counters[row.id] += 1
                     tree_number = row_code_counters[row.id]
-                    vals['tree_id'] = f'{row.code}-A{tree_number}'
-            
-            # Default ad ver
-            if not vals.get('name') and vals.get('tree_id'):
-                vals['name'] = vals['tree_id']
+                    vals['name'] = f'Ağac {tree_number}'
+                
+                # Ağac kodunu generasiya et
+                if not vals.get('tree_id'):
+                    vals['tree_id'] = f'{row.code}-{vals["name"]}'
         
         return super().create(vals_list)
 

@@ -95,18 +95,17 @@ class FarmTreeWizard(models.TransientModel):
                     raise ValidationError('Başlanğıc bitiş dəyərindən kiçik olmalıdır!')
 
     def _check_name_uniqueness(self, names_to_check):
-        """Sahədə ağac adlarının unikallığını yoxla"""
-        if not self.row_id or not self.row_id.parcel_id or not self.row_id.parcel_id.field_id:
+        """Cərgədə ağac adlarının unikallığını yoxla"""
+        if not self.row_id:
             return
         
-        field_id = self.row_id.parcel_id.field_id.id
         for name in names_to_check:
             existing_tree = self.env['farm.tree'].search([
                 ('name', '=', name),
-                ('row_id.parcel_id.field_id', '=', field_id)
+                ('row_id', '=', self.row_id.id)
             ])
             if existing_tree:
-                raise ValidationError(f'Bu sahədə "{name}" adlı ağac artıq mövcuddur! Fərqli ad seçin.')
+                raise ValidationError(f'Bu cərgədə "{name}" adlı ağac artıq mövcuddur! Fərqli ad seçin.')
 
     def _generate_tree_name(self, prefix, number):
         """Ağac adı generasiya et"""
